@@ -7,104 +7,147 @@
 <title>Aset Perhiasan</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f4ef;--card:#fff;--ink:#1d1a14;--mut:#6f685a;--line:#e6e1d5;--gold:#a8791c;--gold-d:#7a5510;--gold-l:#f5ead0;--dark:#1d1a14;--up:#1d7a4b;--down:#b3372c;--r:12px}
-@media(prefers-color-scheme:dark){:root{--bg:#14120e;--card:#1e1b15;--ink:#f1ece0;--mut:#a59d8b;--line:#332e24;--gold:#e0b44f;--gold-d:#f0cf80;--gold-l:#2c2515;--dark:#0e0c09;--up:#4cc58a;--down:#ff7d70}}
+:root{--bg:#f4f1ea;--card:#fff;--ink:#1d1a14;--mut:#6f685a;--line:#e8e3d7;--gold:#b0801f;--gold-d:#7a5510;--gold-l:#f6ecd2;--dark:#1b1710;--up:#1d7a4b;--down:#b3372c;--r:14px;--sh:0 1px 2px rgba(40,30,10,.05),0 4px 14px rgba(40,30,10,.05)}
+@media(prefers-color-scheme:dark){:root{--bg:#12100c;--card:#1d1a14;--ink:#f1ece0;--mut:#a59d8b;--line:#322d23;--gold:#e0b44f;--gold-d:#f0cf80;--gold-l:#2b2415;--dark:#0c0a07;--up:#4cc58a;--down:#ff7d70;--sh:0 1px 2px rgba(0,0,0,.3)}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,sans-serif}
 h1,h2,.num{font-family:Fraunces,Georgia,serif}
-header{background:var(--dark);color:#f3d98b;padding:20px 16px}
+header{background:linear-gradient(135deg,#0c0a07,#2a2110);color:#f3d98b;padding:18px 16px;border-bottom:2px solid var(--gold)}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0}
-h1{margin:0;font-size:24px;letter-spacing:.2px}
-header p{margin:2px 0 0;color:#b9ad8d;font-size:13px}
-button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:9px 14px;font-weight:500}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#f3d98b,#b0801f);color:#2a2110;display:grid;place-items:center;font-size:20px}
+h1{margin:0;font-size:22px;line-height:1.2}
+header p{margin:2px 0 0;color:#b9ad8d;font-size:12.5px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:8px 14px;font-weight:500}
 button:hover{border-color:var(--gold)}
+button:disabled{opacity:.6;cursor:wait}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
 .pri{background:var(--gold);border-color:var(--gold);color:#fff}
 .pri:hover{background:var(--gold-d);border-color:var(--gold-d)}
+header button:not(.pri){background:rgba(255,255,255,.06);border-color:rgba(243,217,139,.25);color:#f3d98b}
 .dng{color:var(--down)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 12px}
-.st{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
-.st small{color:var(--mut);display:block}
-.st .num{font-size:22px;font-weight:700;margin-top:2px;word-break:break-word}
 .up{color:var(--up)}.down{color:var(--down)}
-.panels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.pn{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
-.pn h2{font-size:16px;margin:0 0 12px}
-.bar{margin-bottom:10px}
-.bar .t{display:flex;justify-content:space-between;gap:8px;font-size:13px}
-.bar .t span:last-child{color:var(--mut);white-space:nowrap}
-.bar i{display:block;height:7px;border-radius:4px;background:var(--gold-l);margin-top:4px;overflow:hidden}
-.bar i b{display:block;height:100%;background:var(--gold);border-radius:4px}
-.gold{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--dark);color:#f3d98b;border-radius:var(--r);padding:16px 18px;margin:16px 0 12px}
-.gold small{color:#b9ad8d;display:block}
-.gold .num{font-size:28px;font-weight:700;color:#f6e3a8}
-.gold button{background:var(--gold);border-color:var(--gold);color:#fff}
-.hist{width:100%;height:110px;display:block}
-.hl{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:6px 0;border-bottom:1px solid var(--line)}
-.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.tools input,.tools select{flex:1 1 150px;min-width:0}
-input,select,textarea{font:inherit;width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
-.tbl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:auto}
-table{width:100%;border-collapse:collapse;min-width:820px}
-th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-weight:600;color:var(--mut);cursor:pointer;user-select:none;background:var(--bg);position:sticky;top:0}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:600}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:linear-gradient(135deg,#14110b,#2c2312);color:#f3d98b;border-radius:var(--r);padding:18px 22px;margin:18px 0 12px;box-shadow:var(--sh);border:1px solid rgba(243,217,139,.18)}
+.hero .eyebrow{color:#b9ad8d}
+.hero .num{font-size:30px;font-weight:700;color:#f6e3a8;line-height:1.2}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font-size:12px;padding:2px 10px;border-radius:99px;background:rgba(243,217,139,.1);color:#d9c78f;border:1px solid rgba(243,217,139,.15)}
+.chip.m{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:600}
+.hero button{background:var(--gold);border-color:var(--gold);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);border-top:3px solid var(--gold)}
+.st .num{font-size:21px;font-weight:700;margin:2px 0;word-break:break-word}
+.st small{color:var(--mut);display:block}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.pn{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh);display:flex;flex-direction:column}
+.pn h2{font-size:16px;margin:0}
+.pn .sub{color:var(--mut);font-size:12px;margin:1px 0 12px}
+.bd{flex:1;display:flex;align-items:center;gap:18px}
+.dn{width:132px;height:132px;flex:none}
+.dn text{fill:var(--ink);text-anchor:middle}
+.dn .c1{font:700 14px Fraunces,Georgia,serif}.dn .c2{font:10px Inter,sans-serif;fill:var(--mut)}
+.lgs{flex:1;min-width:0}
+.lg{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid var(--line)}
+.lg:last-child{border-bottom:0}
+.lg i{width:10px;height:10px;border-radius:3px;flex:none}
+.lg .n{flex:1;min-width:0;font-weight:500;line-height:1.25}
+.lg .n b{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lg small{display:block;color:var(--mut);font-size:11.5px;font-weight:400}
+.lg .v{text-align:right;font-weight:600;white-space:nowrap;line-height:1.25}
+.hw{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:center}
+.hw svg{width:100%;height:auto;display:block}
+.hw svg text{font:10.5px Inter,sans-serif;fill:var(--mut)}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.kp div{background:var(--bg);border-radius:10px;padding:8px 10px}
+.kp b{display:block;font-size:14px}
+.kp small{color:var(--mut);font-size:11.5px}
+.hl{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:6px 0;border-top:1px solid var(--line)}
+.hl small{color:var(--mut)}
+.pg{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--mut)}
+.pgb{display:flex;gap:4px;flex-wrap:wrap}
+.pgb button{min-width:34px;padding:5px 9px}
+.pgb button:disabled{cursor:not-allowed}
+.pgd{padding:5px 4px}
+.pgs{display:flex;align-items:center;gap:6px}
+.pgs select{width:auto;padding:5px 8px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.tools input,.tools select{flex:1 1 140px;min-width:0}
+input,select,textarea{font:inherit;width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink)}
+.tbl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:auto;box-shadow:var(--sh)}
+table{width:100%;border-collapse:collapse;min-width:860px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--mut);cursor:pointer;user-select:none;background:var(--bg);font-size:12.5px}
 td.r,th.r{text-align:right}
+td small{display:block;color:var(--mut);font-size:11.5px;line-height:1.2}
+tbody tr:hover{background:var(--gold-l)}
 tr:last-child td{border-bottom:0}
 tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--line)}
-.tag{display:inline-block;padding:2px 9px;border-radius:99px;background:var(--gold-l);color:var(--gold-d);font-size:12px;font-weight:500}
+.tag{display:inline-block;padding:1px 9px;border-radius:99px;background:var(--gold-l);color:var(--gold-d);font-size:12px;font-weight:500}
 .act{display:flex;gap:6px;justify-content:flex-end}
-.act button{padding:5px 10px;font-size:13px}
+.act button{padding:4px 10px;font-size:13px}
 .mob{display:none}
-.item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:10px;box-shadow:var(--sh)}
 .item .hd{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
 .item .hd b{font-size:15px}
-.item dl{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:12px 0}
+.item dl{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:10px 0}
 .item dt{color:var(--mut);font-size:12px}
 .item dd{margin:0;font-weight:500}
-.item .act{justify-content:stretch}.item .act button{flex:1;padding:9px}
-.empty{padding:40px 16px;text-align:center;color:var(--mut)}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:12px;z-index:20}
+.item .act button{flex:1;padding:8px}
+.empty{padding:18px 12px;text-align:center;color:var(--mut)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:12px;z-index:20}
 .ov.on{display:flex}
-.md{background:var(--card);border-radius:16px;width:100%;max-width:520px;max-height:94vh;overflow:auto;padding:20px}
+.md{background:var(--card);border-radius:18px;width:100%;max-width:520px;max-height:94vh;overflow:auto;padding:22px}
 .md h2{margin:0 0 14px;font-size:20px}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fg label{display:block;font-weight:500;font-size:13px}
-.fg label span{display:block;margin-bottom:4px}
+.fg label,.lb{display:block;font-weight:500;font-size:13px}
+.fg label span,.lb span{display:block;margin-bottom:4px}
 .full{grid-column:1/-1}
 .ft{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 .hint{font-size:12px;color:var(--mut);margin-top:4px;font-weight:400}
-#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--dark);color:#f3d98b;padding:10px 18px;border-radius:99px;display:none;z-index:30;max-width:90vw}
-#load{padding:60px;text-align:center;color:var(--mut)}
-@media(max-width:860px){.stats{grid-template-columns:1fr 1fr}.panels{grid-template-columns:1fr}}
-@media(max-width:760px){.tbl{display:none}.mob{display:block}h1{font-size:20px}header .lbl{display:none}.fg{grid-template-columns:1fr}.st .num{font-size:18px}}
+.box{background:var(--gold-l);color:var(--gold-d);padding:10px 12px;border-radius:10px;font-size:13px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);padding:5px;border-radius:12px;margin-bottom:16px}
+.seg button{border:0;background:transparent;padding:9px 10px;text-align:left;border-radius:9px;line-height:1.3}
+.seg button small{display:block;font-weight:400;font-size:11.5px;color:var(--mut)}
+.seg button.on{background:var(--gold);color:#fff}
+.seg button.on small{color:#fff;opacity:.9}
+.mk{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--dark);color:#f3d98b;border-radius:12px;padding:12px 14px}
+.mk .num{font-size:22px;font-weight:700;color:#f6e3a8}
+.mk small{color:#b9ad8d;display:block;font-size:12px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--dark);color:#f3d98b;padding:10px 18px;border-radius:14px;display:none;z-index:30;max-width:90vw;text-align:center;border:1px solid rgba(243,217,139,.25)}
+#load{padding:60px 16px;text-align:center;color:var(--mut)}
+@media(max-width:860px){.stats{grid-template-columns:1fr 1fr}.panels{grid-template-columns:1fr}.hw{grid-template-columns:1fr}}
+@media(max-width:760px){.tbl{display:none}.mob{display:block}h1{font-size:19px}header .lbl,header p{display:none}.fg{grid-template-columns:1fr}.st .num{font-size:17px}.hero .num{font-size:24px}.logo{width:34px;height:34px}}
+@media(max-width:440px){.bd{flex-direction:column;align-items:stretch}.dn{align-self:center}.kp{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:no-preference){.md{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(10px);opacity:0}}}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-  <div><h1>Aset Perhiasan</h1><p>Pantau koleksi emas, nilai terkini, dan selisihnya dari harga beli</p></div>
+  <div class="brand"><div class="logo">◆</div><div><h1>Aset Perhiasan</h1><p>Pantau koleksi emas, nilai terkini, dan selisihnya dari harga beli</p></div></div>
   <div style="display:flex;gap:8px"><button id="lnk" style="display:none" onclick="window.open(SHEET_URL,'_blank')">Buka Sheet</button><button onclick="load()" title="Muat ulang">↻</button><button class="pri" onclick="openForm()">+ <span class="lbl">Tambah perhiasan</span></button></div>
 </div></header>
 
 <main class="wrap">
   <div id="load">Memuat data dari Google Sheets…</div>
   <div id="app" style="display:none">
-    <section class="gold" id="gold"></section>
+    <section class="hero" id="gold"></section>
     <section class="stats" id="stats"></section>
     <section class="panels">
-      <div class="pn"><h2>Nilai per pemilik</h2><div id="byOwner"></div></div>
-      <div class="pn"><h2>Berat per jenis</h2><div id="byType"></div></div>
+      <div class="pn"><h2>Komposisi nilai per pemilik</h2><div class="sub">Berdasarkan nilai saat ini</div><div class="bd" id="byOwner"></div></div>
+      <div class="pn"><h2>Komposisi per jenis perhiasan</h2><div class="sub">Berdasarkan berat emas</div><div class="bd" id="byType"></div></div>
     </section>
-    <div class="pn" style="margin-bottom:16px"><h2>Riwayat harga emas</h2><div id="hist"></div></div>
+    <section class="pn" style="margin-bottom:12px"><h2>Riwayat harga emas</h2><div class="sub">Harga per gram (tanpa kadar) dan total nilai aset setiap kali harga diperbarui</div><div id="hist"></div></section>
     <div class="tools">
-      <input id="q" type="search" placeholder="Cari pemilik, jenis, store, catatan…" oninput="render()">
-      <select id="fo" onchange="render()"></select>
-      <select id="ft" onchange="render()"></select>
-      <select id="fs" onchange="render()"></select>
+      <input id="q" type="search" placeholder="Cari pemilik, jenis, kadar, store, catatan…" oninput="rf()">
+      <select id="fo" onchange="rf()"></select>
+      <select id="ft" onchange="rf()"></select>
+      <select id="fs" onchange="rf()"></select>
     </div>
     <div class="tbl"><table id="tb"></table></div>
     <div class="mob" id="mb"></div>
+    <div class="pg" id="pg"></div>
   </div>
 </main>
 <div style="height:40px"></div>
@@ -116,40 +159,63 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
     <div class="fg">
       <label class="full"><span>Pemilik</span><input id="f_pemilik" list="dlO" required></label>
       <label><span>Jenis</span><input id="f_jenis" list="dlJ" required placeholder="Cincin, Gelang…"></label>
+      <label><span>Kadar (karat)</span><input id="f_kadar" list="dlK" inputmode="decimal" placeholder="Kosongkan jika belum tahu"></label>
       <label><span>Berat (gram)</span><input id="f_berat" inputmode="decimal" required placeholder="0,9"></label>
-      <label class="full"><span>Harga beli (Rp)</span><input id="f_harga" inputmode="numeric" required placeholder="839700"></label>
-      <div class="full hint" id="hintG" style="background:var(--gold-l);color:var(--gold-d);padding:9px 12px;border-radius:8px;margin:0"></div>
+      <label><span>Harga beli (Rp)</span><input id="f_harga" inputmode="numeric" required placeholder="839700"></label>
       <label class="full"><span>Store</span><input id="f_store" list="dlS" placeholder="Semar KTS"></label>
-      <label class="full"><span>Catatan</span><textarea id="f_catatan" rows="2" placeholder="Kadar, nomor nota, kondisi…"></textarea></label>
+      <label class="full"><span>Catatan</span><textarea id="f_catatan" rows="2" placeholder="Nomor nota, kondisi…"></textarea></label>
+      <div class="full box" id="hintG"></div>
     </div>
     <datalist id="dlO"></datalist><datalist id="dlJ"></datalist><datalist id="dlS"></datalist>
+    <datalist id="dlK"><option value="24"><option value="22"><option value="21"><option value="20"><option value="18"><option value="17"><option value="16"><option value="12"><option value="10"><option value="9"><option value="8"></datalist>
     <div class="ft"><button type="button" onclick="closeForm()">Batal</button><button class="pri" id="sv">Simpan</button></div>
   </form>
 </div>
+
+<div class="ov" id="ovs" onclick="if(event.target===this)closeS()">
+  <form class="md" onsubmit="submitS(event)">
+    <h2>Atur harga emas</h2>
+    <div class="seg">
+      <button type="button" id="mM" onclick="setMode('manual')"><b>Manual</b><small>Anda yang menentukan harga</small></button>
+      <button type="button" id="mO" onclick="setMode('otomatis')"><b>Otomatis</b><small>Mengikuti harga pasar</small></button>
+    </div>
+    <div class="fg">
+      <label class="full"><span id="l_manual"></span><input id="s_manual" inputmode="numeric" required oninput="spprev()"><div class="hint" id="h_manual"></div></label>
+
+      <label class="full" id="pM"><span>Harga emas 24K per gram (Rp) — opsional</span>
+        <input id="s_h24" inputmode="numeric" placeholder="Contoh: 2515000" oninput="sH24=num(this.value);spprev()">
+        <div class="hint">Isi hanya jika ada perhiasan yang kadarnya sudah diisi. Dasar hitungnya: harga 24K × kadar ÷ 24.</div></label>
+
+      <div class="full" id="pO">
+        <div class="mk"><div><small>Harga emas 24K di pasar (per gram)</small><div class="num" id="mk_p">—</div><small id="mk_s"></small></div>
+          <button type="button" class="pri" id="bFetch" onclick="fetchPasar()">Ambil harga pasar</button></div>
+        <div class="hint">Diperbarui otomatis tiap 6 jam. Ini harga emas dunia (spot), bukan harga toko, jadi cocokkan lewat kolom selisih di bawah.</div>
+      </div>
+
+      <label class="full"><span>Selisih harga toko vs pasar (%) — untuk perhiasan berkadar</span><input id="s_adj" type="number" step="any" value="0" oninput="spprev()">
+        <div class="hint">Isi minus jika harga toko lebih rendah dari harga pasar.</div></label>
+      <div class="full box" id="s_prev"></div>
+    </div>
+    <div class="ft"><button type="button" onclick="closeS()">Batal</button><button class="pri" id="ssv">Simpan</button></div>
+  </form>
+</div>
+
 <div class="ov" id="ovd"><div class="md" style="max-width:380px">
   <h2>Hapus data ini?</h2><p id="dtxt" style="color:var(--mut)"></p>
   <div class="ft"><button onclick="ovd.classList.remove('on')">Batal</button><button class="pri" style="background:var(--down);border-color:var(--down)" id="dok">Hapus</button></div>
 </div></div>
-<div class="ov" id="ovp" onclick="if(event.target===this)closeP()">
-  <form class="md" style="max-width:420px" onsubmit="submitP(event)">
-    <h2>Perbarui harga emas</h2>
-    <label style="display:block;font-weight:500"><span style="display:block;margin-bottom:4px">Harga emas per gram (Rp)</span><input id="p_harga" inputmode="numeric" required></label>
-    <div class="hint" id="p_prev" style="margin-top:12px;background:var(--gold-l);color:var(--gold-d);padding:10px 12px;border-radius:8px"></div>
-    <div class="ft"><button type="button" onclick="closeP()">Batal</button><button class="pri" id="pv">Simpan harga</button></div>
-  </form>
-</div>
 <div id="toast"></div>
 
 <script>
 // ==================== TEMPEL DISINI (1) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbyo8wItoDYQIm_F0hwb9JAmG5gt-EMo2gAdBPQn17t4w4yw7Yh08xZ-LwPRVQzw201_/exec';
-// Opsional: harus sama dengan API_KEY di Code.gs. Kosongkan jika tidak dipakai.
-const API_KEY='';
+const API_URL='https://script.google.com/macros/s/AKfycbyP-bH1ytjTFLJB0EhnFY267--u2_XMabqXxEpPcB13pyUjVUVq5M21IBHjg8qDGbs/exec';
+// Opsional: kunci rahasia (bukan URL). Harus sama dengan API_KEY di Code.gs. Kosongkan jika tidak dipakai.
+const API_KEY='https://script.google.com/macros/s/AKfycbyP-bH1ytjTFLJB0EhnFY267--u2_XMabqXxEpPcB13pyUjVUVq5M21IBHjg8qDGbs/exec';
 // ==================== TEMPEL DISINI (2) ====================
-// (Opsional) URL Google Spreadsheet -> memunculkan tombol "Buka Sheet". Kosongkan ('') jika tidak perlu.
-const SHEET_URL='https://docs.google.com/spreadsheets/d/19HuU2Jo8iS8aw1bVpm6LCfhEQkrmR2tMgCk3PPHCz7k/edit';
+// (Opsional) URL Google Spreadsheet (docs.google.com/spreadsheets/...) -> tombol "Buka Sheet". Kosongkan ('') jika tidak perlu.
+const SHEET_URL='https://script.google.com/macros/s/AKfycbyP-bH1ytjTFLJB0EhnFY267--u2_XMabqXxEpPcB13pyUjVUVq5M21IBHjg8qDGbs/exec';
 // =======================================================
 function api(fn,args,ok,ko){
   if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
@@ -158,17 +224,22 @@ function api(fn,args,ok,ko){
    .then(r=>r.json()).then(j=>j.ok?ok(j.data):ko(new Error(j.error)))
    .catch(e=>ko(new Error('Tidak bisa terhubung ke Web App ('+e.message+'). Pastikan Deploy memakai akses "Anyone", URL /exec benar, dan sudah New version.')));
 }
-let D=[],P={harga:0,diperbarui:'',riwayat:[]},sortK='pemilik',sortD=1,delId=null;
+let D=[],P={base:0,manual:0,mode:'manual',h24:0,adj:0,ref:0,sumber:'',diperbarui:'',riwayat:[]},sortK='pemilik',sortD=1,delId=null,smode='manual',sH24=0,page=1,ps=10;
 const $=id=>document.getElementById(id);
-const rp=n=>'Rp '+Math.round(n).toLocaleString('id-ID');
+const rp=n=>isFinite(n)&&n!==null&&n!==''?'Rp '+Math.round(n).toLocaleString('id-ID'):'Rp 0';
 const gr=n=>(+n).toLocaleString('id-ID',{maximumFractionDigits:2})+' g';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=s=>{s=String(s||'').trim().replace(/[^\d,.-]/g,'');if(s.includes(',')){s=s.replace(/\./g,'').replace(',','.')}else if(/^\d{1,3}(\.\d{3})+$/.test(s)){s=s.replace(/\./g,'')}return parseFloat(s)||0};
+const numD=s=>parseFloat(String(s||'').replace(',','.').replace(/[^\d.-]/g,''))||0;
 const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
-const sgn=x=>(x>=0?'+':'−')+rp(Math.abs(x));
-function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2600)}
-function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');D=d.items;P=d}
-
+const sgn=x=>(Math.round(x)>=0?'+':'−')+rp(Math.abs(x));
+const kd=k=>k>0?(+(+k).toFixed(2)).toString().replace('.',',')+'K':'—';
+const short=n=>n>=1e9?(n/1e9).toFixed(2).replace('.',',')+' M':n>=1e6?(n/1e6).toFixed(1).replace('.',',')+' jt':n>=1e3?Math.round(n/1e3)+' rb':String(Math.round(n));
+function kadarJS(v){let k=numD(v);if(!(k>0))return 0;if(k>24){if(k>=300&&k<=1000)k=k/1000*24;else return 0}return k}
+const baseJS=S=>Math.round((S.mode==='otomatis'&&S.h24>0&&S.ref>0)?S.manual*S.h24/S.ref:S.manual);
+const pr=(S,k)=>(k>0&&S.h24>0)?S.h24*k/24*(1+S.adj/100):S.base;
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3600)}
+function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');if(d.base===undefined)throw new Error('Code.gs di Apps Script masih versi lama. Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');D=d.items;P=d;return d}
 function fail(m){$('app').style.display='none';$('load').style.display='block';$('load').innerHTML='<b>Gagal memuat data.</b><br>'+esc(m)}
 function load(){
   $('load').style.display='block';$('load').textContent='Memuat data dari Google Sheets…';
@@ -184,86 +255,167 @@ function fillFilters(){
   $('dlJ').innerHTML=uniq('jenis').map(x=>`<option value="${esc(x)}">`).join('');
   $('dlS').innerHTML=uniq('store').map(x=>`<option value="${esc(x)}">`).join('');
 }
-function bars(el,map,fmt){
-  const e=Object.entries(map).sort((a,b)=>b[1]-a[1]),m=Math.max(...e.map(x=>x[1]),1);
-  $(el).innerHTML=e.map(([k,v])=>`<div class="bar"><div class="t"><span>${esc(k)}</span><span>${fmt(v)}</span></div><i><b style="width:${v/m*100}%"></b></i></div>`).join('')||'<div class="empty">Belum ada data</div>';
+
+/* ===== Grafik ===== */
+const PAL=['#c9962b','#e9c872','#8a6a1f','#5f9c86','#c1694f','#7f8fb5','#a8a090'];
+function agg(key,vk){const m={};D.forEach(x=>{const k=x[key]||'—',r=m[k]||(m[k]={k:k,v:0,n:0,w:0,nl:0});r.v+=x[vk];r.n++;r.w+=x.berat;r.nl+=x.nilai});return Object.values(m)}
+function donut(el,rows,max,fmt,sub,cTop,cSub){
+  if(!rows.length){$(el).innerHTML='<div class="empty" style="flex:1">Belum ada data</div>';return}
+  rows=rows.slice().sort((a,b)=>b.v-a.v);
+  if(rows.length>max){const rest=rows.slice(max-1);rows=rows.slice(0,max-1).concat([{k:'Lainnya',v:sum(rest,'v'),n:sum(rest,'n'),w:sum(rest,'w'),nl:sum(rest,'nl')}])}
+  const tot=sum(rows,'v')||1,R=40,C=2*Math.PI*R;let acc=0;
+  const segs=rows.map((r,i)=>{const len=r.v/tot*C,vis=Math.max(len-1.6,.6);
+    const s=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="${PAL[i%PAL.length]}" stroke-width="16" stroke-dasharray="${vis} ${C-vis}" stroke-dashoffset="${-acc}" transform="rotate(-90 60 60)"/>`;acc+=len;return s}).join('');
+  const lg=rows.map((r,i)=>{const p=r.v/tot*100;
+    return `<div class="lg"><i style="background:${PAL[i%PAL.length]}"></i><div class="n"><b title="${esc(r.k)}">${esc(r.k)}</b><small>${sub(r)}</small></div><div class="v">${fmt(r.v)}<small>${p<1?'<1':Math.round(p)}%</small></div></div>`}).join('');
+  $(el).innerHTML=`<svg class="dn" viewBox="0 0 120 120" role="img"><circle cx="60" cy="60" r="${R}" fill="none" stroke="var(--line)" stroke-width="16"/>${segs}<text class="c1" x="60" y="61">${cTop}</text><text class="c2" x="60" y="75">${cSub}</text></svg><div class="lgs">${lg}</div>`;
 }
 function hist(){
-  const all=P.riwayat,r=all.slice(-12);
-  if(!r.length){$('hist').innerHTML='<div class="empty">Belum ada riwayat</div>';return}
-  const W=600,H=110,pd=8,mn=Math.min(...r.map(x=>x.harga)),sp=(Math.max(...r.map(x=>x.harga))-mn)||1;
-  const pts=r.map((x,i)=>(r.length>1?pd+i*(W-2*pd)/(r.length-1):W/2).toFixed(1)+','+(H-pd-(x.harga-mn)/sp*(H-2*pd)).toFixed(1));
-  const rows=all.slice(-6).reverse().map(x=>{const i=all.indexOf(x),pv=i>0?all[i-1].harga:null,d=pv===null?null:x.harga-pv;
-    return `<div class="hl"><span>${esc(x.tanggal)}</span><span>${rp(x.harga)}${d===null?'':` <span class="${d>=0?'up':'down'}">(${sgn(d)})</span>`}</span><span style="color:var(--mut)">${rp(x.total)}</span></div>`}).join('');
-  $('hist').innerHTML=`<svg class="hist" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="2.5" vector-effect="non-scaling-stroke" points="${pts.join(' ')}"/></svg>
-   <div class="hl" style="color:var(--mut);margin-top:8px"><span>Tanggal</span><span>Harga per gram</span><span>Total aset</span></div>${rows}`;
+  const all=P.riwayat;
+  if(!all.length){$('hist').innerHTML='<div class="empty">Belum ada riwayat</div>';return}
+  const r=all.slice(-14),n=r.length,W=520,H=130,L=62,Rr=14,T=14,B=26;
+  let mn=Math.min(...r.map(x=>x.harga)),mx=Math.max(...r.map(x=>x.harga));
+  if(mn===mx){const d=mn*.02||1;mn-=d;mx+=d}
+  const X=i=>n>1?L+i*(W-L-Rr)/(n-1):(L+W-Rr)/2,Y=v=>T+(1-(v-mn)/(mx-mn))*(H-T-B);
+  const pts=r.map((x,i)=>[X(i),Y(x.harga)]);
+  const line=n>1?'M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L'):`M${L} ${pts[0][1]} L${W-Rr} ${pts[0][1]}`;
+  const area=n>1?line+` L${pts[n-1][0].toFixed(1)} ${H-B} L${pts[0][0].toFixed(1)} ${H-B} Z`:'';
+  const last=pts[n-1];
+  const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik riwayat harga emas">
+   <defs><linearGradient id="gA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gold);stop-opacity:.35"/><stop offset="1" style="stop-color:var(--gold);stop-opacity:0"/></linearGradient></defs>
+   <line x1="${L}" x2="${W-Rr}" y1="${T}" y2="${T}" stroke="var(--line)"/><line x1="${L}" x2="${W-Rr}" y1="${H-B}" y2="${H-B}" stroke="var(--line)"/>
+   <text x="${L-6}" y="${T+4}" text-anchor="end">${short(mx)}</text><text x="${L-6}" y="${H-B+4}" text-anchor="end">${short(mn)}</text>
+   ${area?`<path d="${area}" fill="url(#gA)"/>`:''}<path d="${line}" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linejoin="round" ${n>1?'':'stroke-dasharray="5 5"'}/>
+   ${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5" fill="var(--card)" stroke="var(--gold)" stroke-width="2"/>`).join('')}
+   <text x="${L}" y="${H-8}" text-anchor="start">${esc(r[0].tanggal.slice(0,10))}</text>${n>1?`<text x="${W-Rr}" y="${H-8}" text-anchor="end">${esc(r[n-1].tanggal.slice(0,10))}</text>`:''}
+   </svg>${n>1?'':'<div class="hint" style="text-align:center">Baru ada 1 catatan harga. Grafik berkembang setiap kali harga emas diperbarui.</div>'}`;
+  const cur=all[all.length-1],prv=all.length>1?all[all.length-2]:null,d=prv?cur.harga-prv.harga:0,dp=prv&&prv.harga?d/prv.harga*100:0;
+  const rows=all.slice(-4).reverse().map(x=>`<div class="hl"><span>${esc(x.tanggal)}<small>${x.ket?' · '+esc(x.ket):''}</small></span><b>${rp(x.harga)}</b></div>`).join('');
+  $('hist').innerHTML=`<div class="hw"><div>${svg}</div><div>
+   <div class="kp"><div><small>Harga/gram</small><b>${rp(cur.harga)}</b></div><div><small>Perubahan terakhir</small><b class="${d>0?'up':d<0?'down':''}">${prv?(d?sgn(d):'Tetap'):'—'}</b>${prv&&d?`<small class="${d>0?'up':'down'}">${dp>=0?'+':'−'}${Math.abs(dp).toFixed(1).replace('.',',')}%</small>`:''}</div><div><small>Total aset</small><b>${short(cur.total)}</b></div></div>
+   ${rows}</div></div>`;
 }
+
 function render(){
   fillFilters();
   const q=$('q').value.toLowerCase(),fo=$('fo').value,ft=$('ft').value,fs=$('fs').value;
-  let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan].join(' ').toLowerCase().includes(q)));
   D.forEach(x=>x.sel=x.nilai-x.harga);
+  let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan,kd(x.kadar)].join(' ').toLowerCase().includes(q)));
   L.sort((a,b)=>(typeof a[sortK]==='number'?a[sortK]-b[sortK]:String(a[sortK]).localeCompare(String(b[sortK])))*sortD);
   const tb=sum(D,'berat'),th=sum(D,'harga'),tn=sum(D,'nilai'),sl=tn-th,pc=th?sl/th*100:0;
-  $('gold').innerHTML=`<div><small>Harga emas terbaru per gram</small><div class="num">${rp(P.harga)}</div><small>Diperbarui ${esc(P.diperbarui||'-')}</small></div><button onclick="openP()">Perbarui harga emas</button>`;
+  $('gold').innerHTML=`<div><div class="eyebrow">Harga emas per gram · tanpa kadar</div><div class="num">${rp(P.base)}</div>
+   <div class="chips"><span class="chip m">${P.mode==='otomatis'?'Otomatis':'Manual'}</span>${P.h24>0?`<span class="chip">24K: ${rp(P.h24)}</span>`:''}${P.adj?`<span class="chip">Selisih toko ${P.adj>0?'+':''}${P.adj}%</span>`:''}<span class="chip">Diperbarui ${esc(P.diperbarui||'-')}</span></div></div>
+   <button onclick="openS()">Atur harga emas</button>`;
   $('stats').innerHTML=`
-   <div class="st"><small>Total berat</small><div class="num">${gr(tb)}</div><small>${D.length} perhiasan</small></div>
-   <div class="st"><small>Total harga beli</small><div class="num">${rp(th)}</div></div>
-   <div class="st"><small>Nilai aset saat ini</small><div class="num">${rp(tn)}</div><small>${gr(tb)} × ${rp(P.harga)}</small></div>
-   <div class="st"><small>Selisih dari harga beli</small><div class="num ${sl>=0?'up':'down'}">${sgn(sl)}</div><small class="${sl>=0?'up':'down'}">${pc>=0?'+':'−'}${Math.abs(pc).toFixed(1).replace('.',',')}%</small></div>`;
-  const mo={},mt={};D.forEach(x=>{mo[x.pemilik]=(mo[x.pemilik]||0)+x.nilai;mt[x.jenis]=(mt[x.jenis]||0)+x.berat});
-  bars('byOwner',mo,rp);bars('byType',mt,gr);hist();
+   <div class="st"><div class="eyebrow">Total berat</div><div class="num">${gr(tb)}</div><small>${D.length} perhiasan</small></div>
+   <div class="st"><div class="eyebrow">Total harga beli</div><div class="num">${rp(th)}</div><small>Modal yang dikeluarkan</small></div>
+   <div class="st"><div class="eyebrow">Nilai aset saat ini</div><div class="num">${rp(tn)}</div><small>${tb?rp(tn/tb):'-'} rata-rata per gram</small></div>
+   <div class="st"><div class="eyebrow">Selisih dari harga beli</div><div class="num ${sl>=0?'up':'down'}">${sgn(sl)}</div><small class="${sl>=0?'up':'down'}">${pc>=0?'+':'−'}${Math.abs(pc).toFixed(1).replace('.',',')}%</small></div>`;
+  donut('byOwner',agg('pemilik','nilai'),5,rp,r=>`${gr(r.w)} · ${r.n} perhiasan`,short(tn),'Total nilai');
+  donut('byType',agg('jenis','berat'),5,gr,r=>`${r.n} item · ${rp(r.nl)}`,gr(tb),'Total berat');
+  hist();
 
-  const H=[['pemilik','Pemilik'],['jenis','Jenis'],['berat','Berat','r'],['harga','Harga beli','r'],['nilai','Nilai kini','r'],['sel','Selisih','r'],['store','Store']];
+  const H=[['pemilik','Pemilik'],['jenis','Jenis'],['kadar','Kadar'],['berat','Berat','r'],['harga','Harga beli','r'],['nilai','Nilai kini','r'],['sel','Selisih','r'],['store','Store']];
+  const tp=ps?Math.max(1,Math.ceil(L.length/ps)):1;if(page>tp)page=tp;if(page<1)page=1;
+  const Lp=ps?L.slice((page-1)*ps,page*ps):L;
   const fb=sum(L,'berat'),fh=sum(L,'harga'),fn=sum(L,'nilai');
   const sc=x=>`<span class="${x>=0?'up':'down'}">${sgn(x)}</span>`;
   $('tb').innerHTML=`<thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" onclick="sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
-   (L.length?L.map(x=>`<tr><td>${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span></td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="r">${rp(x.nilai)}</td><td class="r">${sc(x.sel)}</td><td>${esc(x.store)}</td>
-   <td><div class="act"><button onclick="openForm('${x.id}')">Ubah</button><button class="dng" onclick="askDel('${x.id}')">Hapus</button></div></td></tr>`).join(''):`<tr><td colspan="8" class="empty">Tidak ada data yang cocok</td></tr>`)+
-   `</tbody><tfoot><tr><td colspan="2">Total (${L.length} data)</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="2"></td></tr></tfoot>`;
-  $('mb').innerHTML=(L.length?L.map(x=>`<div class="item"><div class="hd"><div><b>${esc(x.jenis)}</b><div style="color:var(--mut)">${esc(x.pemilik)}</div></div><span class="tag">${esc(x.store||'-')}</span></div>
-   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd></div><div><dt>Selisih</dt><dd>${sc(x.sel)}</dd></div></dl>
-   ${x.catatan?`<div style="color:var(--mut);margin:-4px 0 10px">${esc(x.catatan)}</div>`:''}
+   (L.length?Lp.map(x=>`<tr><td>${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span></td><td>${kd(x.kadar)}</td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="r">${rp(x.nilai)}<small>${rp(x.hpg)}/g</small></td><td class="r">${sc(x.sel)}</td><td>${esc(x.store)}</td>
+   <td><div class="act"><button onclick="openForm('${x.id}')">Ubah</button><button class="dng" onclick="askDel('${x.id}')">Hapus</button></div></td></tr>`).join(''):`<tr><td colspan="9" class="empty">Tidak ada data yang cocok</td></tr>`)+
+   `</tbody><tfoot><tr><td colspan="3">Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="2"></td></tr></tfoot>`;
+  $('mb').innerHTML=(L.length?Lp.map(x=>`<div class="item"><div class="hd"><div><b>${esc(x.jenis)}</b> <span class="tag">${kd(x.kadar)}</span><div style="color:var(--mut)">${esc(x.pemilik)}</div></div><span class="tag">${esc(x.store||'-')}</span></div>
+   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd><dt>${rp(x.hpg)}/g</dt></div><div><dt>Selisih</dt><dd>${sc(x.sel)}</dd></div></dl>
+   ${x.catatan?`<div style="color:var(--mut);margin:-2px 0 10px">${esc(x.catatan)}</div>`:''}
    <div class="act"><button onclick="openForm('${x.id}')">Ubah</button><button class="dng" onclick="askDel('${x.id}')">Hapus</button></div></div>`).join('')
-   +`<div class="item" style="background:var(--gold-l)"><b>Total ${L.length} data</b><dl><div><dt>Berat</dt><dd>${gr(fb)}</dd></div><div><dt>Harga beli</dt><dd>${rp(fh)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(fn)}</dd></div><div><dt>Selisih</dt><dd>${sc(fn-fh)}</dd></div></dl></div>`
+   +`<div class="item" style="background:var(--gold-l)"><b>Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</b><dl><div><dt>Berat</dt><dd>${gr(fb)}</dd></div><div><dt>Harga beli</dt><dd>${rp(fh)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(fn)}</dd></div><div><dt>Selisih</dt><dd>${sc(fn-fh)}</dd></div></dl></div>`
    :'<div class="empty">Tidak ada data yang cocok</div>');
+  pager(L.length,tp);
 }
-function sortBy(k){if(sortK===k)sortD*=-1;else{sortK=k;sortD=1}render()}
+function pager(n,tp){
+  if(!n){$('pg').innerHTML='';return}
+  const a=ps?(page-1)*ps+1:1,b=ps?Math.min(page*ps,n):n;
+  const nums=[];
+  if(tp>1){const arr=[...new Set([1,tp,page-1,page,page+1])].filter(p=>p>=1&&p<=tp).sort((x,y)=>x-y);arr.forEach((p,i)=>{if(i&&p-arr[i-1]>1)nums.push('…');nums.push(p)})}
+  const btn=(l,p,dis,on)=>`<button type="button" ${dis?'disabled':''} class="${on?'pri':''}" onclick="goPage(${p})">${l}</button>`;
+  $('pg').innerHTML=`<span>Menampilkan ${a}–${b} dari ${n} data</span>`+(tp>1?`<div class="pgb">${btn('‹',page-1,page<=1)}${nums.map(p=>p==='…'?'<span class="pgd">…</span>':btn(p,p,false,p===page)).join('')}${btn('›',page+1,page>=tp)}</div>`:'')
+   +`<label class="pgs">Per halaman <select onchange="setPs(this.value)">${[10,25,50,100,0].map(v=>`<option value="${v}" ${v===ps?'selected':''}>${v||'Semua'}</option>`).join('')}</select></label>`;
+}
+function goPage(p){page=p;render();const t=document.querySelector&&document.querySelector('.tools');if(t&&t.scrollIntoView)t.scrollIntoView({behavior:'smooth',block:'start'})}
+function setPs(v){ps=+v;page=1;render()}
+function rf(){page=1;render()}
+function sortBy(k){if(sortK===k)sortD*=-1;else{sortK=k;sortD=1}page=1;render()}
 
-/* Harga emas */
-function openP(){$('p_harga').value=P.harga;pprev();$('ovp').classList.add('on');setTimeout(()=>$('p_harga').select(),50)}
-function closeP(){$('ovp').classList.remove('on')}
-function pprev(){const h=num($('p_harga').value),tb=sum(D,'berat'),d=tb*h-tb*P.harga;
-  $('p_prev').innerHTML=h?`Total aset menjadi <b>${rp(tb*h)}</b><br>${d===0?'Tidak berubah dari harga sekarang':`<span class="${d>0?'up':'down'}">${sgn(d)}</span> dibanding harga sekarang`}`:'Masukkan harga emas per gram.'}
-$('p_harga').addEventListener('input',pprev);
-function submitP(e){
-  e.preventDefault();const h=num($('p_harga').value);$('pv').disabled=true;$('pv').textContent='Menyimpan…';
-  api('updateHarga',[h],d=>{setAll(d);closeP();render();toast('Harga emas diperbarui');$('pv').disabled=false;$('pv').textContent='Simpan harga'},er=>{toast('Gagal: '+er.message);$('pv').disabled=false;$('pv').textContent='Simpan harga'});
+/* ===== Pengaturan harga emas ===== */
+function setMode(m){
+  smode=m;$('mM').classList.toggle('on',m==='manual');$('mO').classList.toggle('on',m==='otomatis');
+  $('pM').style.display=m==='manual'?'block':'none';$('pO').style.display=m==='otomatis'?'block':'none';
+  $('l_manual').textContent=m==='manual'?'Harga per gram — perhiasan tanpa kadar (Rp)':'Harga acuan toko hari ini per gram — tanpa kadar (Rp)';
+  $('h_manual').textContent=m==='manual'?'Harga yang Anda tetapkan sendiri (mis. harga di Semar Kartasura). Tidak berubah sampai Anda mengubahnya.':'Titik awal kalibrasi. Setelah disimpan, nilai perhiasan tanpa kadar naik/turun mengikuti harga pasar 24K sejak angka ini ditetapkan.';
+  spprev();
+}
+function updateMk(){$('mk_p').textContent=sH24>0?rp(sH24):'Belum diambil';$('mk_s').textContent=P.sumber?'Sumber: '+P.sumber:'Tekan tombol untuk mengambil harga terbaru'}
+function openS(){
+  sH24=P.h24||0;$('s_manual').value=P.manual||'';$('s_h24').value=P.h24||'';$('s_adj').value=P.adj||0;
+  updateMk();setMode(P.mode);$('ovs').classList.add('on');
+}
+function closeS(){$('ovs').classList.remove('on')}
+function sform(){return{mode:smode,manual:num($('s_manual').value),h24:sH24,adj:parseFloat($('s_adj').value)||0}}
+function spprev(){
+  const f=sform();
+  if(f.mode==='otomatis'&&!(f.h24>0)){$('s_prev').textContent='Harga pasar 24K akan diambil otomatis saat Anda menyimpan (atau tekan "Ambil harga pasar").';return}
+  if(!(f.manual>0)){$('s_prev').textContent='Isi harga per gram untuk perhiasan tanpa kadar.';return}
+  let ref=f.manual!==P.manual?(f.h24>0?f.h24:0):P.ref;if(!(ref>0)&&f.h24>0)ref=f.h24;
+  const S={mode:f.mode,manual:f.manual,h24:f.h24,adj:f.adj,ref};S.base=baseJS(S);
+  const tot=D.reduce((s,x)=>s+x.berat*pr(S,x.kadar),0),cur=sum(D,'nilai'),d=tot-cur;
+  const mv=f.mode==='otomatis'&&ref>0&&f.h24>0?`<br>Pergerakan pasar sejak kalibrasi: <b class="${f.h24>=ref?'up':'down'}">${f.h24>=ref?'+':'−'}${Math.abs((f.h24/ref-1)*100).toFixed(2).replace('.',',')}%</b>`:'';
+  $('s_prev').innerHTML=`Harga per gram (tanpa kadar): <b>${rp(S.base)}</b>${mv}<br>Total aset menjadi <b>${rp(tot)}</b> · ${Math.round(d)===0?'tidak berubah dari sekarang':`<span class="${d>0?'up':'down'}">${sgn(d)}</span> dibanding sekarang`}`;
+}
+function fetchPasar(){
+  const b=$('bFetch');b.disabled=true;b.textContent='Mengambil…';
+  api('ambilHargaPasar',[],d=>{b.disabled=false;b.textContent='Ambil harga pasar';try{const o=setAll(d);sH24=P.h24;$('s_h24').value=P.h24;updateMk();render();spprev();toast(o.pesan||'Harga pasar diperbarui')}catch(e){toast(e.message)}},
+   er=>{b.disabled=false;b.textContent='Ambil harga pasar';toast(er.message)});
+}
+function submitS(e){
+  e.preventDefault();const f=sform(),b=$('ssv');
+  if(!(f.manual>0)){toast('Isi harga per gram untuk perhiasan tanpa kadar.');return}
+  b.disabled=true;b.textContent=f.mode==='otomatis'&&!(f.h24>0)?'Mengambil harga pasar…':'Menyimpan…';
+  api('simpanHarga',[f],d=>{b.disabled=false;b.textContent='Simpan';try{const o=setAll(d);closeS();render();toast(o.pesan||'Disimpan')}catch(er){toast(er.message)}},
+   er=>{b.disabled=false;b.textContent='Simpan';toast(er.message)});
 }
 
-/* Perhiasan */
+/* ===== Perhiasan ===== */
 function openForm(id){
   const x=D.find(d=>d.id===id)||{};
   $('mt').textContent=id?'Ubah perhiasan':'Tambah perhiasan';
   $('f_id').value=x.id||'';$('f_pemilik').value=x.pemilik||'';$('f_jenis').value=x.jenis||'';
+  $('f_kadar').value=x.kadar?String(x.kadar).replace('.',','):'';
   $('f_berat').value=x.berat!=null?String(x.berat).replace('.',','):'';
   $('f_harga').value=x.harga||'';$('f_store').value=x.store||'';$('f_catatan').value=x.catatan||'';
   hint();$('ov').classList.add('on');setTimeout(()=>$('f_pemilik').focus(),50);
 }
 function closeForm(){$('ov').classList.remove('on')}
-function hint(){const b=num($('f_berat').value);$('hintG').textContent=b?`Nilai saat ini: ${rp(b*P.harga)} (${gr(b)} × ${rp(P.harga)})`:'Nilai saat ini dihitung otomatis dari berat × harga emas terbaru.'}
-$('f_berat').addEventListener('input',hint);
+function hint(){
+  const b=numD($('f_berat').value),raw=$('f_kadar').value.trim(),k=kadarJS(raw);
+  if(raw&&!k){$('hintG').textContent='Kadar tidak valid. Isi 1–24 karat (mis. 18) atau 300–999 (mis. 750).';return}
+  const p=pr(P,k);
+  $('hintG').textContent=b?`Nilai saat ini: ${rp(b*p)} (${gr(b)} × ${rp(p)}/g${k?' · '+kd(k):' · tanpa kadar'})`:'Nilai saat ini dihitung otomatis dari berat × harga emas (sesuai kadar).';
+}
+['f_berat','f_kadar'].forEach(i=>$(i).addEventListener('input',hint));
 function submitForm(e){
   e.preventDefault();
-  const o={id:$('f_id').value,pemilik:$('f_pemilik').value,jenis:$('f_jenis').value,berat:num($('f_berat').value),harga:num($('f_harga').value),
-    store:$('f_store').value,catatan:$('f_catatan').value};
+  const o={id:$('f_id').value,pemilik:$('f_pemilik').value,jenis:$('f_jenis').value,berat:numD($('f_berat').value),harga:num($('f_harga').value),
+    store:$('f_store').value,kadar:$('f_kadar').value,catatan:$('f_catatan').value};
+  if(!(o.berat>0)){toast('Berat harus lebih dari 0.');return}
+  if(o.kadar.trim()&&!kadarJS(o.kadar)){toast('Kadar tidak valid.');return}
   const edit=!!o.id;$('sv').disabled=true;$('sv').textContent='Menyimpan…';
-  api('saveItem',[o],d=>{setAll(d);closeForm();render();toast(edit?'Perubahan disimpan':'Perhiasan ditambahkan');$('sv').disabled=false;$('sv').textContent='Simpan'},er=>{toast('Gagal: '+er.message);$('sv').disabled=false;$('sv').textContent='Simpan'});
+  api('saveItem',[o],d=>{$('sv').disabled=false;$('sv').textContent='Simpan';try{setAll(d);closeForm();render();toast(edit?'Perubahan disimpan':'Perhiasan ditambahkan')}catch(er){toast(er.message)}},
+   er=>{toast('Gagal: '+er.message);$('sv').disabled=false;$('sv').textContent='Simpan'});
 }
 function askDel(id){const x=D.find(d=>d.id===id);delId=id;$('dtxt').textContent=`${x.jenis} milik ${x.pemilik} (${gr(x.berat)}) akan dihapus dari Google Sheets.`;$('ovd').classList.add('on')}
-$('dok').onclick=()=>{$('dok').disabled=true;api('deleteItem',[delId],d=>{setAll(d);$('ovd').classList.remove('on');$('dok').disabled=false;render();toast('Data dihapus')},er=>{$('dok').disabled=false;toast('Gagal: '+er.message)})};
+$('dok').onclick=()=>{$('dok').disabled=true;api('deleteItem',[delId],d=>{$('dok').disabled=false;try{setAll(d);$('ovd').classList.remove('on');render();toast('Data dihapus')}catch(er){toast(er.message)}},er=>{$('dok').disabled=false;toast('Gagal: '+er.message)})};
 const ovd=$('ovd');ovd.onclick=e=>{if(e.target===ovd)ovd.classList.remove('on')};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeForm();closeP();ovd.classList.remove('on')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeForm();closeS();ovd.classList.remove('on')}});
 if(SHEET_URL)$('lnk').style.display='';
 load();
 </script>
