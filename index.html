@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aset Perhiasan</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1d1a14;--mut:#6f685a;--line:#e6e1d5;--gold:#a8791c;--gold-d:#7a5510;--gold-l:#f5ead0;--dark:#1d1a14;--up:#1d7a4b;--down:#b3372c;--r:12px}
+@media(prefers-color-scheme:dark){:root{--bg:#14120e;--card:#1e1b15;--ink:#f1ece0;--mut:#a59d8b;--line:#332e24;--gold:#e0b44f;--gold-d:#f0cf80;--gold-l:#2c2515;--dark:#0e0c09;--up:#4cc58a;--down:#ff7d70}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,sans-serif}
+h1,h2,.num{font-family:Fraunces,Georgia,serif}
+header{background:var(--dark);color:#f3d98b;padding:20px 16px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0}
+h1{margin:0;font-size:24px;letter-spacing:.2px}
+header p{margin:2px 0 0;color:#b9ad8d;font-size:13px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:9px 14px;font-weight:500}
+button:hover{border-color:var(--gold)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.pri{background:var(--gold);border-color:var(--gold);color:#fff}
+.pri:hover{background:var(--gold-d);border-color:var(--gold-d)}
+.dng{color:var(--down)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 12px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.st small{color:var(--mut);display:block}
+.st .num{font-size:22px;font-weight:700;margin-top:2px;word-break:break-word}
+.up{color:var(--up)}.down{color:var(--down)}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.pn{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.pn h2{font-size:16px;margin:0 0 12px}
+.bar{margin-bottom:10px}
+.bar .t{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.bar .t span:last-child{color:var(--mut);white-space:nowrap}
+.bar i{display:block;height:7px;border-radius:4px;background:var(--gold-l);margin-top:4px;overflow:hidden}
+.bar i b{display:block;height:100%;background:var(--gold);border-radius:4px}
+.gold{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--dark);color:#f3d98b;border-radius:var(--r);padding:16px 18px;margin:16px 0 12px}
+.gold small{color:#b9ad8d;display:block}
+.gold .num{font-size:28px;font-weight:700;color:#f6e3a8}
+.gold button{background:var(--gold);border-color:var(--gold);color:#fff}
+.hist{width:100%;height:110px;display:block}
+.hl{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:6px 0;border-bottom:1px solid var(--line)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tools input,.tools select{flex:1 1 150px;min-width:0}
+input,select,textarea{font:inherit;width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.tbl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--mut);cursor:pointer;user-select:none;background:var(--bg);position:sticky;top:0}
+td.r,th.r{text-align:right}
+tr:last-child td{border-bottom:0}
+tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--line)}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;background:var(--gold-l);color:var(--gold-d);font-size:12px;font-weight:500}
+.act{display:flex;gap:6px;justify-content:flex-end}
+.act button{padding:5px 10px;font-size:13px}
+.mob{display:none}
+.item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.item .hd{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.item .hd b{font-size:15px}
+.item dl{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:12px 0}
+.item dt{color:var(--mut);font-size:12px}
+.item dd{margin:0;font-weight:500}
+.item .act{justify-content:stretch}.item .act button{flex:1;padding:9px}
+.empty{padding:40px 16px;text-align:center;color:var(--mut)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:12px;z-index:20}
+.ov.on{display:flex}
+.md{background:var(--card);border-radius:16px;width:100%;max-width:520px;max-height:94vh;overflow:auto;padding:20px}
+.md h2{margin:0 0 14px;font-size:20px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg label{display:block;font-weight:500;font-size:13px}
+.fg label span{display:block;margin-bottom:4px}
+.full{grid-column:1/-1}
+.ft{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.hint{font-size:12px;color:var(--mut);margin-top:4px;font-weight:400}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--dark);color:#f3d98b;padding:10px 18px;border-radius:99px;display:none;z-index:30;max-width:90vw}
+#load{padding:60px;text-align:center;color:var(--mut)}
+@media(max-width:860px){.stats{grid-template-columns:1fr 1fr}.panels{grid-template-columns:1fr}}
+@media(max-width:760px){.tbl{display:none}.mob{display:block}h1{font-size:20px}header .lbl{display:none}.fg{grid-template-columns:1fr}.st .num{font-size:18px}}
+@media(prefers-reduced-motion:no-preference){.md{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(10px);opacity:0}}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div><h1>Aset Perhiasan</h1><p>Pantau koleksi emas, nilai terkini, dan selisihnya dari harga beli</p></div>
+  <div style="display:flex;gap:8px"><button id="lnk" style="display:none" onclick="window.open(SHEET_URL,'_blank')">Buka Sheet</button><button onclick="load()" title="Muat ulang">↻</button><button class="pri" onclick="openForm()">+ <span class="lbl">Tambah perhiasan</span></button></div>
+</div></header>
+
+<main class="wrap">
+  <div id="load">Memuat data dari Google Sheets…</div>
+  <div id="app" style="display:none">
+    <section class="gold" id="gold"></section>
+    <section class="stats" id="stats"></section>
+    <section class="panels">
+      <div class="pn"><h2>Nilai per pemilik</h2><div id="byOwner"></div></div>
+      <div class="pn"><h2>Berat per jenis</h2><div id="byType"></div></div>
+    </section>
+    <div class="pn" style="margin-bottom:16px"><h2>Riwayat harga emas</h2><div id="hist"></div></div>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Cari pemilik, jenis, store, catatan…" oninput="render()">
+      <select id="fo" onchange="render()"></select>
+      <select id="ft" onchange="render()"></select>
+      <select id="fs" onchange="render()"></select>
+    </div>
+    <div class="tbl"><table id="tb"></table></div>
+    <div class="mob" id="mb"></div>
+  </div>
+</main>
+<div style="height:40px"></div>
+
+<div class="ov" id="ov" onclick="if(event.target===this)closeForm()">
+  <form class="md" onsubmit="submitForm(event)">
+    <h2 id="mt">Tambah perhiasan</h2>
+    <input type="hidden" id="f_id">
+    <div class="fg">
+      <label class="full"><span>Pemilik</span><input id="f_pemilik" list="dlO" required></label>
+      <label><span>Jenis</span><input id="f_jenis" list="dlJ" required placeholder="Cincin, Gelang…"></label>
+      <label><span>Berat (gram)</span><input id="f_berat" inputmode="decimal" required placeholder="0,9"></label>
+      <label class="full"><span>Harga beli (Rp)</span><input id="f_harga" inputmode="numeric" required placeholder="839700"></label>
+      <div class="full hint" id="hintG" style="background:var(--gold-l);color:var(--gold-d);padding:9px 12px;border-radius:8px;margin:0"></div>
+      <label class="full"><span>Store</span><input id="f_store" list="dlS" placeholder="Semar KTS"></label>
+      <label class="full"><span>Catatan</span><textarea id="f_catatan" rows="2" placeholder="Kadar, nomor nota, kondisi…"></textarea></label>
+    </div>
+    <datalist id="dlO"></datalist><datalist id="dlJ"></datalist><datalist id="dlS"></datalist>
+    <div class="ft"><button type="button" onclick="closeForm()">Batal</button><button class="pri" id="sv">Simpan</button></div>
+  </form>
+</div>
+<div class="ov" id="ovd"><div class="md" style="max-width:380px">
+  <h2>Hapus data ini?</h2><p id="dtxt" style="color:var(--mut)"></p>
+  <div class="ft"><button onclick="ovd.classList.remove('on')">Batal</button><button class="pri" style="background:var(--down);border-color:var(--down)" id="dok">Hapus</button></div>
+</div></div>
+<div class="ov" id="ovp" onclick="if(event.target===this)closeP()">
+  <form class="md" style="max-width:420px" onsubmit="submitP(event)">
+    <h2>Perbarui harga emas</h2>
+    <label style="display:block;font-weight:500"><span style="display:block;margin-bottom:4px">Harga emas per gram (Rp)</span><input id="p_harga" inputmode="numeric" required></label>
+    <div class="hint" id="p_prev" style="margin-top:12px;background:var(--gold-l);color:var(--gold-d);padding:10px 12px;border-radius:8px"></div>
+    <div class="ft"><button type="button" onclick="closeP()">Batal</button><button class="pri" id="pv">Simpan harga</button></div>
+  </form>
+</div>
+<div id="toast"></div>
+
+<script>
+// ==================== TEMPEL DISINI (1) ====================
+// URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
+// WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
+const API_URL='https://script.google.com/macros/s/AKfycbyo8wItoDYQIm_F0hwb9JAmG5gt-EMo2gAdBPQn17t4w4yw7Yh08xZ-LwPRVQzw201_/exec';
+// Opsional: harus sama dengan API_KEY di Code.gs. Kosongkan jika tidak dipakai.
+const API_KEY='';
+// ==================== TEMPEL DISINI (2) ====================
+// (Opsional) URL Google Spreadsheet -> memunculkan tombol "Buka Sheet". Kosongkan ('') jika tidak perlu.
+const SHEET_URL='https://docs.google.com/spreadsheets/d/19HuU2Jo8iS8aw1bVpm6LCfhEQkrmR2tMgCk3PPHCz7k/edit';
+// =======================================================
+function api(fn,args,ok,ko){
+  if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
+  if(!API_URL){ko(new Error('Isi API_URL di index.html dengan URL Web App (berakhiran /exec).'));return}
+  fetch(API_URL,{method:'POST',body:JSON.stringify({fn:fn,args:args,key:API_KEY})})
+   .then(r=>r.json()).then(j=>j.ok?ok(j.data):ko(new Error(j.error)))
+   .catch(e=>ko(new Error('Tidak bisa terhubung ke Web App ('+e.message+'). Pastikan Deploy memakai akses "Anyone", URL /exec benar, dan sudah New version.')));
+}
+let D=[],P={harga:0,diperbarui:'',riwayat:[]},sortK='pemilik',sortD=1,delId=null;
+const $=id=>document.getElementById(id);
+const rp=n=>'Rp '+Math.round(n).toLocaleString('id-ID');
+const gr=n=>(+n).toLocaleString('id-ID',{maximumFractionDigits:2})+' g';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=s=>{s=String(s||'').trim().replace(/[^\d,.-]/g,'');if(s.includes(',')){s=s.replace(/\./g,'').replace(',','.')}else if(/^\d{1,3}(\.\d{3})+$/.test(s)){s=s.replace(/\./g,'')}return parseFloat(s)||0};
+const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
+const sgn=x=>(x>=0?'+':'−')+rp(Math.abs(x));
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2600)}
+function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');D=d.items;P=d}
+
+function fail(m){$('app').style.display='none';$('load').style.display='block';$('load').innerHTML='<b>Gagal memuat data.</b><br>'+esc(m)}
+function load(){
+  $('load').style.display='block';$('load').textContent='Memuat data dari Google Sheets…';
+  const t=setTimeout(()=>fail('Server tidak merespons lebih dari 30 detik. Di editor Apps Script jalankan setupData, setujui izin, lalu Deploy > New version.'),30000);
+  api('getData',[],d=>{clearTimeout(t);try{setAll(d);$('load').style.display='none';$('app').style.display='block';render()}catch(e){fail(e.message)}},e=>{clearTimeout(t);fail(e.message)});
+}
+const uniq=k=>[...new Set(D.map(x=>x[k]).filter(Boolean))].sort();
+function fillFilters(){
+  [['fo','pemilik','Semua pemilik'],['ft','jenis','Semua jenis'],['fs','store','Semua store']].forEach(([id,k,l])=>{
+    const el=$(id),v=el.value;el.innerHTML=`<option value="">${l}</option>`+uniq(k).map(x=>`<option>${esc(x)}</option>`).join('');el.value=v;
+  });
+  $('dlO').innerHTML=uniq('pemilik').map(x=>`<option value="${esc(x)}">`).join('');
+  $('dlJ').innerHTML=uniq('jenis').map(x=>`<option value="${esc(x)}">`).join('');
+  $('dlS').innerHTML=uniq('store').map(x=>`<option value="${esc(x)}">`).join('');
+}
+function bars(el,map,fmt){
+  const e=Object.entries(map).sort((a,b)=>b[1]-a[1]),m=Math.max(...e.map(x=>x[1]),1);
+  $(el).innerHTML=e.map(([k,v])=>`<div class="bar"><div class="t"><span>${esc(k)}</span><span>${fmt(v)}</span></div><i><b style="width:${v/m*100}%"></b></i></div>`).join('')||'<div class="empty">Belum ada data</div>';
+}
+function hist(){
+  const all=P.riwayat,r=all.slice(-12);
+  if(!r.length){$('hist').innerHTML='<div class="empty">Belum ada riwayat</div>';return}
+  const W=600,H=110,pd=8,mn=Math.min(...r.map(x=>x.harga)),sp=(Math.max(...r.map(x=>x.harga))-mn)||1;
+  const pts=r.map((x,i)=>(r.length>1?pd+i*(W-2*pd)/(r.length-1):W/2).toFixed(1)+','+(H-pd-(x.harga-mn)/sp*(H-2*pd)).toFixed(1));
+  const rows=all.slice(-6).reverse().map(x=>{const i=all.indexOf(x),pv=i>0?all[i-1].harga:null,d=pv===null?null:x.harga-pv;
+    return `<div class="hl"><span>${esc(x.tanggal)}</span><span>${rp(x.harga)}${d===null?'':` <span class="${d>=0?'up':'down'}">(${sgn(d)})</span>`}</span><span style="color:var(--mut)">${rp(x.total)}</span></div>`}).join('');
+  $('hist').innerHTML=`<svg class="hist" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="2.5" vector-effect="non-scaling-stroke" points="${pts.join(' ')}"/></svg>
+   <div class="hl" style="color:var(--mut);margin-top:8px"><span>Tanggal</span><span>Harga per gram</span><span>Total aset</span></div>${rows}`;
+}
+function render(){
+  fillFilters();
+  const q=$('q').value.toLowerCase(),fo=$('fo').value,ft=$('ft').value,fs=$('fs').value;
+  let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan].join(' ').toLowerCase().includes(q)));
+  D.forEach(x=>x.sel=x.nilai-x.harga);
+  L.sort((a,b)=>(typeof a[sortK]==='number'?a[sortK]-b[sortK]:String(a[sortK]).localeCompare(String(b[sortK])))*sortD);
+  const tb=sum(D,'berat'),th=sum(D,'harga'),tn=sum(D,'nilai'),sl=tn-th,pc=th?sl/th*100:0;
+  $('gold').innerHTML=`<div><small>Harga emas terbaru per gram</small><div class="num">${rp(P.harga)}</div><small>Diperbarui ${esc(P.diperbarui||'-')}</small></div><button onclick="openP()">Perbarui harga emas</button>`;
+  $('stats').innerHTML=`
+   <div class="st"><small>Total berat</small><div class="num">${gr(tb)}</div><small>${D.length} perhiasan</small></div>
+   <div class="st"><small>Total harga beli</small><div class="num">${rp(th)}</div></div>
+   <div class="st"><small>Nilai aset saat ini</small><div class="num">${rp(tn)}</div><small>${gr(tb)} × ${rp(P.harga)}</small></div>
+   <div class="st"><small>Selisih dari harga beli</small><div class="num ${sl>=0?'up':'down'}">${sgn(sl)}</div><small class="${sl>=0?'up':'down'}">${pc>=0?'+':'−'}${Math.abs(pc).toFixed(1).replace('.',',')}%</small></div>`;
+  const mo={},mt={};D.forEach(x=>{mo[x.pemilik]=(mo[x.pemilik]||0)+x.nilai;mt[x.jenis]=(mt[x.jenis]||0)+x.berat});
+  bars('byOwner',mo,rp);bars('byType',mt,gr);hist();
+
+  const H=[['pemilik','Pemilik'],['jenis','Jenis'],['berat','Berat','r'],['harga','Harga beli','r'],['nilai','Nilai kini','r'],['sel','Selisih','r'],['store','Store']];
+  const fb=sum(L,'berat'),fh=sum(L,'harga'),fn=sum(L,'nilai');
+  const sc=x=>`<span class="${x>=0?'up':'down'}">${sgn(x)}</span>`;
+  $('tb').innerHTML=`<thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" onclick="sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
+   (L.length?L.map(x=>`<tr><td>${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span></td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="r">${rp(x.nilai)}</td><td class="r">${sc(x.sel)}</td><td>${esc(x.store)}</td>
+   <td><div class="act"><button onclick="openForm('${x.id}')">Ubah</button><button class="dng" onclick="askDel('${x.id}')">Hapus</button></div></td></tr>`).join(''):`<tr><td colspan="8" class="empty">Tidak ada data yang cocok</td></tr>`)+
+   `</tbody><tfoot><tr><td colspan="2">Total (${L.length} data)</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="2"></td></tr></tfoot>`;
+  $('mb').innerHTML=(L.length?L.map(x=>`<div class="item"><div class="hd"><div><b>${esc(x.jenis)}</b><div style="color:var(--mut)">${esc(x.pemilik)}</div></div><span class="tag">${esc(x.store||'-')}</span></div>
+   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd></div><div><dt>Selisih</dt><dd>${sc(x.sel)}</dd></div></dl>
+   ${x.catatan?`<div style="color:var(--mut);margin:-4px 0 10px">${esc(x.catatan)}</div>`:''}
+   <div class="act"><button onclick="openForm('${x.id}')">Ubah</button><button class="dng" onclick="askDel('${x.id}')">Hapus</button></div></div>`).join('')
+   +`<div class="item" style="background:var(--gold-l)"><b>Total ${L.length} data</b><dl><div><dt>Berat</dt><dd>${gr(fb)}</dd></div><div><dt>Harga beli</dt><dd>${rp(fh)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(fn)}</dd></div><div><dt>Selisih</dt><dd>${sc(fn-fh)}</dd></div></dl></div>`
+   :'<div class="empty">Tidak ada data yang cocok</div>');
+}
+function sortBy(k){if(sortK===k)sortD*=-1;else{sortK=k;sortD=1}render()}
+
+/* Harga emas */
+function openP(){$('p_harga').value=P.harga;pprev();$('ovp').classList.add('on');setTimeout(()=>$('p_harga').select(),50)}
+function closeP(){$('ovp').classList.remove('on')}
+function pprev(){const h=num($('p_harga').value),tb=sum(D,'berat'),d=tb*h-tb*P.harga;
+  $('p_prev').innerHTML=h?`Total aset menjadi <b>${rp(tb*h)}</b><br>${d===0?'Tidak berubah dari harga sekarang':`<span class="${d>0?'up':'down'}">${sgn(d)}</span> dibanding harga sekarang`}`:'Masukkan harga emas per gram.'}
+$('p_harga').addEventListener('input',pprev);
+function submitP(e){
+  e.preventDefault();const h=num($('p_harga').value);$('pv').disabled=true;$('pv').textContent='Menyimpan…';
+  api('updateHarga',[h],d=>{setAll(d);closeP();render();toast('Harga emas diperbarui');$('pv').disabled=false;$('pv').textContent='Simpan harga'},er=>{toast('Gagal: '+er.message);$('pv').disabled=false;$('pv').textContent='Simpan harga'});
+}
+
+/* Perhiasan */
+function openForm(id){
+  const x=D.find(d=>d.id===id)||{};
+  $('mt').textContent=id?'Ubah perhiasan':'Tambah perhiasan';
+  $('f_id').value=x.id||'';$('f_pemilik').value=x.pemilik||'';$('f_jenis').value=x.jenis||'';
+  $('f_berat').value=x.berat!=null?String(x.berat).replace('.',','):'';
+  $('f_harga').value=x.harga||'';$('f_store').value=x.store||'';$('f_catatan').value=x.catatan||'';
+  hint();$('ov').classList.add('on');setTimeout(()=>$('f_pemilik').focus(),50);
+}
+function closeForm(){$('ov').classList.remove('on')}
+function hint(){const b=num($('f_berat').value);$('hintG').textContent=b?`Nilai saat ini: ${rp(b*P.harga)} (${gr(b)} × ${rp(P.harga)})`:'Nilai saat ini dihitung otomatis dari berat × harga emas terbaru.'}
+$('f_berat').addEventListener('input',hint);
+function submitForm(e){
+  e.preventDefault();
+  const o={id:$('f_id').value,pemilik:$('f_pemilik').value,jenis:$('f_jenis').value,berat:num($('f_berat').value),harga:num($('f_harga').value),
+    store:$('f_store').value,catatan:$('f_catatan').value};
+  const edit=!!o.id;$('sv').disabled=true;$('sv').textContent='Menyimpan…';
+  api('saveItem',[o],d=>{setAll(d);closeForm();render();toast(edit?'Perubahan disimpan':'Perhiasan ditambahkan');$('sv').disabled=false;$('sv').textContent='Simpan'},er=>{toast('Gagal: '+er.message);$('sv').disabled=false;$('sv').textContent='Simpan'});
+}
+function askDel(id){const x=D.find(d=>d.id===id);delId=id;$('dtxt').textContent=`${x.jenis} milik ${x.pemilik} (${gr(x.berat)}) akan dihapus dari Google Sheets.`;$('ovd').classList.add('on')}
+$('dok').onclick=()=>{$('dok').disabled=true;api('deleteItem',[delId],d=>{setAll(d);$('ovd').classList.remove('on');$('dok').disabled=false;render();toast('Data dihapus')},er=>{$('dok').disabled=false;toast('Gagal: '+er.message)})};
+const ovd=$('ovd');ovd.onclick=e=>{if(e.target===ovd)ovd.classList.remove('on')};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeForm();closeP();ovd.classList.remove('on')}});
+if(SHEET_URL)$('lnk').style.display='';
+load();
+</script>
+</body>
+</html>
