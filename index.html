@@ -7,8 +7,8 @@
 <title>Aset Perhiasan</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f1ea;--card:#fff;--ink:#1d1a14;--mut:#6f685a;--line:#e8e3d7;--gold:#b0801f;--gold-d:#7a5510;--gold-l:#f6ecd2;--dark:#1b1710;--up:#1d7a4b;--down:#b3372c;--r:14px;--sh:0 1px 2px rgba(40,30,10,.05),0 4px 14px rgba(40,30,10,.05)}
-@media(prefers-color-scheme:dark){:root{--bg:#12100c;--card:#1d1a14;--ink:#f1ece0;--mut:#a59d8b;--line:#322d23;--gold:#e0b44f;--gold-d:#f0cf80;--gold-l:#2b2415;--dark:#0c0a07;--up:#4cc58a;--down:#ff7d70;--sh:0 1px 2px rgba(0,0,0,.3)}}
+:root{--bg:#f4f1ea;--card:#fff;--ink:#1d1a14;--mut:#6f685a;--line:#e8e3d7;--gold:#b0801f;--gold-d:#7a5510;--gold-btn:#8a6212;--on-gold:#fff;--gold-l:#f6ecd2;--dark:#1b1710;--up:#1d7a4b;--down:#b3372c;--r:14px;--sh:0 1px 2px rgba(40,30,10,.05),0 4px 14px rgba(40,30,10,.05)}
+@media(prefers-color-scheme:dark){:root{--bg:#12100c;--card:#1d1a14;--ink:#f1ece0;--mut:#a59d8b;--line:#322d23;--gold:#e0b44f;--gold-d:#f0cf80;--gold-btn:#e0b44f;--on-gold:#1b1710;--gold-l:#2b2415;--dark:#0c0a07;--up:#4cc58a;--down:#ff7d70;--sh:0 1px 2px rgba(0,0,0,.3)}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,sans-serif}
 h1,h2,.num{font-family:Fraunces,Georgia,serif}
@@ -23,8 +23,10 @@ button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(-
 button:hover{border-color:var(--gold)}
 button:disabled{opacity:.6;cursor:wait}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
-.pri{background:var(--gold);border-color:var(--gold);color:#fff}
+.pri{background:var(--gold-btn);border-color:var(--gold-btn);color:var(--on-gold)}
 .pri:hover{background:var(--gold-d);border-color:var(--gold-d)}
+header .pri{background:#e0b44f;border-color:#e0b44f;color:#1b1710}
+header .pri:hover{background:#f0cf80;border-color:#f0cf80}
 header button:not(.pri){background:rgba(255,255,255,.06);border-color:rgba(243,217,139,.25);color:#f3d98b}
 .dng{color:var(--down)}
 .up{color:var(--up)}.down{color:var(--down)}
@@ -34,8 +36,11 @@ header button:not(.pri){background:rgba(255,255,255,.06);border-color:rgba(243,2
 .hero .num{font-size:30px;font-weight:700;color:#f6e3a8;line-height:1.2}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .chip{font-size:12px;padding:2px 10px;border-radius:99px;background:rgba(243,217,139,.1);color:#d9c78f;border:1px solid rgba(243,217,139,.15)}
-.chip.m{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:600}
-.hero button{background:var(--gold);border-color:var(--gold);color:#fff}
+.chip.m{display:inline-flex;align-items:center;gap:6px;background:transparent;color:#f6e3a8;border-color:rgba(243,217,139,.5);font-weight:600}
+.chip.m i{width:7px;height:7px;border-radius:50%;background:#4cc58a}.chip.m.mm i{background:#e0b44f}
+.hero .note{font-size:12.5px;color:#b9ad8d;margin-top:8px;max-width:640px}
+.hero button{background:#e0b44f;border-color:#e0b44f;color:#1b1710}
+.hero button:hover{background:#f0cf80;border-color:#f0cf80}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
 .st{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);border-top:3px solid var(--gold)}
 .st .num{font-size:21px;font-weight:700;margin:2px 0;word-break:break-word}
@@ -105,13 +110,27 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
 .fg label span,.lb span{display:block;margin-bottom:4px}
 .full{grid-column:1/-1}
 .ft{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-.hint{font-size:12px;color:var(--mut);margin-top:4px;font-weight:400}
+.hint{font-size:12px;color:var(--mut);margin-top:4px;font-weight:400}.hint.new{color:var(--up);font-weight:500}
+.fg label[for]{display:block}
+.cbw{position:relative}.cbw input{padding-right:36px}
+.cbt{position:absolute;right:1px;top:1px;bottom:1px;width:34px;padding:0;border:0;background:transparent;color:var(--mut);display:grid;place-items:center;border-radius:0 8px 8px 0}
+.cbt:hover{color:var(--ink);border:0}
+.cbl{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:6;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.35);max-height:232px;overflow:auto;overscroll-behavior:contain;padding:4px}
+.cbl[hidden]{display:none}
+.cbo{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:7px;cursor:pointer;font-weight:500;line-height:1.3}
+.cbo .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cbo .c{flex:none;color:var(--mut);font-size:12px;font-weight:400}
+.cbo:hover,.cbo.act{background:var(--gold-l)}
+.cbo mark{background:none;color:var(--gold-d);font-weight:700}
+.cbo.sel .t::after{content:' ✓';color:var(--gold)}
+.cbn{color:var(--up);border-bottom:1px solid var(--line);border-radius:7px 7px 0 0;margin-bottom:2px}
+.cbh{padding:7px 10px;font-size:11.5px;color:var(--mut)}
 .box{background:var(--gold-l);color:var(--gold-d);padding:10px 12px;border-radius:10px;font-size:13px}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);padding:5px;border-radius:12px;margin-bottom:16px}
 .seg button{border:0;background:transparent;padding:9px 10px;text-align:left;border-radius:9px;line-height:1.3}
 .seg button small{display:block;font-weight:400;font-size:11.5px;color:var(--mut)}
-.seg button.on{background:var(--gold);color:#fff}
-.seg button.on small{color:#fff;opacity:.9}
+.seg button.on{background:var(--gold-btn);color:var(--on-gold)}
+.seg button.on small{color:var(--on-gold);opacity:.9}
 .mk{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--dark);color:#f3d98b;border-radius:12px;padding:12px 14px}
 .mk .num{font-size:22px;font-weight:700;color:#f6e3a8}
 .mk small{color:#b9ad8d;display:block;font-size:12px}
@@ -124,18 +143,18 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
 .vm .seg{margin:0;padding:4px}
 .vm .seg button{padding:7px 14px;font-size:13px}
 .vm .n{flex-basis:100%;color:var(--mut);font-size:12px}
-@media(max-width:760px){.vm .seg{width:100%}}
+@media(max-width:760px){.vm .seg{width:100%}input,select,textarea{font-size:16px}}
 .hb{display:flex;gap:8px;flex:none}
 header button{white-space:nowrap}
 .brand>div:last-child{min-width:0}
 .chip{white-space:nowrap}
 .kch{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
 .kch button{padding:5px 12px;font-size:13px;border-radius:99px}
-.kch button.on{background:var(--gold);border-color:var(--gold);color:#fff}
+
 @media(max-width:760px){.hb button{min-width:40px;height:40px;padding:0 12px}.hero{flex-direction:column;align-items:stretch;padding:16px}.hero button{width:100%;padding:11px}.hero .num{font-size:26px}.tools input{flex:1 1 100%}.tools select{flex:1 1 calc(50% - 4px)}.stats{gap:10px}.st{padding:12px}.pg{justify-content:center}}
 .hero .hseg{display:inline-flex;gap:2px;background:rgba(243,217,139,.1);border:1px solid rgba(243,217,139,.15);border-radius:99px;padding:3px;margin-top:8px}
 .hero .hseg button{width:auto;border:0;background:transparent;color:#d9c78f;padding:3px 14px;font-size:12.5px;border-radius:99px}
-.hero .hseg button.on{background:var(--gold);color:#fff;font-weight:600}
+.hero .hseg button.on{background:#e0b44f;color:#1b1710;font-weight:600}
 @media(max-width:440px){.bd{flex-direction:column;align-items:stretch}.dn{align-self:center}.kp{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:no-preference){.md{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(10px);opacity:0}}}
 </style>
@@ -171,26 +190,26 @@ header button{white-space:nowrap}
 </main>
 <div style="height:40px"></div>
 
-<div class="ov" id="ov" onclick="if(event.target===this)closeForm()">
+<div class="ov" id="ov">
   <form class="md" onsubmit="submitForm(event)">
     <h2 id="mt">Tambah perhiasan</h2>
     <input type="hidden" id="f_id">
     <div class="fg">
-      <label class="full"><span>Pemilik</span><input id="f_pemilik" list="dlO" required></label>
-      <label><span>Jenis</span><input id="f_jenis" list="dlJ" required placeholder="Cincin, Gelang…"></label>
+      <div class="full lb cb"><label for="f_pemilik"><span>Pemilik</span></label><div class="cbw"><input id="f_pemilik" role="combobox" aria-expanded="false" aria-controls="l_pemilik" aria-autocomplete="list" autocomplete="off" required placeholder="Cari atau ketik nama baru"><button type="button" class="cbt" tabindex="-1" aria-label="Tampilkan daftar pemilik"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="cbl" id="l_pemilik" role="listbox" hidden></div></div><div class="hint" id="h_pemilik"></div></div>
+      <div class="lb cb"><label for="f_jenis"><span>Jenis</span></label><div class="cbw"><input id="f_jenis" role="combobox" aria-expanded="false" aria-controls="l_jenis" aria-autocomplete="list" autocomplete="off" required placeholder="Cincin, Gelang…"><button type="button" class="cbt" tabindex="-1" aria-label="Tampilkan daftar jenis"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="cbl" id="l_jenis" role="listbox" hidden></div></div><div class="hint" id="h_jenis"></div></div>
       <label><span>Berat (gram)</span><input id="f_berat" inputmode="decimal" required placeholder="0,9"></label>
       <div class="full lb"><span>Kadar (karat)</span><select id="f_ksel"></select><input id="f_kadar" inputmode="decimal" placeholder="Ketik kadar: 1–24 atau 300–999 (mis. 750)" style="display:none;margin-top:8px"><div class="hint" id="kinfo"></div></div>
       <label><span>Harga beli (Rp)</span><input id="f_harga" inputmode="numeric" required placeholder="839700"></label>
-      <label><span>Store</span><input id="f_store" list="dlS" placeholder="Semar KTS"></label>
+      <div class="lb cb"><label for="f_store"><span>Store</span></label><div class="cbw"><input id="f_store" role="combobox" aria-expanded="false" aria-controls="l_store" aria-autocomplete="list" autocomplete="off" placeholder="Cari atau ketik store baru"><button type="button" class="cbt" tabindex="-1" aria-label="Tampilkan daftar store"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="cbl" id="l_store" role="listbox" hidden></div></div><div class="hint" id="h_store"></div></div>
       <label class="full"><span>Catatan</span><textarea id="f_catatan" rows="2" placeholder="Nomor nota, kondisi…"></textarea></label>
       <div class="full box" id="hintG"></div>
     </div>
-    <datalist id="dlO"></datalist><datalist id="dlJ"></datalist><datalist id="dlS"></datalist>
+    
         <div class="ft"><button type="button" onclick="closeForm()">Batal</button><button class="pri" id="sv">Simpan</button></div>
   </form>
 </div>
 
-<div class="ov" id="ovs" onclick="if(event.target===this)closeS()">
+<div class="ov" id="ovs">
   <form class="md" onsubmit="submitS(event)">
     <h2>Atur harga emas</h2>
     <div class="seg">
@@ -212,7 +231,7 @@ header button{white-space:nowrap}
 
       <label class="full"><span>Selisih harga toko vs pasar (%) — untuk perhiasan berkadar</span><input id="s_adj" type="number" step="any" value="0" oninput="spprev()">
         <div class="hint">Isi minus jika harga toko lebih rendah dari harga pasar.</div>
-        <button type="button" style="margin-top:6px" onclick="samakan()">Samakan 10K dengan harga acuan di atas</button></label>
+        <button type="button" style="margin-top:6px" onclick="samakan()">Samakan 10K dengan harga tanpa kadar</button></label>
       <div class="full box" id="kz" style="display:none"></div>
       <div class="full box" id="s_prev"></div>
     </div>
@@ -230,7 +249,7 @@ header button{white-space:nowrap}
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbxaFAT5IrvdBaVBRMgS_SrMqzmKN9bWA7cKdpvZDfFs9fRTsjpH1HipRFtD4hyN-AsH/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbw-d7V4QjKLRSXoUyw2xRCXDTKMC__oeJzrMX77vZbwzyYoInNwwkMcoUknzqYysBs/exec';
 // =======================================================
 function api(fn,args,ok,ko){
   if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
@@ -244,7 +263,8 @@ let hv='auto';try{hv=localStorage.getItem('hv')==='manual'?'manual':'auto'}catch
 function setHv(v){hv=v==='manual'?'manual':'auto';try{localStorage.setItem('hv',hv)}catch(e){}render()}
 let D=[],P={base:0,manual:0,mode:'manual',h24:0,adj:0,ref:0,sumber:'',diperbarui:'',riwayat:[]},sortK='pemilik',sortD=1,delId=null,smode='manual',sH24=0,page=1,ps=10;
 const $=id=>document.getElementById(id);
-const rp=n=>isFinite(n)&&n!==null&&n!==''?'Rp '+Math.round(n).toLocaleString('id-ID'):'Rp 0';
+const rp=n=>isFinite(n)&&n!==null&&n!==''?'Rp\u00A0'+(Math.round(n)||0).toLocaleString('id-ID'):'Rp\u00A00';
+const pct=(x,d)=>(x>=0?'+':'−')+Math.abs(x).toFixed(d==null?1:d).replace('.',',')+'%';
 const gr=n=>(+n).toLocaleString('id-ID',{maximumFractionDigits:2})+' g';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=s=>{s=String(s||'').trim().replace(/[^\d,.-]/g,'');if(s.includes(',')){s=s.replace(/\./g,'').replace(',','.')}else if(/^\d{1,3}(\.\d{3})+$/.test(s)){s=s.replace(/\./g,'')}return parseFloat(s)||0};
@@ -255,6 +275,7 @@ const kd=k=>k>0?(+(+k).toFixed(2)).toString().replace('.',',')+'K':'—';
 const short=n=>n>=1e9?(n/1e9).toFixed(2).replace('.',',')+' M':n>=1e6?(n/1e6).toFixed(1).replace('.',',')+' jt':n>=1e3?Math.round(n/1e3)+' rb':String(Math.round(n));
 function kadarJS(v){let k=numD(v);if(!(k>0))return 0;if(k>24){if(k>=300&&k<=1000)k=k/1000*24;else return 0}return k}
 const baseJS=S=>Math.round((S.mode==='otomatis'&&S.h24>0&&S.ref>0)?S.manual*S.h24/S.ref:S.manual);
+const refJS=f=>{let ref=(f.manual!==P.manual||(f.mode==='otomatis'&&P.mode!=='otomatis'))?(f.h24>0?f.h24:0):P.ref;if(!(ref>0)&&f.h24>0)ref=f.h24;return ref};
 const pr=(S,k)=>(k>0&&S.h24>0)?S.h24*k/24*(1+S.adj/100):S.base;
 function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3600)}
 function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');if(d.base===undefined)throw new Error('Code.gs di Apps Script masih versi lama. Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');D=d.items;P=d;D.forEach(x=>{x.nilaiH=x.nilai;x.hpgH=x.hpg});applyVM();$('lnk').style.display=d.sheetUrl?'':'none';return d}
@@ -282,9 +303,6 @@ function fillFilters(){
   });
   const ks=[...new Set(D.map(x=>x.kadar))].sort((a,b)=>b-a),fkE=$('fk'),kv=fkE.value;
   fkE.innerHTML='<option value="">Semua kadar</option>'+ks.map(k=>`<option value="${k}">${k>0?kd(k):'Belum ada kadar'}</option>`).join('');fkE.value=kv;
-  $('dlO').innerHTML=uniq('pemilik').map(x=>`<option value="${esc(x)}">`).join('');
-  $('dlJ').innerHTML=uniq('jenis').map(x=>`<option value="${esc(x)}">`).join('');
-  $('dlS').innerHTML=uniq('store').map(x=>`<option value="${esc(x)}">`).join('');
 }
 
 /* ===== Grafik ===== */
@@ -299,7 +317,7 @@ function donut(el,rows,max,fmt,sub,cTop,cSub){
     const s=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="${PAL[i%PAL.length]}" stroke-width="16" stroke-dasharray="${vis} ${C-vis}" stroke-dashoffset="${-acc}" transform="rotate(-90 60 60)"/>`;acc+=len;return s}).join('');
   const lg=rows.map((r,i)=>{const p=r.v/tot*100;
     return `<div class="lg"><i style="background:${PAL[i%PAL.length]}"></i><div class="n"><b title="${esc(r.k)}">${esc(r.k)}</b><small>${sub(r)}</small></div><div class="v">${fmt(r.v)}<small>${p<1?'<1':Math.round(p)}%</small></div></div>`}).join('');
-  $(el).innerHTML=`<svg class="dn" viewBox="0 0 120 120" role="img"><circle cx="60" cy="60" r="${R}" fill="none" stroke="var(--line)" stroke-width="16"/>${segs}<text class="c1" x="60" y="61">${cTop}</text><text class="c2" x="60" y="75">${cSub}</text></svg><div class="lgs">${lg}</div>`;
+  $(el).innerHTML=`<svg class="dn" viewBox="0 0 120 120" role="img" aria-label="${esc(cTop+' '+cSub)}"><circle cx="60" cy="60" r="${R}" fill="none" stroke="var(--line)" stroke-width="16"/>${segs}<text class="c1" x="60" y="61">${cTop}</text><text class="c2" x="60" y="75">${cSub}</text></svg><div class="lgs">${lg}</div>`;
 }
 function hist(){
   const all=P.riwayat;
@@ -315,7 +333,7 @@ function hist(){
   const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik riwayat harga emas">
    <defs><linearGradient id="gA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--gold);stop-opacity:.35"/><stop offset="1" style="stop-color:var(--gold);stop-opacity:0"/></linearGradient></defs>
    <line x1="${L}" x2="${W-Rr}" y1="${T}" y2="${T}" stroke="var(--line)"/><line x1="${L}" x2="${W-Rr}" y1="${H-B}" y2="${H-B}" stroke="var(--line)"/>
-   <text x="${L-6}" y="${T+4}" text-anchor="end">${short(mx)}</text><text x="${L-6}" y="${H-B+4}" text-anchor="end">${short(mn)}</text>
+   <text x="${L-6}" y="${T+4}" text-anchor="end">${Math.round(mx).toLocaleString('id-ID')}</text><text x="${L-6}" y="${H-B+4}" text-anchor="end">${Math.round(mn).toLocaleString('id-ID')}</text>
    ${area?`<path d="${area}" fill="url(#gA)"/>`:''}<path d="${line}" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linejoin="round" ${n>1?'':'stroke-dasharray="5 5"'}/>
    ${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5" fill="var(--card)" stroke="var(--gold)" stroke-width="2"/>`).join('')}
    <text x="${L}" y="${H-8}" text-anchor="start">${esc(r[0].tanggal.slice(0,10))}</text>${n>1?`<text x="${W-Rr}" y="${H-8}" text-anchor="end">${esc(r[n-1].tanggal.slice(0,10))}</text>`:''}
@@ -334,10 +352,16 @@ function render(){
   let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fk||String(x.kadar)===fk)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan,kd(x.kadar)].join(' ').toLowerCase().includes(q)));
   L.sort((a,b)=>(typeof a[sortK]==='number'?a[sortK]-b[sortK]:String(a[sortK]).localeCompare(String(b[sortK])))*sortD);
   const eq=D.reduce((a,x)=>a+(x.kadar>0?x.berat*x.kadar/24:0),0),tb=sum(D,'berat'),th=sum(D,'harga'),tn=sum(D,'nilai'),sl=tn-th,pc=th?sl/th*100:0;
-  const showM=P.mode==='otomatis'&&hv==='manual';
-  $('gold').innerHTML=`<div><div class="eyebrow">Harga emas per gram · tanpa kadar${showM?' · manual':''}</div><div class="num">${rp(showM?P.manual:P.base)}</div>
-   ${P.mode==='otomatis'?`<div class="hseg" role="group" aria-label="Tampilan harga"><button type="button" class="${showM?'':'on'}" onclick="setHv('auto')">Otomatis</button><button type="button" class="${showM?'on':''}" onclick="setHv('manual')">Manual</button></div>`:''}
-   <div class="chips"><span class="chip m">${P.mode==='otomatis'?'Otomatis':'Manual'}</span>${P.h24>0?`<span class="chip">24K: ${rp(P.h24)}</span>`:''}${P.adj?`<span class="chip">Selisih toko ${P.adj>0?'+':''}${P.adj}%</span>`:''}${showM&&P.ref>0?`<span class="chip">24K saat ditetapkan: ${rp(P.ref)}</span>`:''}<span class="chip">Diperbarui ${esc(P.diperbarui||'-')}</span></div></div>
+  const oto=P.mode==='otomatis',showM=oto&&hv==='manual';
+  const mv=oto&&P.ref>0&&P.h24>0?(P.h24/P.ref-1)*100:null;
+  const eb=showM?'Harga acuan toko · per gram · tanpa kadar':oto?'Harga berjalan · per gram · tanpa kadar':'Harga emas · per gram · tanpa kadar';
+  const note=showM?`Harga yang Anda tetapkan${P.ref>0?' saat emas 24K '+rp(P.ref):''}. Perhitungan di bawah memakai harga berjalan ${rp(P.base)}.`
+    :oto?`Dipakai untuk menghitung perhiasan tanpa kadar. Acuan toko ${rp(P.manual)}${mv!=null?' · pasar '+pct(mv,2)+' sejak ditetapkan':''}.`
+    :'Harga tetap sesuai yang Anda tetapkan, tidak mengikuti pasar.';
+  $('gold').innerHTML=`<div><div class="eyebrow">${eb}</div><div class="num">${rp(showM?P.manual:P.base)}</div>
+   ${oto?`<div class="hseg" role="group" aria-label="Pilih harga yang ditampilkan"><button type="button" aria-pressed="${!showM}" class="${showM?'':'on'}" onclick="setHv('auto')">Ikut pasar</button><button type="button" aria-pressed="${showM}" class="${showM?'on':''}" onclick="setHv('manual')">Acuan toko</button></div>`:''}
+   <div class="note">${note}</div>
+   <div class="chips"><span class="chip m ${oto?'':'mm'}" title="Mode harga yang aktif (diubah lewat Atur harga emas)"><i></i>Mode ${oto?'otomatis':'manual'}</span>${P.h24>0?`<span class="chip" title="Harga emas murni per gram">24K: ${rp(P.h24)}</span>`:''}${P.adj?`<span class="chip" title="Berlaku hanya untuk perhiasan yang kadarnya sudah diisi">Selisih toko ${pct(P.adj)} · perhiasan berkadar</span>`:''}<span class="chip">Diperbarui ${esc(P.diperbarui||'-')}</span></div></div>
    <button onclick="openS()">Atur harga emas</button>`;
   $('stats').innerHTML=`
    <div class="st"><div class="eyebrow">Total berat</div><div class="num">${gr(tb)}</div><small>${D.length} perhiasan${eq>0?' · setara '+gr(eq)+' emas 24K':''}</small></div>
@@ -353,14 +377,14 @@ function render(){
   const Lp=ps?L.slice((page-1)*ps,page*ps):L;
   const fb=sum(L,'berat'),fh=sum(L,'harga'),fn=sum(L,'nilai');
   const sc=x=>`<span class="${x>=0?'up':'down'}">${sgn(x)}</span>`;
-  $('tb').innerHTML=`<thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" onclick="sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
+  $('tb').innerHTML=`<thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" tabindex="0" role="button" onclick="sortBy('${k}')" onkeydown="if(event.key==='Enter')sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
    (L.length?Lp.map(x=>`<tr><td>${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span></td><td>${kd(x.kadar)}</td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="r">${rp(x.nilai)}<small>${rp(x.hpg)}/g</small></td><td class="r">${sc(x.sel)}</td><td>${esc(x.store)}</td>
-   <td><div class="act"><button onclick="openForm('${x.id}')">Ubah</button><button class="dng" onclick="askDel('${x.id}')">Hapus</button></div></td></tr>`).join(''):`<tr><td colspan="9" class="empty">Tidak ada data yang cocok</td></tr>`)+
+   <td><div class="act"><button data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)">Ubah</button><button class="dng" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)">Hapus</button></div></td></tr>`).join(''):`<tr><td colspan="9" class="empty">Tidak ada data yang cocok</td></tr>`)+
    `</tbody><tfoot><tr><td colspan="3">Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="2"></td></tr></tfoot>`;
   $('mb').innerHTML=(L.length?Lp.map(x=>`<div class="item"><div class="hd"><div><b>${esc(x.jenis)}</b> <span class="tag">${kd(x.kadar)}</span><div style="color:var(--mut)">${esc(x.pemilik)}</div></div><span class="tag">${esc(x.store||'-')}</span></div>
    <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd><dt>${rp(x.hpg)}/g</dt></div><div><dt>Selisih</dt><dd>${sc(x.sel)}</dd></div></dl>
    ${x.catatan?`<div style="color:var(--mut);margin:-2px 0 10px">${esc(x.catatan)}</div>`:''}
-   <div class="act"><button onclick="openForm('${x.id}')">Ubah</button><button class="dng" onclick="askDel('${x.id}')">Hapus</button></div></div>`).join('')
+   <div class="act"><button data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)">Ubah</button><button class="dng" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)">Hapus</button></div></div>`).join('')
    +`<div class="item" style="background:var(--gold-l)"><b>Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</b><dl><div><dt>Berat</dt><dd>${gr(fb)}</dd></div><div><dt>Harga beli</dt><dd>${rp(fh)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(fn)}</dd></div><div><dt>Selisih</dt><dd>${sc(fn-fh)}</dd></div></dl></div>`
    :'<div class="empty">Tidak ada data yang cocok</div>');
   pager(L.length,tp);
@@ -381,7 +405,7 @@ function sortBy(k){if(sortK===k)sortD*=-1;else{sortK=k;sortD=1}page=1;render()}
 
 /* ===== Pengaturan harga emas ===== */
 function setMode(m){
-  smode=m;$('mM').classList.toggle('on',m==='manual');$('mO').classList.toggle('on',m==='otomatis');
+  smode=m;updateMk();$('mM').classList.toggle('on',m==='manual');$('mO').classList.toggle('on',m==='otomatis');
   $('pM').style.display=m==='manual'?'block':'none';$('pO').style.display=m==='otomatis'?'block':'none';
   $('l_manual').textContent=m==='manual'?'Harga per gram — perhiasan tanpa kadar (Rp)':'Harga acuan toko hari ini per gram — tanpa kadar (Rp)';
   $('h_manual').textContent=m==='manual'?'Harga yang Anda tetapkan sendiri (mis. harga di Semar Kartasura). Tidak berubah sampai Anda mengubahnya.':'Titik awal kalibrasi. Setelah disimpan, nilai perhiasan tanpa kadar naik/turun mengikuti harga pasar 24K sejak angka ini ditetapkan.';
@@ -404,9 +428,10 @@ function isiKadar(){
   api('isiKadarKosong',[DEF_KADAR],d=>{try{const o=setAll(d);kzUpdate();render();spprev();toast(o.pesan||'Kadar diisi')}catch(e){toast(e.message)}},er=>{b.disabled=false;kzArm=false;b.textContent='Set semua ke '+DEF_KADAR+'K';toast(er.message)});
 }
 function samakan(){
-  const f=sform();
-  if(!(f.h24>0&&f.manual>0)){toast('Isi harga per gram dan harga 24K dulu.');return}
-  $('s_adj').value=Math.round((f.manual/(f.h24*DEF_KADAR/24)-1)*1000)/10;spprev();
+  const f=sform(),ref=refJS(f),den=f.mode==='otomatis'?ref:f.h24;
+  if(!(f.h24>0&&f.manual>0&&den>0)){toast('Isi harga per gram dan harga 24K dulu.');return}
+  // Otomatis: harga tanpa kadar = acuan × 24K sekarang ÷ 24K saat ditetapkan, jadi pembandingnya 24K saat ditetapkan
+  $('s_adj').value=Math.round((f.manual/(den*DEF_KADAR/24)-1)*10000)/100;spprev();
 }
 function closeS(){$('ovs').classList.remove('on')}
 function sform(){return{mode:smode,manual:num($('s_manual').value),h24:sH24,adj:parseFloat($('s_adj').value)||0}}
@@ -414,7 +439,7 @@ function spprev(){
   const f=sform();
   if(f.mode==='otomatis'&&!(f.h24>0)){$('s_prev').textContent='Harga pasar 24K akan diambil otomatis saat Anda menyimpan (atau tekan "Ambil harga pasar").';return}
   if(!(f.manual>0)){$('s_prev').textContent='Isi harga per gram untuk perhiasan tanpa kadar.';return}
-  let ref=f.manual!==P.manual?(f.h24>0?f.h24:0):P.ref;if(!(ref>0)&&f.h24>0)ref=f.h24;
+  const ref=refJS(f);
   const S={mode:f.mode,manual:f.manual,h24:f.h24,adj:f.adj,ref};S.base=baseJS(S);
   const tot=D.reduce((s,x)=>s+x.berat*pr(S,x.kadar),0),cur=sum(D,'nilaiH'),d=tot-cur;
   const mv=f.mode==='otomatis'&&ref>0&&f.h24>0?`<br>Pergerakan pasar sejak kalibrasi: <b class="${f.h24>=ref?'up':'down'}">${f.h24>=ref?'+':'−'}${Math.abs((f.h24/ref-1)*100).toFixed(2).replace('.',',')}%</b>`:'';
@@ -441,9 +466,9 @@ function openForm(id){
   $('f_kadar').value=id?(x.kadar?String(x.kadar).replace('.',','):''):String(DEF_KADAR);
   $('f_berat').value=x.berat!=null?String(x.berat).replace('.',','):'';
   $('f_harga').value=x.harga||'';$('f_store').value=x.store||'';$('f_catatan').value=x.catatan||'';
-  setSel();hint();$('ov').classList.add('on');setTimeout(()=>$('f_pemilik').focus(),50);
+  setSel();hint();fldHint();$('ov').classList.add('on');setTimeout(()=>{const e=$('f_pemilik');cbSkip=true;e.focus();cbSkip=false},50);
 }
-function closeForm(){$('ov').classList.remove('on')}
+function closeForm(){cbClose();$('ov').classList.remove('on')}
 function hint(){
   const b=numD($('f_berat').value),raw=$('f_kadar').value.trim(),k=kadarJS(raw);
   $('kinfo').textContent=k?`${kd(k)} = kemurnian ${(k/24*100).toFixed(1).replace('.',',')}% (${Math.round(k/24*1000)}‰)${b?' · setara '+gr(b*k/24)+' emas 24K':''}`:(raw?'Kadar tidak valid.':'Belum diisi: dihitung dengan harga tanpa kadar.');
@@ -452,23 +477,102 @@ function hint(){
   $('hintG').textContent=b?`Nilai saat ini: ${rp(b*p)} (${gr(b)} × ${rp(p)}/g${k?' · '+kd(k):' · tanpa kadar'})`:'Nilai saat ini dihitung otomatis dari berat × harga emas (sesuai kadar).';
 }
 ['f_berat','f_kadar'].forEach(i=>$(i).addEventListener('input',hint));
-const KL=[8,9,10,12,16,17,18,20,22,24];
+const KL=[8,9,10,12,14,16,17,18,20,22,24];
 $('f_ksel').innerHTML=KL.map(v=>`<option value="${v}">${v}K</option>`).join('')+'<option value="">Belum tahu</option><option value="x">Lainnya…</option>';
+const normT=s=>String(s||'').replace(/\s+/g,' ').trim();
+const titleT=s=>s.replace(/(^|\s)(\S)/g,(m,a,b)=>a+b.toUpperCase());
+// Daftar nilai unik (tanpa beda huruf besar/kecil) beserta jumlah pemakaiannya
+function cbStats(k,skip){const m={};D.forEach(x=>{if(skip&&x.id===skip)return;const v=normT(x[k]);if(!v)return;const l=v.toLowerCase(),e=m[l]||(m[l]={n:0,s:{}});e.n++;e.s[v]=(e.s[v]||0)+1});return Object.values(m).map(e=>({v:Object.entries(e.s).sort((a,b)=>b[1]-a[1])[0][0],n:e.n}))}
+const canonList=(k,skip)=>cbStats(k,skip).map(x=>x.v).sort((a,b)=>a.localeCompare(b));
+// Aturan sama dengan server: sudah ada -> pakai penulisan yang ada; baru & huruf kecil semua -> Huruf Awal Kapital
+function canonVal(k,raw,skip){const v=normT(raw);if(!v)return{v:'',st:'empty'};const hit=canonList(k,skip).find(x=>x.toLowerCase()===v.toLowerCase());if(hit)return{v:hit,st:hit===v?'same':'case'};return{v:v===v.toLowerCase()?titleT(v):v,st:'new'}}
+const CB={pemilik:{i:'f_pemilik',l:'l_pemilik',h:'h_pemilik',n:'pemilik',t:'Pemilik'},jenis:{i:'f_jenis',l:'l_jenis',h:'h_jenis',n:'jenis',t:'Jenis'},store:{i:'f_store',l:'l_store',h:'h_store',n:'store',t:'Store'}};
+const CB_MAX=50;
+let cbK=null,cbAct=-1,cbRows=[],cbTyped=false,cbSkip=false;
+function fldHint(){
+  const sid=$('f_id').value;
+  Object.keys(CB).forEach(k=>{
+    const c=CB[k],v=canonVal(k,$(c.i).value,sid),el=$(c.h),n=canonList(k,sid).length;el.className='hint';
+    if(v.st==='empty')el.textContent=(n?`${n} ${c.n} tersimpan. Ketik untuk mencari atau menambah yang baru.`:`Belum ada ${c.n} tersimpan. Ketik untuk menambah.`)+(k==='store'?' Opsional.':'');
+    else if(v.st==='new'){el.textContent=`${c.t} baru "${v.v}" akan ditambahkan.`;el.classList.add('new')}
+    else if(v.st==='case')el.textContent=`Akan ditulis sesuai data yang ada: "${v.v}".`;
+    else el.textContent=`${c.t} sudah ada di daftar.`;
+  });
+}
+function cbHL(v,q){const i=q?v.toLowerCase().indexOf(q):-1;return i<0?esc(v):esc(v.slice(0,i))+'<mark>'+esc(v.slice(i,i+q.length))+'</mark>'+esc(v.slice(i+q.length))}
+function cbBuild(k){
+  const c=CB[k],raw=normT($(c.i).value),q=cbTyped?raw.toLowerCase():'';
+  let rows=cbStats(k,$('f_id').value);
+  if(q)rows=rows.filter(x=>x.v.toLowerCase().includes(q));
+  const rk=x=>{const l=x.v.toLowerCase();return l===q?0:l.startsWith(q)?1:2};
+  rows.sort((a,b)=>(q?rk(a)-rk(b):0)||b.n-a.n||a.v.localeCompare(b.v));
+  const total=rows.length;rows=rows.slice(0,CB_MAX);
+  const items=rows.map(x=>({t:'o',v:x.v,n:x.n}));
+  if(q&&!rows.some(x=>x.v.toLowerCase()===q))items.unshift({t:'n',v:canonVal(k,raw).v});
+  return{items,total,q};
+}
+function cbRender(){
+  if(!cbK)return;
+  const c=CB[cbK],el=$(c.l),inp=$(c.i),b=cbBuild(cbK),cur=normT(inp.value).toLowerCase();
+  cbRows=b.items;
+  if(cbAct<0&&cbTyped&&cbRows.length){const j=cbRows.findIndex(x=>x.t==='o');cbAct=j>=0?j:0}  // ada yang cocok -> itu yang aktif (cegah nama setengah jadi); tidak ada -> baris "Tambah baru"
+  if(cbAct>=cbRows.length)cbAct=cbRows.length-1;
+  el.innerHTML=(cbRows.map((x,i)=>{
+    const id=`o_${cbK}_${i}`,act=i===cbAct?' act':'';
+    if(x.t==='n')return`<div class="cbo cbn${act}" role="option" id="${id}" data-i="${i}"><span class="t"><b>+</b> Tambah ${c.n} baru “${esc(x.v)}”</span></div>`;
+    const sel=x.v.toLowerCase()===cur;
+    return`<div class="cbo${act}${sel?' sel':''}" role="option" id="${id}" aria-selected="${sel}" data-i="${i}"><span class="t">${cbHL(x.v,b.q)}</span><span class="c" title="${x.n} perhiasan">${x.n}</span></div>`;
+  }).join('')+(b.total>CB_MAX?`<div class="cbh">Menampilkan ${CB_MAX} dari ${b.total}. Ketik untuk mempersempit.</div>`:''))||'<div class="cbh">Belum ada data. Ketik untuk menambah.</div>';
+  if(cbAct>=0){inp.setAttribute('aria-activedescendant',`o_${cbK}_${cbAct}`);const a=el.querySelector('.act');if(a){const t=a.offsetTop,bt=t+a.offsetHeight;if(t<el.scrollTop)el.scrollTop=t;else if(bt>el.scrollTop+el.clientHeight)el.scrollTop=bt-el.clientHeight}}
+  else inp.removeAttribute('aria-activedescendant');
+}
+function cbOpen(k,typed){
+  if(cbK&&cbK!==k)cbClose();
+  const first=cbK!==k;cbK=k;cbTyped=!!typed;if(first)cbAct=-1;
+  const c=CB[k];$(c.l).hidden=false;$(c.i).setAttribute('aria-expanded','true');cbRender();
+  if(first)$(c.l).scrollIntoView({block:'nearest'});
+}
+function cbClose(){if(!cbK)return;const c=CB[cbK];$(c.l).hidden=true;$(c.i).setAttribute('aria-expanded','false');$(c.i).removeAttribute('aria-activedescendant');cbK=null;cbAct=-1;cbTyped=false}
+function cbPick(i){const x=cbRows[i];if(!x||!cbK)return;$(CB[cbK].i).value=x.v;cbClose();fldHint()}
+Object.keys(CB).forEach(k=>{
+  const c=CB[k],inp=$(c.i),lst=$(c.l),tg=inp.parentNode.querySelector('.cbt');
+  inp.addEventListener('focus',()=>{if(cbSkip)return;cbOpen(k,false)});
+  inp.addEventListener('click',()=>{if(cbK!==k)cbOpen(k,false)});
+  inp.addEventListener('input',()=>{cbAct=-1;cbOpen(k,true);fldHint()});
+  inp.addEventListener('blur',()=>{if(cbK===k)cbClose()});
+  inp.addEventListener('keydown',e=>{
+    const open=cbK===k;
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+      e.preventDefault();if(!open){cbOpen(k,false);return}
+      const n=cbRows.length;if(!n)return;
+      cbAct=e.key==='ArrowDown'?(cbAct+1)%n:(cbAct<=0?n-1:cbAct-1);cbRender();
+    }else if(e.key==='Enter'&&open&&cbAct>=0){e.preventDefault();cbPick(cbAct)}
+    else if(e.key==='Escape'&&open){e.stopPropagation();cbClose()}
+  });
+  lst.addEventListener('mousedown',e=>e.preventDefault());
+  lst.addEventListener('click',e=>{const o=e.target.closest('.cbo');if(o)cbPick(+o.dataset.i)});
+  tg.addEventListener('mousedown',e=>e.preventDefault());
+  tg.addEventListener('click',()=>{if(cbK===k){cbClose();return}if(document.activeElement!==inp){cbSkip=true;inp.focus();cbSkip=false}cbOpen(k,false)});
+});
 function setSel(){const raw=$('f_kadar').value.trim(),k=kadarJS(raw),v=KL.includes(k)?String(k):(raw?'x':'');$('f_ksel').value=v;$('f_kadar').style.display=v==='x'?'':'none'}
 $('f_ksel').onchange=()=>{const v=$('f_ksel').value,i=$('f_kadar');if(v==='x'){i.style.display='';i.value='';i.focus()}else{i.style.display='none';i.value=v}hint()};
 function submitForm(e){
-  e.preventDefault();
+  e.preventDefault();cbClose();
   const o={id:$('f_id').value,pemilik:$('f_pemilik').value,jenis:$('f_jenis').value,berat:numD($('f_berat').value),harga:num($('f_harga').value),
     store:$('f_store').value,kadar:$('f_kadar').value,catatan:$('f_catatan').value};
+  o.pemilik=normT(o.pemilik);o.jenis=normT(o.jenis);o.store=normT(o.store);
+  if(!o.pemilik||!o.jenis){toast('Pemilik dan jenis wajib diisi.');return}
   if(!(o.berat>0)){toast('Berat harus lebih dari 0.');return}
   if(o.kadar.trim()&&!kadarJS(o.kadar)){toast('Kadar tidak valid.');return}
   const edit=!!o.id;$('sv').disabled=true;$('sv').textContent='Menyimpan…';
-  api('saveItem',[o],d=>{$('sv').disabled=false;$('sv').textContent='Simpan';try{setAll(d);closeForm();render();toast(edit?'Perubahan disimpan':'Perhiasan ditambahkan')}catch(er){toast(er.message)}},
+  api('saveItem',[o],d=>{$('sv').disabled=false;$('sv').textContent='Simpan';try{const r=setAll(d);closeForm();render();toast(r.pesan||(edit?'Perubahan disimpan':'Perhiasan ditambahkan'))}catch(er){toast(er.message)}},
    er=>{toast('Gagal: '+er.message);$('sv').disabled=false;$('sv').textContent='Simpan'});
 }
 function askDel(id){const x=D.find(d=>d.id===id);delId=id;$('dtxt').textContent=`${x.jenis} milik ${x.pemilik} (${gr(x.berat)}) akan dihapus dari Google Sheets.`;$('ovd').classList.add('on')}
 $('dok').onclick=()=>{$('dok').disabled=true;api('deleteItem',[delId],d=>{$('dok').disabled=false;try{setAll(d);$('ovd').classList.remove('on');render();toast('Data dihapus')}catch(er){toast(er.message)}},er=>{$('dok').disabled=false;toast('Gagal: '+er.message)})};
-const ovd=$('ovd');ovd.onclick=e=>{if(e.target===ovd)ovd.classList.remove('on')};
+const ovd=$('ovd');
+function ovClose(el,fn){let dn=false;el.addEventListener('pointerdown',e=>{dn=e.target===el});el.addEventListener('click',e=>{if(dn&&e.target===el)fn();dn=false})}
+ovClose($('ov'),closeForm);ovClose($('ovs'),closeS);ovClose(ovd,()=>ovd.classList.remove('on'));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeForm();closeS();ovd.classList.remove('on')}});
 load();
 </script>
