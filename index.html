@@ -176,6 +176,12 @@ td.pm{font-weight:500}
 .item .act{border-top:1px solid var(--line);padding-top:10px}
 .item dl{margin:12px 0 10px}
 .item dl .full{border-top:1px dashed var(--line);padding-top:8px}
+.fl{color:var(--gold-d);font-weight:500;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.fl:hover{color:var(--gold)}
+.fotoRow{display:flex;gap:8px;flex-wrap:wrap}
+.fotoPrev{display:block;max-width:100%;max-height:220px;margin-top:8px;border-radius:10px;border:1px solid var(--line);object-fit:contain}
+.fotoPrev[hidden]{display:none}
+#ocrTxt details{margin-top:6px;font-weight:400;font-size:12.5px;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -222,6 +228,11 @@ td.pm{font-weight:500}
       <label><span>Tanggal beli</span><input id="f_tgl" type="date"><div class="hint">Opsional</div></label>
       <div class="full lb cb"><label for="f_store"><span>Store</span></label><div class="cbw"><input id="f_store" role="combobox" aria-expanded="false" aria-controls="l_store" aria-autocomplete="list" autocomplete="off" placeholder="Cari atau ketik store baru"><button type="button" class="cbt" tabindex="-1" aria-label="Tampilkan daftar store"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="cbl" id="l_store" role="listbox" hidden></div></div><div class="hint" id="h_store"></div></div>
       <label class="full"><span>Catatan</span><textarea id="f_catatan" rows="2" placeholder="Nomor nota, kondisi…"></textarea></label>
+      <div class="full lb" id="fotoBox"><span>Foto surat</span>
+        <input type="file" id="f_foto" accept="image/*" hidden>
+        <div class="fotoRow"><button type="button" id="bFoto" onclick="$('f_foto').click()">Pilih / ambil foto</button><button type="button" class="pri" id="bOcr" style="display:none" onclick="ocrFoto()">Isi data otomatis dari foto</button><button type="button" class="dng" id="bFotoDel" style="display:none" onclick="hapusFoto()">Hapus foto</button></div>
+        <img class="fotoPrev" id="fotoPrev" alt="Pratinjau foto surat" hidden>
+        <div class="hint" id="fotoInfo"></div><div id="ocrTxt"></div></div>
       <div class="full box" id="hintG"></div>
     </div>
     
@@ -269,7 +280,7 @@ td.pm{font-weight:500}
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbzI1EuKbGY8cgu-F4Qig9gR2MKdDR9pnJDayaC2ZxfhF1ylwVV8hL0pt8pzdlydipFX/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbyXis07St1PkNdHFLvQTVLiE9J1xyrE1zBJMXCLH2h-bXyC7Mhk6norvWlghvtJfR7w/exec';
 // =======================================================
 function api(fn,args,ok,ko){
   if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
@@ -292,6 +303,9 @@ const num=s=>{s=String(s||'').trim().replace(/[^\d,.-]/g,'');if(s.includes(','))
 const numD=s=>parseFloat(String(s||'').replace(',','.').replace(/[^\d.-]/g,''))||0;
 const sum=(a,k)=>a.reduce((s,x)=>s+x[k],0);
 const sgn=x=>(Math.round(x)>=0?'+':'−')+rp(Math.abs(x));
+const safeUrl=u=>/^https?:\/\//i.test(u||'')?String(u):'';
+const fl=u=>safeUrl(u)?`<a class="fl" href="${esc(safeUrl(u))}" target="_blank" rel="noopener">Lihat foto</a>`:'<span style="color:var(--mut)">—</span>';
+let fotoNew=null,fotoDel=false,fotoCur='';
 const kd=k=>k>0?(+(+k).toFixed(2)).toString().replace('.',',')+'K':'—';
 const short=n=>n>=1e9?(n/1e9).toFixed(2).replace('.',',')+' M':n>=1e6?(n/1e6).toFixed(1).replace('.',',')+' jt':n>=1e3?Math.round(n/1e3)+' rb':String(Math.round(n));
 function kadarJS(v){let k=numD(v);if(!(k>0))return 0;if(k>24){if(k>=300&&k<=1000)k=k/1000*24;else return 0}return k}
@@ -299,7 +313,7 @@ const baseJS=S=>Math.round((S.mode==='otomatis'&&S.h24>0&&S.ref>0)?S.manual*S.h2
 const refJS=f=>{let ref=(f.manual!==P.manual||(f.mode==='otomatis'&&P.mode!=='otomatis'))?(f.h24>0?f.h24:0):P.ref;if(!(ref>0)&&f.h24>0)ref=f.h24;return ref};
 const pr=(S,k)=>(k>0&&S.h24>0)?S.h24*k/24*(1+S.adj/100):S.base;
 function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3600)}
-function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');if(d.base===undefined)throw new Error('Code.gs di Apps Script masih versi lama. Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');D=d.items;P=d;D.forEach(x=>{x.nilaiH=x.nilai;x.hpgH=x.hpg});applyVM();$('lnk').style.display=d.sheetUrl?'':'none';return d}
+function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');if(d.base===undefined)throw new Error('Code.gs di Apps Script masih versi lama. Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');if(d.items.length&&d.items[0].foto===undefined)throw new Error('Code.gs di Apps Script belum mendukung Foto Surat. Tempel Code.gs terbaru, jalankan izinkanAkses, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');D=d.items;P=d;D.forEach(x=>{x.nilaiH=x.nilai;x.hpgH=x.hpg});applyVM();$('lnk').style.display=d.sheetUrl?'':'none';return d}
 function applyVM(){const s=P.sumberNilai==='sheet';D.forEach(x=>{if(s&&x.nilaiSheet!=null){x.nilai=x.nilaiSheet;x.hpg=x.berat?x.nilaiSheet/x.berat:0}else{x.nilai=x.nilaiH;x.hpg=x.hpgH}})}
 function vmRender(){
   if(P.sumberNilai===undefined){$('vm').innerHTML='<div class="box full" style="width:100%"><b>Code.gs di Apps Script belum versi terbaru.</b> Pilihan "Nilai kini" aktif setelah Code.gs baru ditempel, lalu Deploy &gt; Manage deployments &gt; ikon pensil &gt; New version &gt; Deploy.</div>';return}
@@ -393,16 +407,16 @@ function render(){
   donut('byType',agg('jenis','berat'),5,gr,r=>`${r.n} item · ${rp(r.nl)}`,gr(tb),'Total berat');
   hist();
 
-  const H=[['pemilik','Pemilik'],['jenis','Jenis / kadar'],['berat','Berat','r'],['harga','Harga beli','r'],['tgl','Tgl beli','c'],['nilai','Nilai kini','r'],['sel','Selisih','r'],['store','Store','sp']];
+  const H=[['pemilik','Pemilik'],['jenis','Jenis / kadar'],['berat','Berat','r'],['harga','Harga beli','r'],['tgl','Tgl beli','c'],['nilai','Nilai kini','r'],['sel','Selisih','r'],['store','Store','sp'],['foto','Foto surat','c']];
   const tp=ps?Math.max(1,Math.ceil(L.length/ps)):1;if(page>tp)page=tp;if(page<1)page=1;
   const Lp=ps?L.slice((page-1)*ps,page*ps):L;
   const fb=sum(L,'berat'),fh=sum(L,'harga'),fn=sum(L,'nilai');
   const sc=x=>`<span class="${x>=0?'up':'down'}">${sgn(x)}</span>`;
-  $('tb').innerHTML=`<colgroup>${[18,12,7,11,10,12,11,11,8].map(w=>`<col style="width:${w}%">`).join('')}</colgroup><thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" tabindex="0" role="button" onclick="sortBy('${k}')" onkeydown="if(event.key==='Enter')sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
-   (L.length?Lp.map(x=>`<tr><td class="pm">${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span><small>${kd(x.kadar)}</small></td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="n c">${fd(x.tgl)}</td><td class="r">${rp(x.nilai)}<small>${rp(x.hpg)}/g</small></td><td class="r">${sc(x.sel)}</td><td class="sp">${esc(x.store||'—')}</td><td><div class="act"><button class="ib" title="Ubah" aria-label="Ubah" data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button><button class="ib dng" title="Hapus" aria-label="Hapus" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="9" class="empty">Tidak ada data yang cocok</td></tr>`)+
-   `</tbody><tfoot><tr><td colspan="2">Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td></td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="2"></td></tr></tfoot>`;
+  $('tb').innerHTML=`<colgroup>${[18,10,6,10,9,11,10,9,8,9].map(w=>`<col style="width:${w}%">`).join('')}</colgroup><thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" tabindex="0" role="button" onclick="sortBy('${k}')" onkeydown="if(event.key==='Enter')sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
+   (L.length?Lp.map(x=>`<tr><td class="pm">${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span><small>${kd(x.kadar)}</small></td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="n c">${fd(x.tgl)}</td><td class="r">${rp(x.nilai)}<small>${rp(x.hpg)}/g</small></td><td class="r">${sc(x.sel)}</td><td class="sp">${esc(x.store||'—')}</td><td class="c">${fl(x.foto)}</td><td><div class="act"><button class="ib" title="Ubah" aria-label="Ubah" data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button><button class="ib dng" title="Hapus" aria-label="Hapus" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="10" class="empty">Tidak ada data yang cocok</td></tr>`)+
+   `</tbody><tfoot><tr><td colspan="2">Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td></td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="3"></td></tr></tfoot>`;
   $('mb').innerHTML=(L.length?Lp.map(x=>`<div class="item"><div class="hd"><div><b>${esc(x.jenis)}</b> <span class="tag">${kd(x.kadar)}</span><div style="color:var(--mut)">${esc(x.pemilik)}</div></div><span class="tag">${esc(x.store||'-')}</span></div>
-   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Tanggal beli</dt><dd>${fd(x.tgl)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd><dt>${rp(x.hpg)}/g</dt></div><div class="full"><dt>Selisih dari harga beli</dt><dd>${sc(x.sel)}</dd></div></dl>
+   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Tanggal beli</dt><dd>${fd(x.tgl)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd><dt>${rp(x.hpg)}/g</dt></div><div class="full"><dt>Selisih dari harga beli</dt><dd>${sc(x.sel)}</dd></div><div class="full"><dt>Foto surat</dt><dd>${fl(x.foto)}</dd></div></dl>
    ${x.catatan?`<div style="color:var(--mut);margin:-2px 0 10px">${esc(x.catatan)}</div>`:''}
    <div class="act"><button data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)">Ubah</button><button class="dng" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)">Hapus</button></div></div>`).join('')
    +`<div class="item" style="background:var(--gold-l)"><b>Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</b><dl><div><dt>Berat</dt><dd>${gr(fb)}</dd></div><div><dt>Harga beli</dt><dd>${rp(fh)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(fn)}</dd></div><div><dt>Selisih</dt><dd>${sc(fn-fh)}</dd></div></dl></div>`
@@ -486,7 +500,7 @@ function openForm(id){
   $('f_kadar').value=id?(x.kadar?String(x.kadar).replace('.',','):''):String(DEF_KADAR);
   $('f_berat').value=x.berat!=null?String(x.berat).replace('.',','):'';
   $('f_harga').value=x.harga||'';$('f_tgl').value=x.tgl||'';$('f_store').value=x.store||'';$('f_catatan').value=x.catatan||'';
-  setSel();hint();fldHint();$('ov').classList.add('on');setTimeout(()=>{const e=$('f_pemilik');cbSkip=true;e.focus();cbSkip=false},50);
+  fotoNew=null;fotoDel=false;fotoCur=safeUrl(x.foto);$('f_foto').value='';$('ocrTxt').innerHTML='';fotoUI();setSel();hint();fldHint();$('ov').classList.add('on');setTimeout(()=>{const e=$('f_pemilik');cbSkip=true;e.focus();cbSkip=false},50);
 }
 function closeForm(){cbClose();$('ov').classList.remove('on')}
 function hint(){
@@ -576,15 +590,80 @@ Object.keys(CB).forEach(k=>{
 });
 function setSel(){const raw=$('f_kadar').value.trim(),k=kadarJS(raw),v=KL.includes(k)?String(k):(raw?'x':'');$('f_ksel').value=v;$('f_kadar').style.display=v==='x'?'':'none'}
 $('f_ksel').onchange=()=>{const v=$('f_ksel').value,i=$('f_kadar');if(v==='x'){i.style.display='';i.value='';i.focus()}else{i.style.display='none';i.value=v}hint()};
+/* ===== Foto surat ===== */
+function readImg(file){
+  return new Promise((res,rej)=>{
+    if(!/^image\//.test(file.type||'')){rej(new Error('File harus berupa gambar (JPG/PNG).'));return}
+    const fr=new FileReader();
+    fr.onerror=()=>rej(new Error('Gagal membaca file foto.'));
+    fr.onload=()=>{
+      const im=new Image();
+      im.onerror=()=>rej(new Error('Gambar tidak bisa dibuka. Coba format JPG atau PNG.'));
+      im.onload=()=>{
+        const M=1600,s=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement('canvas');
+        c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));
+        const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);
+        const u=c.toDataURL('image/jpeg',0.85);
+        res({name:file.name||'surat.jpg',mime:'image/jpeg',data:u.split(',')[1],prev:u});
+      };
+      im.src=fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+function fotoUI(){
+  const add=!$('f_id').value,has=!!fotoNew,cur=!fotoDel&&fotoCur,pv=$('fotoPrev');
+  if(has){pv.src=fotoNew.prev;pv.hidden=false}else{pv.removeAttribute('src');pv.hidden=true}
+  $('bOcr').style.display=(add&&has)?'':'none';
+  $('bFotoDel').style.display=(has||fotoCur)?'':'none';
+  $('bFotoDel').textContent=has?'Batalkan foto baru':fotoDel?'Batal hapus':'Hapus foto';
+  $('bFoto').textContent=(has||cur)?'Ganti foto':'Pilih / ambil foto';
+  $('fotoInfo').innerHTML=has?'Foto baru akan diunggah ke Google Drive saat Anda menekan Simpan.'+(cur?' Foto lama diganti.':'')
+    :cur?'Foto surat sudah ada: <a class="fl" href="'+esc(fotoCur)+'" target="_blank" rel="noopener">Lihat foto</a>'
+    :fotoDel?'Foto akan dilepas dari data saat Simpan (file di Google Drive tidak ikut terhapus).'
+    :'Opsional. Foto disimpan di folder Google Drive.'+(add?' Setelah memilih foto, Anda bisa mengisi data otomatis darinya.':'');
+}
+function hapusFoto(){
+  if(fotoNew){fotoNew=null;$('ocrTxt').innerHTML=''}
+  else fotoDel=!fotoDel;
+  fotoUI();
+}
+$('f_foto').addEventListener('change',e=>{
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  $('fotoInfo').textContent='Memproses foto…';
+  readImg(f).then(r=>{fotoNew=r;fotoDel=false;$('ocrTxt').innerHTML='';fotoUI()},er=>{toast(er.message);fotoUI()});
+  e.target.value='';
+});
+function ocrFoto(){
+  if(!fotoNew)return;
+  const b=$('bOcr'),t0='Isi data otomatis dari foto';b.disabled=true;b.textContent='Membaca foto…';
+  api('bacaFoto',[{data:fotoNew.data,mime:fotoNew.mime}],d=>{
+    b.disabled=false;b.textContent=t0;
+    try{const r=typeof d==='string'?JSON.parse(d):d;applyOcr(r.hasil||{},r.teks||'')}catch(e){toast(e.message)}
+  },er=>{b.disabled=false;b.textContent=t0;toast(er.message)});
+}
+function applyOcr(h,teks){
+  const got=[];
+  if(h.pemilik){$('f_pemilik').value=h.pemilik;got.push('pemilik')}
+  if(h.jenis){$('f_jenis').value=h.jenis;got.push('jenis')}
+  if(h.berat>0){$('f_berat').value=String(h.berat).replace('.',',');got.push('berat')}
+  if(h.kadar>0){$('f_kadar').value=String(h.kadar).replace('.',',');setSel();got.push('kadar')}
+  if(h.harga>0){$('f_harga').value=h.harga;got.push('harga beli')}
+  if(h.tgl){$('f_tgl').value=h.tgl;got.push('tanggal beli')}
+  if(h.store){$('f_store').value=h.store;got.push('store')}
+  fldHint();hint();
+  $('ocrTxt').innerHTML=teks?'<details><summary>Teks yang terbaca dari foto</summary><pre style="white-space:pre-wrap;font:12px/1.4 Inter,sans-serif;margin:6px 0 0">'+esc(teks)+'</pre></details>':'';
+  toast(got.length?'Terisi otomatis: '+got.join(', ')+'. Periksa kembali sebelum menyimpan.':'Foto terbaca tetapi tidak ada data yang dikenali. Isi manual.');
+}
 function submitForm(e){
   e.preventDefault();cbClose();
   const o={id:$('f_id').value,pemilik:$('f_pemilik').value,jenis:$('f_jenis').value,berat:numD($('f_berat').value),harga:num($('f_harga').value),
-    store:$('f_store').value,tgl:$('f_tgl').value,kadar:$('f_kadar').value,catatan:$('f_catatan').value};
+    store:$('f_store').value,tgl:$('f_tgl').value,kadar:$('f_kadar').value,catatan:$('f_catatan').value,foto:fotoNew?{data:fotoNew.data,mime:fotoNew.mime,name:fotoNew.name}:null,hapusFoto:!!(fotoDel&&!fotoNew)};
   o.pemilik=normT(o.pemilik);o.jenis=normT(o.jenis);o.store=normT(o.store);
   if(!o.pemilik||!o.jenis){toast('Pemilik dan jenis wajib diisi.');return}
   if(!(o.berat>0)){toast('Berat harus lebih dari 0.');return}
   if(o.kadar.trim()&&!kadarJS(o.kadar)){toast('Kadar tidak valid.');return}
-  const edit=!!o.id;$('sv').disabled=true;$('sv').textContent='Menyimpan…';
+  const edit=!!o.id;$('sv').disabled=true;$('sv').textContent=fotoNew?'Mengunggah foto…':'Menyimpan…';
   api('saveItem',[o],d=>{$('sv').disabled=false;$('sv').textContent='Simpan';try{const r=setAll(d);closeForm();render();toast(r.pesan||(edit?'Perubahan disimpan':'Perhiasan ditambahkan'))}catch(er){toast(er.message)}},
    er=>{toast('Gagal: '+er.message);$('sv').disabled=false;$('sv').textContent='Simpan'});
 }
