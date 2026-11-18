@@ -81,17 +81,19 @@ header button:not(.pri){background:rgba(255,255,255,.06);border-color:rgba(243,2
 .tools input,.tools select{flex:1 1 140px;min-width:0}
 input,select,textarea{font:inherit;width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink)}
 .tbl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:auto;box-shadow:var(--sh)}
-table{width:100%;border-collapse:collapse;min-width:860px}
-th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th,td{padding:10px 8px;text-align:left;vertical-align:middle;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+th,td.n{white-space:nowrap}
+th:first-child,td:first-child{padding-left:16px}th:last-child,td:last-child{padding-right:16px}
 th{font-weight:600;color:var(--mut);cursor:pointer;user-select:none;background:var(--bg);font-size:12.5px}
-td.r,th.r{text-align:right}
+td.r,th.r{text-align:right;white-space:nowrap}
 td small{display:block;color:var(--mut);font-size:11.5px;line-height:1.2}
 tbody tr:hover{background:var(--gold-l)}
 tr:last-child td{border-bottom:0}
 tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--line)}
 .tag{display:inline-block;padding:1px 9px;border-radius:99px;background:var(--gold-l);color:var(--gold-d);font-size:12px;font-weight:500}
 .act{display:flex;gap:6px;justify-content:flex-end}
-.act button{padding:4px 10px;font-size:13px}
+.act button{padding:5px 9px;font-size:13px;white-space:nowrap}
 .mob{display:none}
 .item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:10px;box-shadow:var(--sh)}
 .item .hd{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
@@ -157,6 +159,23 @@ header button{white-space:nowrap}
 .hero .hseg button.on{background:#e0b44f;color:#1b1710;font-weight:600}
 @media(max-width:440px){.bd{flex-direction:column;align-items:stretch}.dn{align-self:center}.kp{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:no-preference){.md{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(10px);opacity:0}}}
+input[type=date]{min-height:38px;-webkit-appearance:none;appearance:none}
+:root{color-scheme:light dark}
+.item dd{overflow-wrap:anywhere}
+@media(max-width:1180px){.tbl{display:none}.mob{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:start}.mob .item{margin:0}.mob .item:last-child{grid-column:1/-1}}
+@media(max-width:900px){.mob{grid-template-columns:1fr 1fr}}
+@media(max-width:599px){.mob{display:block}.mob .item{margin-bottom:10px}}
+td.c,th.c{text-align:center}
+th.sp,td.sp{padding-left:22px}
+td .tag+small{margin-top:4px;padding-left:9px}
+td.pm{font-weight:500}
+.ib{width:34px;height:34px;padding:0;display:grid;place-items:center;border-radius:9px;flex:none}
+.ib svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ib.dng:hover{border-color:var(--down)}
+.tbl .act{gap:6px}
+.item .act{border-top:1px solid var(--line);padding-top:10px}
+.item dl{margin:12px 0 10px}
+.item dl .full{border-top:1px dashed var(--line);padding-top:8px}
 </style>
 </head>
 <body>
@@ -200,7 +219,8 @@ header button{white-space:nowrap}
       <label><span>Berat (gram)</span><input id="f_berat" inputmode="decimal" required placeholder="0,9"></label>
       <div class="full lb"><span>Kadar (karat)</span><select id="f_ksel"></select><input id="f_kadar" inputmode="decimal" placeholder="Ketik kadar: 1–24 atau 300–999 (mis. 750)" style="display:none;margin-top:8px"><div class="hint" id="kinfo"></div></div>
       <label><span>Harga beli (Rp)</span><input id="f_harga" inputmode="numeric" required placeholder="839700"></label>
-      <div class="lb cb"><label for="f_store"><span>Store</span></label><div class="cbw"><input id="f_store" role="combobox" aria-expanded="false" aria-controls="l_store" aria-autocomplete="list" autocomplete="off" placeholder="Cari atau ketik store baru"><button type="button" class="cbt" tabindex="-1" aria-label="Tampilkan daftar store"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="cbl" id="l_store" role="listbox" hidden></div></div><div class="hint" id="h_store"></div></div>
+      <label><span>Tanggal beli</span><input id="f_tgl" type="date"><div class="hint">Opsional</div></label>
+      <div class="full lb cb"><label for="f_store"><span>Store</span></label><div class="cbw"><input id="f_store" role="combobox" aria-expanded="false" aria-controls="l_store" aria-autocomplete="list" autocomplete="off" placeholder="Cari atau ketik store baru"><button type="button" class="cbt" tabindex="-1" aria-label="Tampilkan daftar store"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="cbl" id="l_store" role="listbox" hidden></div></div><div class="hint" id="h_store"></div></div>
       <label class="full"><span>Catatan</span><textarea id="f_catatan" rows="2" placeholder="Nomor nota, kondisi…"></textarea></label>
       <div class="full box" id="hintG"></div>
     </div>
@@ -249,7 +269,7 @@ header button{white-space:nowrap}
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbw-d7V4QjKLRSXoUyw2xRCXDTKMC__oeJzrMX77vZbwzyYoInNwwkMcoUknzqYysBs/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbzI1EuKbGY8cgu-F4Qig9gR2MKdDR9pnJDayaC2ZxfhF1ylwVV8hL0pt8pzdlydipFX/exec';
 // =======================================================
 function api(fn,args,ok,ko){
   if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
@@ -265,6 +285,7 @@ let D=[],P={base:0,manual:0,mode:'manual',h24:0,adj:0,ref:0,sumber:'',diperbarui
 const $=id=>document.getElementById(id);
 const rp=n=>isFinite(n)&&n!==null&&n!==''?'Rp\u00A0'+(Math.round(n)||0).toLocaleString('id-ID'):'Rp\u00A00';
 const pct=(x,d)=>(x>=0?'+':'−')+Math.abs(x).toFixed(d==null?1:d).replace('.',',')+'%';
+const fd=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?m[3]+'/'+m[2]+'/'+m[1]:'—'};
 const gr=n=>(+n).toLocaleString('id-ID',{maximumFractionDigits:2})+' g';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=s=>{s=String(s||'').trim().replace(/[^\d,.-]/g,'');if(s.includes(',')){s=s.replace(/\./g,'').replace(',','.')}else if(/^\d{1,3}(\.\d{3})+$/.test(s)){s=s.replace(/\./g,'')}return parseFloat(s)||0};
@@ -349,7 +370,7 @@ function render(){
   fillFilters();vmRender();
   const q=$('q').value.toLowerCase(),fo=$('fo').value,ft=$('ft').value,fs=$('fs').value,fk=$('fk').value;
   D.forEach(x=>x.sel=x.nilai-x.harga);
-  let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fk||String(x.kadar)===fk)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan,kd(x.kadar)].join(' ').toLowerCase().includes(q)));
+  let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fk||String(x.kadar)===fk)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan,kd(x.kadar),fd(x.tgl)].join(' ').toLowerCase().includes(q)));
   L.sort((a,b)=>(typeof a[sortK]==='number'?a[sortK]-b[sortK]:String(a[sortK]).localeCompare(String(b[sortK])))*sortD);
   const eq=D.reduce((a,x)=>a+(x.kadar>0?x.berat*x.kadar/24:0),0),tb=sum(D,'berat'),th=sum(D,'harga'),tn=sum(D,'nilai'),sl=tn-th,pc=th?sl/th*100:0;
   const oto=P.mode==='otomatis',showM=oto&&hv==='manual';
@@ -372,17 +393,16 @@ function render(){
   donut('byType',agg('jenis','berat'),5,gr,r=>`${r.n} item · ${rp(r.nl)}`,gr(tb),'Total berat');
   hist();
 
-  const H=[['pemilik','Pemilik'],['jenis','Jenis'],['kadar','Kadar'],['berat','Berat','r'],['harga','Harga beli','r'],['nilai','Nilai kini','r'],['sel','Selisih','r'],['store','Store']];
+  const H=[['pemilik','Pemilik'],['jenis','Jenis / kadar'],['berat','Berat','r'],['harga','Harga beli','r'],['tgl','Tgl beli','c'],['nilai','Nilai kini','r'],['sel','Selisih','r'],['store','Store','sp']];
   const tp=ps?Math.max(1,Math.ceil(L.length/ps)):1;if(page>tp)page=tp;if(page<1)page=1;
   const Lp=ps?L.slice((page-1)*ps,page*ps):L;
   const fb=sum(L,'berat'),fh=sum(L,'harga'),fn=sum(L,'nilai');
   const sc=x=>`<span class="${x>=0?'up':'down'}">${sgn(x)}</span>`;
-  $('tb').innerHTML=`<thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" tabindex="0" role="button" onclick="sortBy('${k}')" onkeydown="if(event.key==='Enter')sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
-   (L.length?Lp.map(x=>`<tr><td>${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span></td><td>${kd(x.kadar)}</td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="r">${rp(x.nilai)}<small>${rp(x.hpg)}/g</small></td><td class="r">${sc(x.sel)}</td><td>${esc(x.store)}</td>
-   <td><div class="act"><button data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)">Ubah</button><button class="dng" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)">Hapus</button></div></td></tr>`).join(''):`<tr><td colspan="9" class="empty">Tidak ada data yang cocok</td></tr>`)+
-   `</tbody><tfoot><tr><td colspan="3">Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="2"></td></tr></tfoot>`;
+  $('tb').innerHTML=`<colgroup>${[18,12,7,11,10,12,11,11,8].map(w=>`<col style="width:${w}%">`).join('')}</colgroup><thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" tabindex="0" role="button" onclick="sortBy('${k}')" onkeydown="if(event.key==='Enter')sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
+   (L.length?Lp.map(x=>`<tr><td class="pm">${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span><small>${kd(x.kadar)}</small></td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="n c">${fd(x.tgl)}</td><td class="r">${rp(x.nilai)}<small>${rp(x.hpg)}/g</small></td><td class="r">${sc(x.sel)}</td><td class="sp">${esc(x.store||'—')}</td><td><div class="act"><button class="ib" title="Ubah" aria-label="Ubah" data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button><button class="ib dng" title="Hapus" aria-label="Hapus" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="9" class="empty">Tidak ada data yang cocok</td></tr>`)+
+   `</tbody><tfoot><tr><td colspan="2">Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td></td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="2"></td></tr></tfoot>`;
   $('mb').innerHTML=(L.length?Lp.map(x=>`<div class="item"><div class="hd"><div><b>${esc(x.jenis)}</b> <span class="tag">${kd(x.kadar)}</span><div style="color:var(--mut)">${esc(x.pemilik)}</div></div><span class="tag">${esc(x.store||'-')}</span></div>
-   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd><dt>${rp(x.hpg)}/g</dt></div><div><dt>Selisih</dt><dd>${sc(x.sel)}</dd></div></dl>
+   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Tanggal beli</dt><dd>${fd(x.tgl)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd><dt>${rp(x.hpg)}/g</dt></div><div class="full"><dt>Selisih dari harga beli</dt><dd>${sc(x.sel)}</dd></div></dl>
    ${x.catatan?`<div style="color:var(--mut);margin:-2px 0 10px">${esc(x.catatan)}</div>`:''}
    <div class="act"><button data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)">Ubah</button><button class="dng" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)">Hapus</button></div></div>`).join('')
    +`<div class="item" style="background:var(--gold-l)"><b>Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</b><dl><div><dt>Berat</dt><dd>${gr(fb)}</dd></div><div><dt>Harga beli</dt><dd>${rp(fh)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(fn)}</dd></div><div><dt>Selisih</dt><dd>${sc(fn-fh)}</dd></div></dl></div>`
@@ -465,7 +485,7 @@ function openForm(id){
   $('f_id').value=x.id||'';$('f_pemilik').value=x.pemilik||'';$('f_jenis').value=x.jenis||'';
   $('f_kadar').value=id?(x.kadar?String(x.kadar).replace('.',','):''):String(DEF_KADAR);
   $('f_berat').value=x.berat!=null?String(x.berat).replace('.',','):'';
-  $('f_harga').value=x.harga||'';$('f_store').value=x.store||'';$('f_catatan').value=x.catatan||'';
+  $('f_harga').value=x.harga||'';$('f_tgl').value=x.tgl||'';$('f_store').value=x.store||'';$('f_catatan').value=x.catatan||'';
   setSel();hint();fldHint();$('ov').classList.add('on');setTimeout(()=>{const e=$('f_pemilik');cbSkip=true;e.focus();cbSkip=false},50);
 }
 function closeForm(){cbClose();$('ov').classList.remove('on')}
@@ -559,7 +579,7 @@ $('f_ksel').onchange=()=>{const v=$('f_ksel').value,i=$('f_kadar');if(v==='x'){i
 function submitForm(e){
   e.preventDefault();cbClose();
   const o={id:$('f_id').value,pemilik:$('f_pemilik').value,jenis:$('f_jenis').value,berat:numD($('f_berat').value),harga:num($('f_harga').value),
-    store:$('f_store').value,kadar:$('f_kadar').value,catatan:$('f_catatan').value};
+    store:$('f_store').value,tgl:$('f_tgl').value,kadar:$('f_kadar').value,catatan:$('f_catatan').value};
   o.pemilik=normT(o.pemilik);o.jenis=normT(o.jenis);o.store=normT(o.store);
   if(!o.pemilik||!o.jenis){toast('Pemilik dan jenis wajib diisi.');return}
   if(!(o.berat>0)){toast('Berat harus lebih dari 0.');return}
