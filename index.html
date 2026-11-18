@@ -41,7 +41,7 @@ header button:not(.pri){background:rgba(255,255,255,.06);border-color:rgba(243,2
 .hero .note{font-size:12.5px;color:#b9ad8d;margin-top:8px;max-width:640px}
 .hero button{background:#e0b44f;border-color:#e0b44f;color:#1b1710}
 .hero button:hover{background:#f0cf80;border-color:#f0cf80}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
 .st{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);border-top:3px solid var(--gold)}
 .st .num{font-size:21px;font-weight:700;margin:2px 0;word-break:break-word}
 .st small{color:var(--mut);display:block}
@@ -182,6 +182,23 @@ td.pm{font-weight:500}
 .fotoPrev{display:block;max-width:100%;max-height:220px;margin-top:8px;border-radius:10px;border:1px solid var(--line);object-fit:contain}
 .fotoPrev[hidden]{display:none}
 #ocrTxt details{margin-top:6px;font-weight:400;font-size:12.5px;color:var(--mut)}
+.tabs{display:inline-flex;gap:2px;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:3px;flex-wrap:wrap}
+.tabs button{border:0;background:transparent;padding:4px 14px;font-size:12.5px;border-radius:99px;color:var(--mut)}
+.tabs button.on{background:var(--gold-btn);color:var(--on-gold)}
+.pfc{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;margin-bottom:12px}
+.kp.k4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:600px){.kp.k4{grid-template-columns:1fr 1fr}}
+.pfs{width:100%;height:auto;display:block}
+.pfs text{font:10.5px Inter,sans-serif;fill:var(--mut)}
+.lgd{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin:6px 0}
+.lgd i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.lgd i.ds{background:repeating-linear-gradient(90deg,var(--mut) 0 4px,transparent 4px 7px)}
+.lgd b{color:var(--gold)}
+.rkh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.rkw{overflow-x:auto}
+.rkt{table-layout:auto;min-width:780px}
+.rkt th{cursor:default}
+.rkt td.pm small{margin-top:2px}
 </style>
 </head>
 <body>
@@ -201,6 +218,8 @@ td.pm{font-weight:500}
       <div class="pn"><h2>Komposisi per jenis perhiasan</h2><div class="sub">Berdasarkan berat emas</div><div class="bd" id="byType"></div></div>
     </section>
     <section class="pn" style="margin-bottom:12px"><h2>Riwayat harga emas</h2><div class="sub">Harga per gram (tanpa kadar) dan total nilai aset setiap kali harga diperbarui</div><div id="hist"></div></section>
+    <section class="pn" style="margin-bottom:12px"><h2>Nilai aset &amp; untung/rugi</h2><div class="sub">Perkembangan total nilai dibandingkan modal, ditambah perkiraan hasil jika dijual</div><div id="pf"></div></section>
+    <section class="pn" style="margin-bottom:12px"><div class="rkh"><div><h2>Perbandingan pemilik &amp; store</h2><div class="sub" style="margin-bottom:0">Mana yang paling menguntungkan dari harga beli</div></div><div id="rkTabs"></div></div><div id="rk"></div></section>
     <div class="tools">
       <input id="q" type="search" placeholder="Cari pemilik, jenis, kadar, store, catatan…" oninput="rf()">
       <select id="fo" onchange="rf()"></select>
@@ -263,6 +282,9 @@ td.pm{font-weight:500}
       <label class="full"><span>Selisih harga toko vs pasar (%) — untuk perhiasan berkadar</span><input id="s_adj" type="number" step="any" value="0" oninput="spprev()">
         <div class="hint">Isi minus jika harga toko lebih rendah dari harga pasar.</div>
         <button type="button" style="margin-top:6px" onclick="samakan()">Samakan 10K dengan harga tanpa kadar</button></label>
+      <label><span>Potongan jual — ada surat (%)</span><input id="s_potS" inputmode="decimal" placeholder="5"></label>
+      <label><span>Potongan jual — tanpa surat (%)</span><input id="s_potT" inputmode="decimal" placeholder="10"></label>
+      <div class="full hint" style="margin-top:-6px">Untuk "perkiraan hasil jika dijual": nilai kini dikurangi potongan ini (mis. tawaran beli kembali toko). Perhiasan dianggap ada surat bila Foto Surat terisi.</div>
       <div class="full box" id="kz" style="display:none"></div>
       <div class="full box" id="s_prev"></div>
     </div>
@@ -280,7 +302,7 @@ td.pm{font-weight:500}
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbyXis07St1PkNdHFLvQTVLiE9J1xyrE1zBJMXCLH2h-bXyC7Mhk6norvWlghvtJfR7w/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbyCoBTlWuODp5P0N4TP7ElHVQz0hpMFWZpcwotf4hMi-AikBy4G9-QYrEEln0FCxSJW/exec';
 // =======================================================
 function api(fn,args,ok,ko){
   if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
@@ -313,7 +335,7 @@ const baseJS=S=>Math.round((S.mode==='otomatis'&&S.h24>0&&S.ref>0)?S.manual*S.h2
 const refJS=f=>{let ref=(f.manual!==P.manual||(f.mode==='otomatis'&&P.mode!=='otomatis'))?(f.h24>0?f.h24:0):P.ref;if(!(ref>0)&&f.h24>0)ref=f.h24;return ref};
 const pr=(S,k)=>(k>0&&S.h24>0)?S.h24*k/24*(1+S.adj/100):S.base;
 function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3600)}
-function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');if(d.base===undefined)throw new Error('Code.gs di Apps Script masih versi lama. Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');if(d.items.length&&d.items[0].foto===undefined)throw new Error('Code.gs di Apps Script belum mendukung Foto Surat. Tempel Code.gs terbaru, jalankan izinkanAkses, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');D=d.items;P=d;D.forEach(x=>{x.nilaiH=x.nilai;x.hpgH=x.hpg});applyVM();$('lnk').style.display=d.sheetUrl?'':'none';return d}
+function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');if(d.base===undefined)throw new Error('Code.gs di Apps Script masih versi lama. Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');if(d.items.length&&d.items[0].foto===undefined)throw new Error('Code.gs di Apps Script belum mendukung Foto Surat. Tempel Code.gs terbaru, jalankan izinkanAkses, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');if(d.potS===undefined)throw new Error('Code.gs di Apps Script belum versi terbaru (nilai jual kembali). Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');D=d.items;P=d;D.forEach(x=>{x.nilaiH=x.nilai;x.hpgH=x.hpg});applyVM();$('lnk').style.display=d.sheetUrl?'':'none';return d}
 function applyVM(){const s=P.sumberNilai==='sheet';D.forEach(x=>{if(s&&x.nilaiSheet!=null){x.nilai=x.nilaiSheet;x.hpg=x.berat?x.nilaiSheet/x.berat:0}else{x.nilai=x.nilaiH;x.hpg=x.hpgH}})}
 function vmRender(){
   if(P.sumberNilai===undefined){$('vm').innerHTML='<div class="box full" style="width:100%"><b>Code.gs di Apps Script belum versi terbaru.</b> Pilihan "Nilai kini" aktif setelah Code.gs baru ditempel, lalu Deploy &gt; Manage deployments &gt; ikon pensil &gt; New version &gt; Deploy.</div>';return}
@@ -383,10 +405,11 @@ function hist(){
 function render(){
   fillFilters();vmRender();
   const q=$('q').value.toLowerCase(),fo=$('fo').value,ft=$('ft').value,fs=$('fs').value,fk=$('fk').value;
-  D.forEach(x=>x.sel=x.nilai-x.harga);
+  D.forEach(x=>{x.sel=x.nilai-x.harga;x.jual=x.nilai*(1-(safeUrl(x.foto)?P.potS:P.potT)/100)});
   let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fk||String(x.kadar)===fk)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan,kd(x.kadar),fd(x.tgl)].join(' ').toLowerCase().includes(q)));
   L.sort((a,b)=>(typeof a[sortK]==='number'?a[sortK]-b[sortK]:String(a[sortK]).localeCompare(String(b[sortK])))*sortD);
   const eq=D.reduce((a,x)=>a+(x.kadar>0?x.berat*x.kadar/24:0),0),tb=sum(D,'berat'),th=sum(D,'harga'),tn=sum(D,'nilai'),sl=tn-th,pc=th?sl/th*100:0;
+  const tj=sum(D,'jual'),ns=D.filter(x=>safeUrl(x.foto)).length,sj=tj-th,pj=th?sj/th*100:0;
   const oto=P.mode==='otomatis',showM=oto&&hv==='manual';
   const mv=oto&&P.ref>0&&P.h24>0?(P.h24/P.ref-1)*100:null;
   const eb=showM?'Harga acuan toko · per gram · tanpa kadar':oto?'Harga berjalan · per gram · tanpa kadar':'Harga emas · per gram · tanpa kadar';
@@ -402,10 +425,12 @@ function render(){
    <div class="st"><div class="eyebrow">Total berat</div><div class="num">${gr(tb)}</div><small>${D.length} perhiasan${eq>0?' · setara '+gr(eq)+' emas 24K':''}</small></div>
    <div class="st"><div class="eyebrow">Total harga beli</div><div class="num">${rp(th)}</div><small>Modal yang dikeluarkan</small></div>
    <div class="st"><div class="eyebrow">Nilai aset saat ini</div><div class="num">${rp(tn)}</div><small>${tb?rp(tn/tb):'-'} rata-rata per gram</small></div>
-   <div class="st"><div class="eyebrow">Selisih dari harga beli</div><div class="num ${sl>=0?'up':'down'}">${sgn(sl)}</div><small class="${sl>=0?'up':'down'}">${pc>=0?'+':'−'}${Math.abs(pc).toFixed(1).replace('.',',')}%</small></div>`;
+   <div class="st"><div class="eyebrow">Selisih dari harga beli</div><div class="num ${sl>=0?'up':'down'}">${sgn(sl)}</div><small class="${sl>=0?'up':'down'}">${pc>=0?'+':'−'}${Math.abs(pc).toFixed(1).replace('.',',')}%</small></div>
+   <div class="st"><div class="eyebrow">Perkiraan hasil jika dijual</div><div class="num">${rp(tj)}</div><small>Potongan ${String(P.potS).replace('.',',')}% (${ns} ada surat) · ${String(P.potT).replace('.',',')}% (${D.length-ns} tanpa surat)</small></div>
+   <div class="st"><div class="eyebrow">Untung/rugi jika dijual</div><div class="num ${sj>=0?'up':'down'}">${sgn(sj)}</div><small class="${sj>=0?'up':'down'}">${pj>=0?'+':'−'}${Math.abs(pj).toFixed(1).replace('.',',')}% dari harga beli</small></div>`;
   donut('byOwner',agg('pemilik','nilai'),5,rp,r=>`${gr(r.w)} · ${r.n} perhiasan`,short(tn),'Total nilai');
   donut('byType',agg('jenis','berat'),5,gr,r=>`${r.n} item · ${rp(r.nl)}`,gr(tb),'Total berat');
-  hist();
+  hist();pf();rk();
 
   const H=[['pemilik','Pemilik'],['jenis','Jenis / kadar'],['berat','Berat','r'],['harga','Harga beli','r'],['tgl','Tgl beli','c'],['nilai','Nilai kini','r'],['sel','Selisih','r'],['store','Store','sp'],['foto','Foto surat','c']];
   const tp=ps?Math.max(1,Math.ceil(L.length/ps)):1;if(page>tp)page=tp;if(page<1)page=1;
@@ -413,10 +438,10 @@ function render(){
   const fb=sum(L,'berat'),fh=sum(L,'harga'),fn=sum(L,'nilai');
   const sc=x=>`<span class="${x>=0?'up':'down'}">${sgn(x)}</span>`;
   $('tb').innerHTML=`<colgroup>${[18,10,6,10,9,11,10,9,8,9].map(w=>`<col style="width:${w}%">`).join('')}</colgroup><thead><tr>${H.map(([k,l,c])=>`<th class="${c||''}" tabindex="0" role="button" onclick="sortBy('${k}')" onkeydown="if(event.key==='Enter')sortBy('${k}')">${l}${sortK===k?(sortD>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>`+
-   (L.length?Lp.map(x=>`<tr><td class="pm">${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span><small>${kd(x.kadar)}</small></td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="n c">${fd(x.tgl)}</td><td class="r">${rp(x.nilai)}<small>${rp(x.hpg)}/g</small></td><td class="r">${sc(x.sel)}</td><td class="sp">${esc(x.store||'—')}</td><td class="c">${fl(x.foto)}</td><td><div class="act"><button class="ib" title="Ubah" aria-label="Ubah" data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button><button class="ib dng" title="Hapus" aria-label="Hapus" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="10" class="empty">Tidak ada data yang cocok</td></tr>`)+
+   (L.length?Lp.map(x=>`<tr><td class="pm">${esc(x.pemilik)}</td><td><span class="tag">${esc(x.jenis)}</span><small>${kd(x.kadar)}</small></td><td class="r">${gr(x.berat)}</td><td class="r">${rp(x.harga)}</td><td class="n c">${fd(x.tgl)}</td><td class="r">${rp(x.nilai)}<small>${rp(x.hpg)}/g</small><small>Jual ${rp(x.jual)}</small></td><td class="r">${sc(x.sel)}</td><td class="sp">${esc(x.store||'—')}</td><td class="c">${fl(x.foto)}</td><td><div class="act"><button class="ib" title="Ubah" aria-label="Ubah" data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button><button class="ib dng" title="Hapus" aria-label="Hapus" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button></div></td></tr>`).join(''):`<tr><td colspan="10" class="empty">Tidak ada data yang cocok</td></tr>`)+
    `</tbody><tfoot><tr><td colspan="2">Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</td><td class="r">${gr(fb)}</td><td class="r">${rp(fh)}</td><td></td><td class="r">${rp(fn)}</td><td class="r">${sc(fn-fh)}</td><td colspan="3"></td></tr></tfoot>`;
   $('mb').innerHTML=(L.length?Lp.map(x=>`<div class="item"><div class="hd"><div><b>${esc(x.jenis)}</b> <span class="tag">${kd(x.kadar)}</span><div style="color:var(--mut)">${esc(x.pemilik)}</div></div><span class="tag">${esc(x.store||'-')}</span></div>
-   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Tanggal beli</dt><dd>${fd(x.tgl)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd><dt>${rp(x.hpg)}/g</dt></div><div class="full"><dt>Selisih dari harga beli</dt><dd>${sc(x.sel)}</dd></div><div class="full"><dt>Foto surat</dt><dd>${fl(x.foto)}</dd></div></dl>
+   <dl><div><dt>Berat</dt><dd>${gr(x.berat)}</dd></div><div><dt>Tanggal beli</dt><dd>${fd(x.tgl)}</dd></div><div><dt>Harga beli</dt><dd>${rp(x.harga)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(x.nilai)}</dd><dt>${rp(x.hpg)}/g</dt></div><div><dt>Perkiraan jual</dt><dd>${rp(x.jual)}</dd><dt>potongan ${String(safeUrl(x.foto)?P.potS:P.potT).replace('.',',')}%</dt></div><div class="full"><dt>Selisih dari harga beli</dt><dd>${sc(x.sel)}</dd></div><div class="full"><dt>Foto surat</dt><dd>${fl(x.foto)}</dd></div></dl>
    ${x.catatan?`<div style="color:var(--mut);margin:-2px 0 10px">${esc(x.catatan)}</div>`:''}
    <div class="act"><button data-id="${esc(x.id)}" onclick="openForm(this.dataset.id)">Ubah</button><button class="dng" data-id="${esc(x.id)}" onclick="askDel(this.dataset.id)">Hapus</button></div></div>`).join('')
    +`<div class="item" style="background:var(--gold-l)"><b>Total ${L.length} data${Lp.length<L.length?' (semua halaman)':''}</b><dl><div><dt>Berat</dt><dd>${gr(fb)}</dd></div><div><dt>Harga beli</dt><dd>${rp(fh)}</dd></div><div><dt>Nilai kini</dt><dd>${rp(fn)}</dd></div><div><dt>Selisih</dt><dd>${sc(fn-fh)}</dd></div></dl></div>`
@@ -437,6 +462,83 @@ function setPs(v){ps=+v;page=1;render()}
 function rf(){page=1;render()}
 function sortBy(k){if(sortK===k)sortD*=-1;else{sortK=k;sortD=1}page=1;render()}
 
+/* ===== Grafik nilai & untung/rugi ===== */
+let pfV='nilai',pfR='all',rkV='pemilik';
+function pTs(s){const m=/(\d{2})\/(\d{2})\/(\d{4})(?:\s+(\d{2}):(\d{2}))?/.exec(s||'');return m?new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0)):null}
+const dkey=d=>d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+const sh2=n=>(n<0?'−':'')+short(Math.abs(n));
+function setPf(k,v){if(k==='v')pfV=v;else pfR=v;pf()}
+function setRk(v){rkV=v;rk()}
+function pf(){
+  const el=$('pf');if(!el)return;
+  if(!D.length){el.innerHTML='<div class="empty">Belum ada data</div>';return}
+  const now=new Date(),tn=sum(D,'nilai'),th=sum(D,'harga'),tj=sum(D,'jual'),byDay={};
+  (P.riwayat||[]).forEach(r=>{const d=pTs(r.tanggal);if(d&&r.total>0)byDay[dkey(d)]={t:new Date(d.getFullYear(),d.getMonth(),d.getDate(),12),v:r.total}});
+  byDay[dkey(now)]={t:new Date(now.getFullYear(),now.getMonth(),now.getDate(),12),v:tn};
+  let pts=Object.keys(byDay).sort().map(k=>({k:k,t:byDay[k].t,v:byDay[k].v}));
+  if(pfR!=='all'){const lim=new Date(now.getFullYear(),now.getMonth(),now.getDate()-(+pfR)),f=pts.filter(p=>p.t>=lim);pts=f.length?f:pts.slice(-1)}
+  const modalAt=k=>D.reduce((a,x)=>a+((!x.tgl||x.tgl<=k)?x.harga:0),0);
+  pts.forEach(p=>{p.m=modalAt(p.k);p.u=p.v-p.m});
+  const n=pts.length,u=pfV==='untung',W=520,H=190,L=64,Rr=14,T=14,B=26;
+  const vals=u?pts.map(p=>p.u).concat([0]):pts.map(p=>p.v).concat(pts.map(p=>p.m));
+  let mn=Math.min(...vals),mx=Math.max(...vals);const pad=(mx-mn)*.08||Math.abs(mx)*.02||1;mn-=pad;mx+=pad;
+  const t0=pts[0].t.getTime(),t1=pts[n-1].t.getTime();
+  const X=t=>n>1&&t1>t0?L+(t-t0)/(t1-t0)*(W-L-Rr):(L+W-Rr)/2,Y=v=>T+(1-(v-mn)/(mx-mn))*(H-T-B);
+  const line=f=>n>1?'M'+pts.map(p=>X(p.t.getTime()).toFixed(1)+' '+Y(f(p)).toFixed(1)).join(' L'):`M${L} ${Y(f(pts[0])).toFixed(1)} L${W-Rr} ${Y(f(pts[0])).toFixed(1)}`;
+  const fmtv=v=>u?sgn(v):rp(v);
+  const dots=(f,c)=>n<=24?pts.map(p=>`<circle cx="${X(p.t.getTime()).toFixed(1)}" cy="${Y(f(p)).toFixed(1)}" r="3.5" fill="var(--card)" stroke="${c}" stroke-width="2"><title>${esc(fd(p.k)+': '+fmtv(f(p)))}</title></circle>`).join(''):'';
+  let body='',mk='';
+  if(u){
+    const c=pts[n-1].u>=0?'var(--up)':'var(--down)';
+    body=`<line x1="${L}" x2="${W-Rr}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--mut)" stroke-dasharray="4 4"/>`
+      +`<path d="${line(p=>p.u)}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round" ${n>1?'':'stroke-dasharray="5 5"'}/>`+dots(p=>p.u,c);
+  }else{
+    const g={};
+    D.forEach(x=>{if(x.tgl&&x.tgl>=pts[0].k&&x.tgl<=pts[n-1].k)(g[x.tgl]=g[x.tgl]||[]).push(x)});
+    Object.keys(g).forEach(k=>{
+      const cx=X(new Date(+k.slice(0,4),+k.slice(5,7)-1,+k.slice(8,10),12).getTime()),cy=Y(modalAt(k)),tt=g[k].map(x=>x.jenis+' '+rp(x.harga)).join(', ');
+      mk+=`<path d="M${cx.toFixed(1)} ${(cy-6).toFixed(1)} L${(cx+5).toFixed(1)} ${cy.toFixed(1)} L${cx.toFixed(1)} ${(cy+6).toFixed(1)} L${(cx-5).toFixed(1)} ${cy.toFixed(1)} Z" fill="var(--gold)" stroke="var(--card)" stroke-width="1.5"><title>${esc('Pembelian '+fd(k)+': '+tt)}</title></path>`;
+    });
+    body=`<path d="${line(p=>p.m)}" fill="none" stroke="var(--mut)" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>`
+      +`<path d="${line(p=>p.v)}" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linejoin="round" ${n>1?'':'stroke-dasharray="5 5"'}/>`+dots(p=>p.v,'var(--gold)')+mk;
+  }
+  const svg=`<svg class="pfs" viewBox="0 0 ${W} ${H}" role="img" aria-label="${u?'Grafik untung/rugi':'Grafik total nilai dan modal'}">
+   <line x1="${L}" x2="${W-Rr}" y1="${T}" y2="${T}" stroke="var(--line)"/><line x1="${L}" x2="${W-Rr}" y1="${H-B}" y2="${H-B}" stroke="var(--line)"/>
+   <text x="${L-6}" y="${T+4}" text-anchor="end">${sh2(mx)}</text><text x="${L-6}" y="${H-B+4}" text-anchor="end">${sh2(mn)}</text>
+   ${body}
+   <text x="${L}" y="${H-8}" text-anchor="start">${esc(fd(pts[0].k))}</text>${n>1?`<text x="${W-Rr}" y="${H-8}" text-anchor="end">${esc(fd(pts[n-1].k))}</text>`:''}</svg>`;
+  const su=tn-th,sp=th?su/th*100:0,sj=tj-th,spj=th?sj/th*100:0;
+  const tab=(k,cur,items)=>`<div class="tabs" role="group">${items.map(([v,l])=>`<button type="button" class="${cur===v?'on':''}" aria-pressed="${cur===v}" onclick="setPf('${k}','${v}')">${l}</button>`).join('')}</div>`;
+  el.innerHTML=`<div class="pfc">${tab('v',pfV,[['nilai','Nilai vs modal'],['untung','Untung/rugi']])}${tab('r',pfR,[['7','7 hari'],['30','30 hari'],['all','Semua']])}</div>
+   <div class="kp k4"><div><small>Nilai kini</small><b>${rp(tn)}</b></div><div><small>Modal</small><b>${rp(th)}</b></div>
+   <div><small>Untung/rugi</small><b class="${su>=0?'up':'down'}">${sgn(su)}</b><small class="${su>=0?'up':'down'}">${pct(sp)}</small></div>
+   <div><small>Jika dijual</small><b>${rp(tj)}</b><small class="${sj>=0?'up':'down'}">${sgn(sj)} · ${pct(spj)}</small></div></div>
+   <div class="lgd">${u?'<span>Untung/rugi = total nilai − modal pada tanggal itu</span>':'<span><i style="background:var(--gold)"></i>Total nilai</span><span><i class="ds"></i>Modal (harga beli)</span><span><b>◆</b> Pembelian</span>'}</div>
+   ${svg}
+   ${n>1?'':'<div class="hint" style="text-align:center">Baru ada data 1 hari. Grafik berkembang seiring harga emas diperbarui.</div>'}
+   <div class="hint">Nilai per tanggal diambil dari Riwayat Harga (titik terakhir tiap hari; titik paling kanan = nilai sekarang). Modal dihitung dari tanggal beli; perhiasan tanpa tanggal beli dianggap sudah dimiliki sejak awal.</div>`;
+}
+
+/* ===== Perbandingan pemilik & store ===== */
+function rk(){
+  const el=$('rk');if(!el)return;
+  if(!D.length){el.innerHTML='<div class="empty">Belum ada data</div>';return}
+  const st=rkV==='store',m={};
+  D.forEach(x=>{const k=(st?x.store:x.pemilik)||'(Tanpa store)',r=m[k]||(m[k]={k:k,n:0,w:0,m:0,v:0,j:0});r.n++;r.w+=x.berat;r.m+=x.harga;r.v+=x.nilai;r.j+=x.jual});
+  const rows=Object.values(m);
+  rows.forEach(r=>{r.s=r.v-r.m;r.p=r.m?r.s/r.m*100:0;r.bg=r.w?r.m/r.w:0});
+  rows.sort((a,b)=>b.p-a.p||b.v-a.v);
+  const tot=rows.reduce((a,r)=>({n:a.n+r.n,w:a.w+r.w,m:a.m+r.m,v:a.v+r.v,j:a.j+r.j}),{n:0,w:0,m:0,v:0,j:0});
+  const ts=tot.v-tot.m,tp=tot.m?ts/tot.m*100:0;
+  const sc=x=>`<span class="${x>=0?'up':'down'}">${sgn(x)}</span>`;
+  const tabs=`<div class="tabs" role="group">${[['pemilik','Per pemilik'],['store','Per store']].map(([v,l])=>`<button type="button" class="${rkV===v?'on':''}" aria-pressed="${rkV===v}" onclick="setRk('${v}')">${l}</button>`).join('')}</div>`;
+  $('rkTabs').innerHTML=tabs;
+  el.innerHTML=`<div class="rkw"><table class="rkt"><thead><tr><th>${st?'Store':'Pemilik'}</th><th class="r">Item</th><th class="r">Berat</th><th class="r">Modal</th><th class="r">Beli/gram</th><th class="r">Nilai kini</th><th class="r">Untung/rugi</th><th class="r">%</th><th class="r">Jika dijual</th></tr></thead><tbody>`
+   +rows.map((r,i)=>`<tr><td class="pm">${esc(r.k)}${rows.length>1&&i===0?'<small class="up">▲ persentase tertinggi</small>':rows.length>1&&i===rows.length-1?'<small class="down">▼ persentase terendah</small>':''}</td><td class="r">${r.n}</td><td class="r">${gr(r.w)}</td><td class="r">${rp(r.m)}</td><td class="r">${rp(r.bg)}</td><td class="r">${rp(r.v)}</td><td class="r">${sc(r.s)}</td><td class="r"><span class="${r.p>=0?'up':'down'}">${pct(r.p)}</span></td><td class="r">${rp(r.j)}<small class="${r.j-r.m>=0?'up':'down'}">${sgn(r.j-r.m)}</small></td></tr>`).join('')
+   +`</tbody><tfoot><tr><td>Total</td><td class="r">${tot.n}</td><td class="r">${gr(tot.w)}</td><td class="r">${rp(tot.m)}</td><td class="r">${tot.w?rp(tot.m/tot.w):'—'}</td><td class="r">${rp(tot.v)}</td><td class="r">${sc(ts)}</td><td class="r"><span class="${tp>=0?'up':'down'}">${pct(tp)}</span></td><td class="r">${rp(tot.j)}</td></tr></tfoot></table></div>
+   <div class="hint">Diurutkan dari persentase untung tertinggi. Beli/gram = harga beli rata-rata per gram; bila kadar emasnya berbeda-beda, perbandingan antar ${st?'store':'pemilik'} belum sepenuhnya setara.</div>`;
+}
+
 /* ===== Pengaturan harga emas ===== */
 function setMode(m){
   smode=m;updateMk();$('mM').classList.toggle('on',m==='manual');$('mO').classList.toggle('on',m==='otomatis');
@@ -448,7 +550,7 @@ function setMode(m){
 function updateMk(){$('mk_p').textContent=sH24>0?rp(sH24):'Belum diambil';$('mk_s').textContent=P.sumber?'Sumber: '+P.sumber:'Tekan tombol untuk mengambil harga terbaru'}
 function openS(){
   sH24=P.h24||0;$('s_manual').value=P.manual||'';$('s_h24').value=P.h24||'';$('s_adj').value=P.adj||0;
-  kzUpdate();updateMk();setMode(P.mode);$('ovs').classList.add('on');
+  $('s_potS').value=String(P.potS).replace('.',',');$('s_potT').value=String(P.potT).replace('.',',');kzUpdate();updateMk();setMode(P.mode);$('ovs').classList.add('on');
 }
 function kzUpdate(){
   const n=D.filter(x=>!(x.kadar>0)).length,e=$('kz');e.style.display=n?'block':'none';kzArm=false;
@@ -468,7 +570,7 @@ function samakan(){
   $('s_adj').value=Math.round((f.manual/(den*DEF_KADAR/24)-1)*10000)/100;spprev();
 }
 function closeS(){$('ovs').classList.remove('on')}
-function sform(){return{mode:smode,manual:num($('s_manual').value),h24:sH24,adj:parseFloat($('s_adj').value)||0}}
+function sform(){return{mode:smode,manual:num($('s_manual').value),h24:sH24,adj:parseFloat($('s_adj').value)||0,potS:numD($('s_potS').value),potT:numD($('s_potT').value)}}
 function spprev(){
   const f=sform();
   if(f.mode==='otomatis'&&!(f.h24>0)){$('s_prev').textContent='Harga pasar 24K akan diambil otomatis saat Anda menyimpan (atau tekan "Ambil harga pasar").';return}
@@ -487,6 +589,7 @@ function fetchPasar(){
 function submitS(e){
   e.preventDefault();const f=sform(),b=$('ssv');
   if(!(f.manual>0)){toast('Isi harga per gram untuk perhiasan tanpa kadar.');return}
+  if(!(f.potS>=0&&f.potS<=90&&f.potT>=0&&f.potT<=90)){toast('Potongan jual harus antara 0% dan 90%.');return}
   b.disabled=true;b.textContent=f.mode==='otomatis'&&!(f.h24>0)?'Mengambil harga pasar…':'Menyimpan…';
   api('simpanHarga',[f],d=>{b.disabled=false;b.textContent='Simpan';try{const o=setAll(d);closeS();render();toast(o.pesan||'Disimpan')}catch(er){toast(er.message)}},
    er=>{b.disabled=false;b.textContent='Simpan';toast(er.message)});
