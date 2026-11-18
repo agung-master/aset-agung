@@ -357,14 +357,14 @@ td.pm{font-weight:500}
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbxRG-jggyikE8fksBcHNuo-EtseTn79fO2Sg1-yq0dSLe6hIiF3DJhXUx0_hEYqjyBj/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbyCWrUxJ54tNZUv6EEcxV_PuW4o541ZRUKPrDy8TIvEk29m1BWoy8OELUkdqKPnE4xM/exec';
 // =======================================================
 function api(fn,args,ok,ko){
   if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
   if(!API_URL){ko(new Error('Isi API_URL di index.html dengan URL Web App (berakhiran /exec).'));return}
   fetch(API_URL,{method:'POST',body:JSON.stringify({fn:fn,args:args})})
-   .then(r=>r.json()).then(j=>j.ok?ok(j.data):ko(new Error(j.error)))
-   .catch(e=>ko(new Error('Tidak bisa terhubung ke Web App ('+e.message+'). Pastikan Deploy memakai akses "Anyone", URL /exec benar, dan sudah New version.')));
+   .then(r=>r.json()).then(j=>{if(j.ok)ok(j.data);else ko(new Error(j.error))},
+   e=>ko(new Error('Tidak bisa terhubung ke Web App ('+e.message+'). Pastikan Deploy memakai akses "Anyone", URL /exec benar, dan sudah New version.')));
 }
 const DEF_KADAR=10;
 let hv='auto';try{hv=localStorage.getItem('hv')==='manual'?'manual':'auto'}catch(e){}
@@ -411,10 +411,10 @@ function load(){
 const uniq=k=>[...new Set(D.map(x=>x[k]).filter(Boolean))].sort();
 function fillFilters(){
   [['fo','pemilik','Semua pemilik'],['ft','jenis','Semua jenis'],['fs','store','Semua store']].forEach(([id,k,l])=>{
-    const el=$(id),v=el.value;el.innerHTML=`<option value="">${l}</option>`+uniq(k).map(x=>`<option>${esc(x)}</option>`).join('');el.value=v;
+    const el=$(id),v=el.value;el.innerHTML=`<option value="">${l}</option>`+uniq(k).map(x=>`<option>${esc(x)}</option>`).join('');el.value=v;if(el.selectedIndex<0)el.value='';
   });
   const ks=[...new Set(D.map(x=>x.kadar))].sort((a,b)=>b-a),fkE=$('fk'),kv=fkE.value;
-  fkE.innerHTML='<option value="">Semua kadar</option>'+ks.map(k=>`<option value="${k}">${k>0?kd(k):'Belum ada kadar'}</option>`).join('');fkE.value=kv;
+  fkE.innerHTML='<option value="">Semua kadar</option>'+ks.map(k=>`<option value="${k}">${k>0?kd(k):'Belum ada kadar'}</option>`).join('');fkE.value=kv;if(fkE.selectedIndex<0)fkE.value='';
 }
 
 /* ===== Grafik ===== */
@@ -462,7 +462,7 @@ function render(){
   const q=$('q').value.toLowerCase(),fo=$('fo').value,ft=$('ft').value,fs=$('fs').value,fk=$('fk').value;
   D.forEach(x=>{x.sel=x.nilai-x.harga;x.jual=x.nilai*(1-(safeUrl(x.foto)?P.potS:P.potT)/100)});
   let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fk||String(x.kadar)===fk)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan,kd(x.kadar),fd(x.tgl)].join(' ').toLowerCase().includes(q)));
-  L.sort((a,b)=>(typeof a[sortK]==='number'?a[sortK]-b[sortK]:String(a[sortK]).localeCompare(String(b[sortK])))*sortD);
+  L.sort((a,b)=>(sortK==='foto'?(!!safeUrl(a.foto))-(!!safeUrl(b.foto)):typeof a[sortK]==='number'?a[sortK]-b[sortK]:String(a[sortK]).localeCompare(String(b[sortK])))*sortD);
   const eq=D.reduce((a,x)=>a+(x.kadar>0?x.berat*x.kadar/24:0),0),tb=sum(D,'berat'),th=sum(D,'harga'),tn=sum(D,'nilai'),sl=tn-th,pc=th?sl/th*100:0;
   const tj=sum(D,'jual'),ns=D.filter(x=>safeUrl(x.foto)).length,sj=tj-th,pj=th?sj/th*100:0;
   const oto=P.mode==='otomatis',showM=oto&&hv==='manual';
@@ -644,6 +644,7 @@ function fetchPasar(){
 function submitS(e){
   e.preventDefault();const f=sform(),b=$('ssv');
   if(!(f.manual>0)){toast('Isi harga per gram untuk perhiasan tanpa kadar.');return}
+  if(!$('s_potS').value.trim()||!$('s_potT').value.trim()){toast('Isi potongan jual (boleh 0).');return}
   if(!(f.potS>=0&&f.potS<=90&&f.potT>=0&&f.potT<=90)){toast('Potongan jual harus antara 0% dan 90%.');return}
   b.disabled=true;b.textContent=f.mode==='otomatis'&&!(f.h24>0)?'Mengambil harga pasar…':'Menyimpan…';
   api('simpanHarga',[f],d=>{b.disabled=false;b.textContent='Simpan';try{const o=setAll(d);closeS();render();toast(o.pesan||'Disimpan')}catch(er){toast(er.message)}},
