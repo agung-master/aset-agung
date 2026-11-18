@@ -119,6 +119,23 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
 #load{padding:60px 16px;text-align:center;color:var(--mut)}
 @media(max-width:860px){.stats{grid-template-columns:1fr 1fr}.panels{grid-template-columns:1fr}.hw{grid-template-columns:1fr}}
 @media(max-width:760px){.tbl{display:none}.mob{display:block}h1{font-size:19px}header .lbl,header p{display:none}.fg{grid-template-columns:1fr}.st .num{font-size:17px}.hero .num{font-size:24px}.logo{width:34px;height:34px}}
+.vm{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.vm .lbv{color:var(--mut);font-size:12.5px;font-weight:500}
+.vm .seg{margin:0;padding:4px}
+.vm .seg button{padding:7px 14px;font-size:13px}
+.vm .n{flex-basis:100%;color:var(--mut);font-size:12px}
+@media(max-width:760px){.vm .seg{width:100%}}
+.hb{display:flex;gap:8px;flex:none}
+header button{white-space:nowrap}
+.brand>div:last-child{min-width:0}
+.chip{white-space:nowrap}
+.kch{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.kch button{padding:5px 12px;font-size:13px;border-radius:99px}
+.kch button.on{background:var(--gold);border-color:var(--gold);color:#fff}
+@media(max-width:760px){.hb button{min-width:40px;height:40px;padding:0 12px}.hero{flex-direction:column;align-items:stretch;padding:16px}.hero button{width:100%;padding:11px}.hero .num{font-size:26px}.tools input{flex:1 1 100%}.tools select{flex:1 1 calc(50% - 4px)}.stats{gap:10px}.st{padding:12px}.pg{justify-content:center}}
+.hero .hseg{display:inline-flex;gap:2px;background:rgba(243,217,139,.1);border:1px solid rgba(243,217,139,.15);border-radius:99px;padding:3px;margin-top:8px}
+.hero .hseg button{width:auto;border:0;background:transparent;color:#d9c78f;padding:3px 14px;font-size:12.5px;border-radius:99px}
+.hero .hseg button.on{background:var(--gold);color:#fff;font-weight:600}
 @media(max-width:440px){.bd{flex-direction:column;align-items:stretch}.dn{align-self:center}.kp{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:no-preference){.md{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(10px);opacity:0}}}
 </style>
@@ -126,13 +143,14 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
 <body>
 <header><div class="wrap">
   <div class="brand"><div class="logo">◆</div><div><h1>Aset Perhiasan</h1><p>Pantau koleksi emas, nilai terkini, dan selisihnya dari harga beli</p></div></div>
-  <div style="display:flex;gap:8px"><button id="lnk" style="display:none" onclick="window.open(SHEET_URL,'_blank')">Buka Sheet</button><button onclick="load()" title="Muat ulang">↻</button><button class="pri" onclick="openForm()">+ <span class="lbl">Tambah perhiasan</span></button></div>
+  <div class="hb"><button id="lnk" style="display:none" onclick="window.open(P.sheetUrl,'_blank')" title="Buka Google Sheet" aria-label="Buka Google Sheet">↗<span class="lbl"> Buka Sheet</span></button><button onclick="load()" title="Muat ulang" aria-label="Muat ulang">↻</button><button class="pri" onclick="openForm()" aria-label="Tambah perhiasan">+ <span class="lbl">Tambah perhiasan</span></button></div>
 </div></header>
 
 <main class="wrap">
   <div id="load">Memuat data dari Google Sheets…</div>
   <div id="app" style="display:none">
     <section class="hero" id="gold"></section>
+    <section class="vm" id="vm"></section>
     <section class="stats" id="stats"></section>
     <section class="panels">
       <div class="pn"><h2>Komposisi nilai per pemilik</h2><div class="sub">Berdasarkan nilai saat ini</div><div class="bd" id="byOwner"></div></div>
@@ -143,6 +161,7 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
       <input id="q" type="search" placeholder="Cari pemilik, jenis, kadar, store, catatan…" oninput="rf()">
       <select id="fo" onchange="rf()"></select>
       <select id="ft" onchange="rf()"></select>
+      <select id="fk" onchange="rf()"></select>
       <select id="fs" onchange="rf()"></select>
     </div>
     <div class="tbl"><table id="tb"></table></div>
@@ -159,16 +178,15 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
     <div class="fg">
       <label class="full"><span>Pemilik</span><input id="f_pemilik" list="dlO" required></label>
       <label><span>Jenis</span><input id="f_jenis" list="dlJ" required placeholder="Cincin, Gelang…"></label>
-      <label><span>Kadar (karat)</span><input id="f_kadar" list="dlK" inputmode="decimal" placeholder="Kosongkan jika belum tahu"></label>
       <label><span>Berat (gram)</span><input id="f_berat" inputmode="decimal" required placeholder="0,9"></label>
+      <div class="full lb"><span>Kadar (karat)</span><select id="f_ksel"></select><input id="f_kadar" inputmode="decimal" placeholder="Ketik kadar: 1–24 atau 300–999 (mis. 750)" style="display:none;margin-top:8px"><div class="hint" id="kinfo"></div></div>
       <label><span>Harga beli (Rp)</span><input id="f_harga" inputmode="numeric" required placeholder="839700"></label>
-      <label class="full"><span>Store</span><input id="f_store" list="dlS" placeholder="Semar KTS"></label>
+      <label><span>Store</span><input id="f_store" list="dlS" placeholder="Semar KTS"></label>
       <label class="full"><span>Catatan</span><textarea id="f_catatan" rows="2" placeholder="Nomor nota, kondisi…"></textarea></label>
       <div class="full box" id="hintG"></div>
     </div>
     <datalist id="dlO"></datalist><datalist id="dlJ"></datalist><datalist id="dlS"></datalist>
-    <datalist id="dlK"><option value="24"><option value="22"><option value="21"><option value="20"><option value="18"><option value="17"><option value="16"><option value="12"><option value="10"><option value="9"><option value="8"></datalist>
-    <div class="ft"><button type="button" onclick="closeForm()">Batal</button><button class="pri" id="sv">Simpan</button></div>
+        <div class="ft"><button type="button" onclick="closeForm()">Batal</button><button class="pri" id="sv">Simpan</button></div>
   </form>
 </div>
 
@@ -193,7 +211,9 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
       </div>
 
       <label class="full"><span>Selisih harga toko vs pasar (%) — untuk perhiasan berkadar</span><input id="s_adj" type="number" step="any" value="0" oninput="spprev()">
-        <div class="hint">Isi minus jika harga toko lebih rendah dari harga pasar.</div></label>
+        <div class="hint">Isi minus jika harga toko lebih rendah dari harga pasar.</div>
+        <button type="button" style="margin-top:6px" onclick="samakan()">Samakan 10K dengan harga acuan di atas</button></label>
+      <div class="full box" id="kz" style="display:none"></div>
       <div class="full box" id="s_prev"></div>
     </div>
     <div class="ft"><button type="button" onclick="closeS()">Batal</button><button class="pri" id="ssv">Simpan</button></div>
@@ -207,23 +227,21 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
 <div id="toast"></div>
 
 <script>
-// ==================== TEMPEL DISINI (1) ====================
+// ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbyP-bH1ytjTFLJB0EhnFY267--u2_XMabqXxEpPcB13pyUjVUVq5M21IBHjg8qDGbs/exec';
-// Opsional: kunci rahasia (bukan URL). Harus sama dengan API_KEY di Code.gs. Kosongkan jika tidak dipakai.
-const API_KEY='https://script.google.com/macros/s/AKfycbyP-bH1ytjTFLJB0EhnFY267--u2_XMabqXxEpPcB13pyUjVUVq5M21IBHjg8qDGbs/exec';
-// ==================== TEMPEL DISINI (2) ====================
-// (Opsional) URL Google Spreadsheet (docs.google.com/spreadsheets/...) -> tombol "Buka Sheet". Kosongkan ('') jika tidak perlu.
-const SHEET_URL='https://script.google.com/macros/s/AKfycbyP-bH1ytjTFLJB0EhnFY267--u2_XMabqXxEpPcB13pyUjVUVq5M21IBHjg8qDGbs/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbxaFAT5IrvdBaVBRMgS_SrMqzmKN9bWA7cKdpvZDfFs9fRTsjpH1HipRFtD4hyN-AsH/exec';
 // =======================================================
 function api(fn,args,ok,ko){
   if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
   if(!API_URL){ko(new Error('Isi API_URL di index.html dengan URL Web App (berakhiran /exec).'));return}
-  fetch(API_URL,{method:'POST',body:JSON.stringify({fn:fn,args:args,key:API_KEY})})
+  fetch(API_URL,{method:'POST',body:JSON.stringify({fn:fn,args:args})})
    .then(r=>r.json()).then(j=>j.ok?ok(j.data):ko(new Error(j.error)))
    .catch(e=>ko(new Error('Tidak bisa terhubung ke Web App ('+e.message+'). Pastikan Deploy memakai akses "Anyone", URL /exec benar, dan sudah New version.')));
 }
+const DEF_KADAR=10;
+let hv='auto';try{hv=localStorage.getItem('hv')==='manual'?'manual':'auto'}catch(e){}
+function setHv(v){hv=v==='manual'?'manual':'auto';try{localStorage.setItem('hv',hv)}catch(e){}render()}
 let D=[],P={base:0,manual:0,mode:'manual',h24:0,adj:0,ref:0,sumber:'',diperbarui:'',riwayat:[]},sortK='pemilik',sortD=1,delId=null,smode='manual',sH24=0,page=1,ps=10;
 const $=id=>document.getElementById(id);
 const rp=n=>isFinite(n)&&n!==null&&n!==''?'Rp '+Math.round(n).toLocaleString('id-ID'):'Rp 0';
@@ -239,7 +257,18 @@ function kadarJS(v){let k=numD(v);if(!(k>0))return 0;if(k>24){if(k>=300&&k<=1000
 const baseJS=S=>Math.round((S.mode==='otomatis'&&S.h24>0&&S.ref>0)?S.manual*S.h24/S.ref:S.manual);
 const pr=(S,k)=>(k>0&&S.h24>0)?S.h24*k/24*(1+S.adj/100):S.base;
 function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3600)}
-function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');if(d.base===undefined)throw new Error('Code.gs di Apps Script masih versi lama. Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');D=d.items;P=d;return d}
+function setAll(d){if(typeof d==='string')d=JSON.parse(d);if(!d||!d.items)throw new Error('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.');if(d.base===undefined)throw new Error('Code.gs di Apps Script masih versi lama. Tempel Code.gs terbaru, jalankan setupData, lalu Deploy > Manage deployments > ikon pensil > New version > Deploy.');D=d.items;P=d;D.forEach(x=>{x.nilaiH=x.nilai;x.hpgH=x.hpg});applyVM();$('lnk').style.display=d.sheetUrl?'':'none';return d}
+function applyVM(){const s=P.sumberNilai==='sheet';D.forEach(x=>{if(s&&x.nilaiSheet!=null){x.nilai=x.nilaiSheet;x.hpg=x.berat?x.nilaiSheet/x.berat:0}else{x.nilai=x.nilaiH;x.hpg=x.hpgH}})}
+function vmRender(){
+  if(P.sumberNilai===undefined){$('vm').innerHTML='<div class="box full" style="width:100%"><b>Code.gs di Apps Script belum versi terbaru.</b> Pilihan "Nilai kini" aktif setelah Code.gs baru ditempel, lalu Deploy &gt; Manage deployments &gt; ikon pensil &gt; New version &gt; Deploy.</div>';return}
+  const s=P.sumberNilai==='sheet',miss=D.filter(x=>x.nilaiSheet==null).length,tH=sum(D,'nilaiH'),tS=D.reduce((a,x)=>a+(x.nilaiSheet!=null?x.nilaiSheet:x.nilaiH),0);
+  $('vm').innerHTML=`<span class="lbv">Nilai kini:</span><div class="seg"><button type="button" class="${s?'':'on'}" onclick="setVM('hitung')">Hitung otomatis</button><button type="button" class="${s?'on':''}" onclick="setVM('sheet')">Ambil dari database</button></div>`+`<small class="n">${s?'Memakai angka kolom "Nilai Saat Ini" dari sheet "'+esc(P.sumberSheet||'Data')+'" apa adanya'+(miss?` (${miss} perhiasan tidak ditemukan di sheet itu, memakai hitungan otomatis)`:'')+'.':'Dihitung dari harga 24K × kadar ÷ 24 × (1 + selisih toko); perhiasan tanpa kadar memakai harga tanpa kadar.'}${D.length&&miss===D.length?`<br><span class="down">Kolom "Nilai Saat Ini" (G) tidak terbaca sebagai angka. Isi G baris pertama: ${esc(P.gContoh||'tidak ada')} · rumus G: ${esc(P.gRumus||'(bukan rumus)')} · Harga per gram (H): ${esc(P.hContoh||'-')}</span>${/#/.test(P.gContoh||'')?' <button type="button" class="pri" id="bFix" style="padding:4px 10px;font-size:12.5px" onclick="fixRumus()">Perbaiki rumus Sheet</button>':''}`:''}<br>Total hitung otomatis: <b>${rp(tH)}</b> · Total database: <b>${rp(tS)}</b> · ${Math.abs(tS-tH)<1?'sama persis (angka di sheet sama dengan hitungan otomatis)':`selisih <b class="${tS>tH?'up':'down'}">${sgn(tS-tH)}</b>`}</small>`;
+}
+function fixRumus(){
+  const b=$('bFix');b.disabled=true;b.textContent='Memperbaiki…';
+  api('perbaikiRumus',[],d=>{try{const o=setAll(d);render();toast(o.pesan||'Selesai')}catch(e){toast(e.message)}},er=>{b.disabled=false;b.textContent='Perbaiki rumus Sheet';toast(er.message)});
+}
+function setVM(m){if(P.sumberNilai===undefined||P.sumberNilai===m)return;P.sumberNilai=m;applyVM();render();api('simpanSumberNilai',[m],()=>{},er=>toast('Gagal menyimpan pilihan: '+er.message))}
 function fail(m){$('app').style.display='none';$('load').style.display='block';$('load').innerHTML='<b>Gagal memuat data.</b><br>'+esc(m)}
 function load(){
   $('load').style.display='block';$('load').textContent='Memuat data dari Google Sheets…';
@@ -251,6 +280,8 @@ function fillFilters(){
   [['fo','pemilik','Semua pemilik'],['ft','jenis','Semua jenis'],['fs','store','Semua store']].forEach(([id,k,l])=>{
     const el=$(id),v=el.value;el.innerHTML=`<option value="">${l}</option>`+uniq(k).map(x=>`<option>${esc(x)}</option>`).join('');el.value=v;
   });
+  const ks=[...new Set(D.map(x=>x.kadar))].sort((a,b)=>b-a),fkE=$('fk'),kv=fkE.value;
+  fkE.innerHTML='<option value="">Semua kadar</option>'+ks.map(k=>`<option value="${k}">${k>0?kd(k):'Belum ada kadar'}</option>`).join('');fkE.value=kv;
   $('dlO').innerHTML=uniq('pemilik').map(x=>`<option value="${esc(x)}">`).join('');
   $('dlJ').innerHTML=uniq('jenis').map(x=>`<option value="${esc(x)}">`).join('');
   $('dlS').innerHTML=uniq('store').map(x=>`<option value="${esc(x)}">`).join('');
@@ -297,17 +328,19 @@ function hist(){
 }
 
 function render(){
-  fillFilters();
-  const q=$('q').value.toLowerCase(),fo=$('fo').value,ft=$('ft').value,fs=$('fs').value;
+  fillFilters();vmRender();
+  const q=$('q').value.toLowerCase(),fo=$('fo').value,ft=$('ft').value,fs=$('fs').value,fk=$('fk').value;
   D.forEach(x=>x.sel=x.nilai-x.harga);
-  let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan,kd(x.kadar)].join(' ').toLowerCase().includes(q)));
+  let L=D.filter(x=>(!fo||x.pemilik===fo)&&(!ft||x.jenis===ft)&&(!fk||String(x.kadar)===fk)&&(!fs||x.store===fs)&&(!q||[x.pemilik,x.jenis,x.store,x.catatan,kd(x.kadar)].join(' ').toLowerCase().includes(q)));
   L.sort((a,b)=>(typeof a[sortK]==='number'?a[sortK]-b[sortK]:String(a[sortK]).localeCompare(String(b[sortK])))*sortD);
-  const tb=sum(D,'berat'),th=sum(D,'harga'),tn=sum(D,'nilai'),sl=tn-th,pc=th?sl/th*100:0;
-  $('gold').innerHTML=`<div><div class="eyebrow">Harga emas per gram · tanpa kadar</div><div class="num">${rp(P.base)}</div>
-   <div class="chips"><span class="chip m">${P.mode==='otomatis'?'Otomatis':'Manual'}</span>${P.h24>0?`<span class="chip">24K: ${rp(P.h24)}</span>`:''}${P.adj?`<span class="chip">Selisih toko ${P.adj>0?'+':''}${P.adj}%</span>`:''}<span class="chip">Diperbarui ${esc(P.diperbarui||'-')}</span></div></div>
+  const eq=D.reduce((a,x)=>a+(x.kadar>0?x.berat*x.kadar/24:0),0),tb=sum(D,'berat'),th=sum(D,'harga'),tn=sum(D,'nilai'),sl=tn-th,pc=th?sl/th*100:0;
+  const showM=P.mode==='otomatis'&&hv==='manual';
+  $('gold').innerHTML=`<div><div class="eyebrow">Harga emas per gram · tanpa kadar${showM?' · manual':''}</div><div class="num">${rp(showM?P.manual:P.base)}</div>
+   ${P.mode==='otomatis'?`<div class="hseg" role="group" aria-label="Tampilan harga"><button type="button" class="${showM?'':'on'}" onclick="setHv('auto')">Otomatis</button><button type="button" class="${showM?'on':''}" onclick="setHv('manual')">Manual</button></div>`:''}
+   <div class="chips"><span class="chip m">${P.mode==='otomatis'?'Otomatis':'Manual'}</span>${P.h24>0?`<span class="chip">24K: ${rp(P.h24)}</span>`:''}${P.adj?`<span class="chip">Selisih toko ${P.adj>0?'+':''}${P.adj}%</span>`:''}${showM&&P.ref>0?`<span class="chip">24K saat ditetapkan: ${rp(P.ref)}</span>`:''}<span class="chip">Diperbarui ${esc(P.diperbarui||'-')}</span></div></div>
    <button onclick="openS()">Atur harga emas</button>`;
   $('stats').innerHTML=`
-   <div class="st"><div class="eyebrow">Total berat</div><div class="num">${gr(tb)}</div><small>${D.length} perhiasan</small></div>
+   <div class="st"><div class="eyebrow">Total berat</div><div class="num">${gr(tb)}</div><small>${D.length} perhiasan${eq>0?' · setara '+gr(eq)+' emas 24K':''}</small></div>
    <div class="st"><div class="eyebrow">Total harga beli</div><div class="num">${rp(th)}</div><small>Modal yang dikeluarkan</small></div>
    <div class="st"><div class="eyebrow">Nilai aset saat ini</div><div class="num">${rp(tn)}</div><small>${tb?rp(tn/tb):'-'} rata-rata per gram</small></div>
    <div class="st"><div class="eyebrow">Selisih dari harga beli</div><div class="num ${sl>=0?'up':'down'}">${sgn(sl)}</div><small class="${sl>=0?'up':'down'}">${pc>=0?'+':'−'}${Math.abs(pc).toFixed(1).replace('.',',')}%</small></div>`;
@@ -357,7 +390,23 @@ function setMode(m){
 function updateMk(){$('mk_p').textContent=sH24>0?rp(sH24):'Belum diambil';$('mk_s').textContent=P.sumber?'Sumber: '+P.sumber:'Tekan tombol untuk mengambil harga terbaru'}
 function openS(){
   sH24=P.h24||0;$('s_manual').value=P.manual||'';$('s_h24').value=P.h24||'';$('s_adj').value=P.adj||0;
-  updateMk();setMode(P.mode);$('ovs').classList.add('on');
+  kzUpdate();updateMk();setMode(P.mode);$('ovs').classList.add('on');
+}
+function kzUpdate(){
+  const n=D.filter(x=>!(x.kadar>0)).length,e=$('kz');e.style.display=n?'block':'none';kzArm=false;
+  if(n)e.innerHTML=`<b>${n} perhiasan belum diisi kadarnya</b>, jadi dihitung dengan harga "tanpa kadar" dan tidak terpengaruh harga 24K maupun selisih toko.<div style="margin-top:8px"><button type="button" class="pri" id="bKz" onclick="isiKadar()">Set semua ke ${DEF_KADAR}K</button></div>`;
+}
+let kzArm=false;
+function isiKadar(){
+  const b=$('bKz');
+  if(!kzArm){kzArm=true;b.textContent='Klik lagi untuk konfirmasi';return}
+  b.disabled=true;b.textContent='Menyimpan…';
+  api('isiKadarKosong',[DEF_KADAR],d=>{try{const o=setAll(d);kzUpdate();render();spprev();toast(o.pesan||'Kadar diisi')}catch(e){toast(e.message)}},er=>{b.disabled=false;kzArm=false;b.textContent='Set semua ke '+DEF_KADAR+'K';toast(er.message)});
+}
+function samakan(){
+  const f=sform();
+  if(!(f.h24>0&&f.manual>0)){toast('Isi harga per gram dan harga 24K dulu.');return}
+  $('s_adj').value=Math.round((f.manual/(f.h24*DEF_KADAR/24)-1)*1000)/10;spprev();
 }
 function closeS(){$('ovs').classList.remove('on')}
 function sform(){return{mode:smode,manual:num($('s_manual').value),h24:sH24,adj:parseFloat($('s_adj').value)||0}}
@@ -367,7 +416,7 @@ function spprev(){
   if(!(f.manual>0)){$('s_prev').textContent='Isi harga per gram untuk perhiasan tanpa kadar.';return}
   let ref=f.manual!==P.manual?(f.h24>0?f.h24:0):P.ref;if(!(ref>0)&&f.h24>0)ref=f.h24;
   const S={mode:f.mode,manual:f.manual,h24:f.h24,adj:f.adj,ref};S.base=baseJS(S);
-  const tot=D.reduce((s,x)=>s+x.berat*pr(S,x.kadar),0),cur=sum(D,'nilai'),d=tot-cur;
+  const tot=D.reduce((s,x)=>s+x.berat*pr(S,x.kadar),0),cur=sum(D,'nilaiH'),d=tot-cur;
   const mv=f.mode==='otomatis'&&ref>0&&f.h24>0?`<br>Pergerakan pasar sejak kalibrasi: <b class="${f.h24>=ref?'up':'down'}">${f.h24>=ref?'+':'−'}${Math.abs((f.h24/ref-1)*100).toFixed(2).replace('.',',')}%</b>`:'';
   $('s_prev').innerHTML=`Harga per gram (tanpa kadar): <b>${rp(S.base)}</b>${mv}<br>Total aset menjadi <b>${rp(tot)}</b> · ${Math.round(d)===0?'tidak berubah dari sekarang':`<span class="${d>0?'up':'down'}">${sgn(d)}</span> dibanding sekarang`}`;
 }
@@ -389,19 +438,24 @@ function openForm(id){
   const x=D.find(d=>d.id===id)||{};
   $('mt').textContent=id?'Ubah perhiasan':'Tambah perhiasan';
   $('f_id').value=x.id||'';$('f_pemilik').value=x.pemilik||'';$('f_jenis').value=x.jenis||'';
-  $('f_kadar').value=x.kadar?String(x.kadar).replace('.',','):'';
+  $('f_kadar').value=id?(x.kadar?String(x.kadar).replace('.',','):''):String(DEF_KADAR);
   $('f_berat').value=x.berat!=null?String(x.berat).replace('.',','):'';
   $('f_harga').value=x.harga||'';$('f_store').value=x.store||'';$('f_catatan').value=x.catatan||'';
-  hint();$('ov').classList.add('on');setTimeout(()=>$('f_pemilik').focus(),50);
+  setSel();hint();$('ov').classList.add('on');setTimeout(()=>$('f_pemilik').focus(),50);
 }
 function closeForm(){$('ov').classList.remove('on')}
 function hint(){
   const b=numD($('f_berat').value),raw=$('f_kadar').value.trim(),k=kadarJS(raw);
+  $('kinfo').textContent=k?`${kd(k)} = kemurnian ${(k/24*100).toFixed(1).replace('.',',')}% (${Math.round(k/24*1000)}‰)${b?' · setara '+gr(b*k/24)+' emas 24K':''}`:(raw?'Kadar tidak valid.':'Belum diisi: dihitung dengan harga tanpa kadar.');
   if(raw&&!k){$('hintG').textContent='Kadar tidak valid. Isi 1–24 karat (mis. 18) atau 300–999 (mis. 750).';return}
   const p=pr(P,k);
   $('hintG').textContent=b?`Nilai saat ini: ${rp(b*p)} (${gr(b)} × ${rp(p)}/g${k?' · '+kd(k):' · tanpa kadar'})`:'Nilai saat ini dihitung otomatis dari berat × harga emas (sesuai kadar).';
 }
 ['f_berat','f_kadar'].forEach(i=>$(i).addEventListener('input',hint));
+const KL=[8,9,10,12,16,17,18,20,22,24];
+$('f_ksel').innerHTML=KL.map(v=>`<option value="${v}">${v}K</option>`).join('')+'<option value="">Belum tahu</option><option value="x">Lainnya…</option>';
+function setSel(){const raw=$('f_kadar').value.trim(),k=kadarJS(raw),v=KL.includes(k)?String(k):(raw?'x':'');$('f_ksel').value=v;$('f_kadar').style.display=v==='x'?'':'none'}
+$('f_ksel').onchange=()=>{const v=$('f_ksel').value,i=$('f_kadar');if(v==='x'){i.style.display='';i.value='';i.focus()}else{i.style.display='none';i.value=v}hint()};
 function submitForm(e){
   e.preventDefault();
   const o={id:$('f_id').value,pemilik:$('f_pemilik').value,jenis:$('f_jenis').value,berat:numD($('f_berat').value),harga:num($('f_harga').value),
@@ -416,7 +470,6 @@ function askDel(id){const x=D.find(d=>d.id===id);delId=id;$('dtxt').textContent=
 $('dok').onclick=()=>{$('dok').disabled=true;api('deleteItem',[delId],d=>{$('dok').disabled=false;try{setAll(d);$('ovd').classList.remove('on');render();toast('Data dihapus')}catch(er){toast(er.message)}},er=>{$('dok').disabled=false;toast('Gagal: '+er.message)})};
 const ovd=$('ovd');ovd.onclick=e=>{if(e.target===ovd)ovd.classList.remove('on')};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeForm();closeS();ovd.classList.remove('on')}});
-if(SHEET_URL)$('lnk').style.display='';
 load();
 </script>
 </body>
