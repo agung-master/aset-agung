@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aset Perhiasan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f4f1ea;--card:#fff;--ink:#1d1a14;--mut:#6f685a;--line:#e8e3d7;--gold:#b0801f;--gold-d:#7a5510;--gold-btn:#8a6212;--on-gold:#fff;--gold-l:#f6ecd2;--dark:#1b1710;--up:#1d7a4b;--down:#b3372c;--r:14px;--sh:0 1px 2px rgba(40,30,10,.05),0 4px 14px rgba(40,30,10,.05)}
@@ -136,7 +137,7 @@ tfoot td{font-weight:600;background:var(--gold-l);border-top:1px solid var(--lin
 .mk{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--dark);color:#f3d98b;border-radius:12px;padding:12px 14px}
 .mk .num{font-size:22px;font-weight:700;color:#f6e3a8}
 .mk small{color:#b9ad8d;display:block;font-size:12px}
-#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--dark);color:#f3d98b;padding:10px 18px;border-radius:14px;display:none;z-index:30;max-width:90vw;text-align:center;border:1px solid rgba(243,217,139,.25)}
+#toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--dark);color:#f3d98b;padding:10px 18px;border-radius:14px;display:none;z-index:30;max-width:90vw;text-align:center;border:1px solid rgba(243,217,139,.25)}
 #load{padding:60px 16px;text-align:center;color:var(--mut)}
 @media(max-width:860px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.panels{grid-template-columns:minmax(0,1fr)}.hw{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:760px){.tbl{display:none}.mob{display:block}h1{font-size:19px}header .lbl,header p{display:none}.fg{grid-template-columns:1fr}.st .num{font-size:17px}.hero .num{font-size:24px}.logo{width:34px;height:34px}}
@@ -330,7 +331,8 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
 @media(max-height:640px){.lkl{width:50px;height:50px;font-size:24px;margin-bottom:12px}.lks{margin-bottom:14px}.lkp{gap:10px;grid-template-columns:repeat(3,62px)}.lkp button{width:62px;height:62px;font-size:22px}.lkr{margin-top:14px}.lkm{min-height:34px}}
 @media(prefers-reduced-motion:reduce){.lkd.sk{animation:none}}
 .hb .lko svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:400px){.hb{gap:6px}header .wrap{gap:8px}h1{white-space:nowrap;font-size:18px}.hb button{min-width:38px!important;padding:0 10px!important}.brand{gap:10px;min-width:0}.logo{width:30px;height:30px;font-size:16px;border-radius:10px;flex:none}}
+@media(max-width:400px){.hb{gap:6px}header .wrap{gap:8px}h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:18px}.hb button{min-width:38px!important;padding:0 10px!important}.brand{gap:10px;min-width:0;flex:1 1 auto}.brand>div:last-child{overflow:hidden}.logo{width:30px;height:30px;font-size:16px;border-radius:10px;flex:none}}
+@media(max-width:340px){.logo{display:none}}
 </style>
 </head>
 <body>
@@ -380,7 +382,7 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
 </div>
 
 <div class="ov" id="ov">
-  <form class="md" onsubmit="submitForm(event)">
+  <form class="md" role="dialog" aria-modal="true" aria-labelledby="mt" onsubmit="submitForm(event)">
     <h2 id="mt">Tambah perhiasan</h2>
     <input type="hidden" id="f_id">
     <div class="fg">
@@ -405,8 +407,8 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
 </div>
 
 <div class="ov" id="ovs">
-  <form class="md" onsubmit="submitS(event)">
-    <h2>Atur harga emas</h2>
+  <form class="md" role="dialog" aria-modal="true" aria-labelledby="st_t" onsubmit="submitS(event)">
+    <h2 id="st_t">Atur harga emas</h2>
     <div class="seg">
       <button type="button" id="mM" onclick="setMode('manual')"><b>Manual</b><small>Anda yang menentukan harga</small></button>
       <button type="button" id="mO" onclick="setMode('otomatis')"><b>Otomatis</b><small>Mengikuti harga pasar</small></button>
@@ -425,8 +427,8 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
       </div>
 
       <label class="full"><span>Selisih harga toko vs pasar (%) — untuk perhiasan berkadar</span><input id="s_adj" type="number" step="any" value="0" oninput="spprev()">
-        <div class="hint">Isi minus jika harga toko lebih rendah dari harga pasar.</div>
-        <button type="button" style="margin-top:6px" onclick="samakan()">Samakan 10K dengan harga tanpa kadar</button></label>
+        <div class="hint">Isi minus jika harga toko lebih rendah dari harga pasar.</div></label>
+      <div class="full" style="margin-top:-4px"><button type="button" onclick="samakan()">Samakan 10K dengan harga tanpa kadar</button></div>
       <label><span>Potongan jual — ada surat (%)</span><input id="s_potS" inputmode="decimal" placeholder="5"></label>
       <label><span>Potongan jual — tanpa surat (%)</span><input id="s_potT" inputmode="decimal" placeholder="10"></label>
       <div class="full hint" style="margin-top:-6px">Untuk "perkiraan hasil jika dijual": nilai kini dikurangi potongan ini (mis. tawaran beli kembali toko). Perhiasan dianggap ada surat bila Foto Surat terisi.</div>
@@ -437,8 +439,8 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
   </form>
 </div>
 
-<div class="ov" id="ovd"><div class="md" style="max-width:380px">
-  <h2>Hapus data ini?</h2><p id="dtxt" style="color:var(--mut)"></p>
+<div class="ov" id="ovd"><div class="md" role="alertdialog" aria-modal="true" aria-labelledby="dl_t" style="max-width:380px">
+  <h2 id="dl_t">Hapus data ini?</h2><p id="dtxt" style="color:var(--mut)"></p>
   <div class="ft"><button onclick="ovd.classList.remove('on')">Batal</button><button class="pri" style="background:var(--down);border-color:var(--down)" id="dok">Hapus</button></div>
 </div></div>
 <div id="toast"></div>
@@ -447,7 +449,7 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbzHI5RVbnadGoeYKHnYjsVAmWhoQTWHWdgcIFZd_UyCNTG38apcps54OCyw_Oek2WZK/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbxJ81bGpzKIXq4dmYTPlkSH1Zj3M5J1pJ5budIYVjDZr5V63VMfcf6NmzTMRfVQCn97/exec';
 // =======================================================
 /* ===== Sesi & login PIN ===== */
 const $=id=>document.getElementById(id);
@@ -533,7 +535,7 @@ function lkKey(k){
   k.innerHTML=h;lkDraw();
   k.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&!b.disabled)lkKey(b.dataset.k)});
   document.addEventListener('keydown',e=>{
-    if(!lockOn||e.ctrlKey||e.metaKey||e.altKey)return;
+    if(!lockOn||e.ctrlKey||e.metaKey||e.altKey||(e.target&&e.target.closest&&e.target.closest('.lkb')))return;
     if(/^\d$/.test(e.key)){e.preventDefault();lkKey(e.key)}
     else if(e.key==='Backspace'){e.preventDefault();lkKey('del')}
     else if(e.key==='Enter'){e.preventDefault();lkKey('go')}
@@ -557,8 +559,8 @@ const safeUrl=u=>/^https?:\/\//i.test(u||'')?String(u):'';
 const fl=u=>safeUrl(u)?`<a class="fl" href="${esc(safeUrl(u))}" target="_blank" rel="noopener">Lihat foto</a>`:'<span style="color:var(--mut)">—</span>';
 let fotoNew=null,fotoDel=false,fotoCur='';
 const kd=k=>k>0?(+(+k).toFixed(2)).toString().replace('.',',')+'K':'—';
-const short=n=>n>=1e9?(n/1e9).toFixed(2).replace('.',',')+' M':n>=1e6?(n/1e6).toFixed(1).replace('.',',')+' jt':n>=1e3?Math.round(n/1e3)+' rb':String(Math.round(n));
-function kadarJS(v){let k=numD(v);if(!(k>0))return 0;if(k>24){if(k>=300&&k<=1000)k=k/1000*24;else return 0}return k}
+const short=n=>n>=999.95e6?(n/1e9).toFixed(2).replace('.',',')+' M':n>=999500?(n/1e6).toFixed(1).replace('.',',')+' jt':n>=1e3?Math.round(n/1e3)+' rb':String(Math.round(n));
+function kadarJS(v){let k=numD(v);if(!(k>=1))return 0;if(k>24){if(k>=300&&k<=1000)k=k/1000*24;else return 0}return k}
 const baseJS=S=>Math.round((S.mode==='otomatis'&&S.h24>0&&S.ref>0)?S.manual*S.h24/S.ref:S.manual);
 const refJS=f=>{let ref=(f.manual!==P.manual||(f.mode==='otomatis'&&P.mode!=='otomatis'))?(f.h24>0?f.h24:0):P.ref;if(!(ref>0)&&f.h24>0)ref=f.h24;return ref};
 const pr=(S,k)=>(k>0&&S.h24>0)?S.h24*k/24*(1+S.adj/100):S.base;
@@ -999,7 +1001,7 @@ function submitForm(e){
   api('saveItem',[o],d=>{$('sv').disabled=false;$('sv').textContent='Simpan';try{const r=setAll(d);closeForm();render();toast(r.pesan||(edit?'Perubahan disimpan':'Perhiasan ditambahkan'))}catch(er){toast(er.message)}},
    er=>{toast('Gagal: '+er.message);$('sv').disabled=false;$('sv').textContent='Simpan'});
 }
-function askDel(id){const x=D.find(d=>d.id===id);delId=id;$('dtxt').textContent=`${x.jenis} milik ${x.pemilik} (${gr(x.berat)}) akan dihapus dari Google Sheets.`;$('ovd').classList.add('on')}
+function askDel(id){const x=D.find(d=>d.id===id);if(!x){toast('Data tidak ditemukan. Muat ulang halaman.');return}delId=id;$('dtxt').textContent=`${x.jenis} milik ${x.pemilik} (${gr(x.berat)}) akan dihapus dari Google Sheets.`;$('ovd').classList.add('on')}
 $('dok').onclick=()=>{$('dok').disabled=true;api('deleteItem',[delId],d=>{$('dok').disabled=false;try{setAll(d);$('ovd').classList.remove('on');render();toast('Data dihapus')}catch(er){toast(er.message)}},er=>{$('dok').disabled=false;toast('Gagal: '+er.message)})};
 const ovd=$('ovd');
 function ovClose(el,fn){let dn=false;el.addEventListener('pointerdown',e=>{dn=e.target===el});el.addEventListener('click',e=>{if(dn&&e.target===el)fn();dn=false})}
