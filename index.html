@@ -254,6 +254,45 @@ td.pm{font-weight:500}
   .st .num{font-size:15px}
   .item dl{gap:6px 8px}
 }
+
+.vm .seg{background:var(--card);border:1px solid var(--line);box-shadow:var(--sh)}
+.vm .seg button:not(.on):hover{background:var(--gold-l)}
+.modal-seg,.md .seg{background:var(--bg);border:1px solid var(--line)}
+/* ===== Perapian tombol & tampilan (teks tombol selalu di tengah) ===== */
+button{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1.25;gap:6px}
+.seg button,.vm .seg button{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.3;min-height:40px}
+.seg button small{text-align:center}
+.vm .seg{display:inline-grid;grid-template-columns:1fr 1fr;min-width:340px}
+.vm .seg button{white-space:nowrap}
+.hero .hseg button,.tabs button,.kch button{display:inline-flex;align-items:center;justify-content:center;text-align:center}
+.hero button{justify-content:center;text-align:center}
+.pgb button{display:inline-flex;align-items:center;justify-content:center}
+.act button,.item .act button{display:inline-flex;align-items:center;justify-content:center;text-align:center}
+.ib{display:inline-flex;align-items:center;justify-content:center}
+.fotoRow button{justify-content:center;text-align:center}
+.ft button{min-width:96px;justify-content:center}
+.mk button{justify-content:center;text-align:center}
+.hb button{display:inline-flex;align-items:center;justify-content:center}
+@media(max-width:760px){
+  .vm .seg{display:grid;width:100%;min-width:0}
+  .vm .lbv{flex-basis:100%}
+  .vm .seg button{padding:9px 8px;font-size:13px}
+}
+@media(max-width:520px){
+  .ft{flex-direction:column-reverse}
+  .ft button{width:100%;min-height:42px}
+  .fotoRow button{flex:1 1 100%;min-height:40px}
+  .mk{flex-direction:column;align-items:stretch;text-align:center}
+  .mk button{width:100%;min-height:42px}
+  .md{padding:18px 16px}
+  .pfc{justify-content:center}
+  .tabs{width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr))}
+}
+@media(max-width:520px){
+  #rkTabs{width:100%}
+  #rkTabs .tabs,.pfc .tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));width:100%;border-radius:12px}
+  .tabs button{padding:7px 10px;min-height:34px}
+}
 </style>
 </head>
 <body>
@@ -357,7 +396,7 @@ td.pm{font-weight:500}
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbyCWrUxJ54tNZUv6EEcxV_PuW4o541ZRUKPrDy8TIvEk29m1BWoy8OELUkdqKPnE4xM/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbw_Ioly4k-9QGrOH9FPA33p_QfTrgabTTebU81Z3Fke_S8vPNQA2_GZFAct6vJ3UB9E/exec';
 // =======================================================
 function api(fn,args,ok,ko){
   if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
