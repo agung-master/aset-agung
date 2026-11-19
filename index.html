@@ -293,12 +293,49 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
   #rkTabs .tabs,.pfc .tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));width:100%;border-radius:12px}
   .tabs button{padding:7px 10px;min-height:34px}
 }
+
+/* ===== Halaman login PIN ===== */
+.lk{position:fixed;inset:0;z-index:60;display:flex;padding:20px;overflow:auto;color:#f3d98b;
+  background:radial-gradient(900px 520px at 50% -8%,rgba(224,180,79,.22),transparent 62%),radial-gradient(700px 480px at 100% 100%,rgba(176,128,31,.16),transparent 58%),linear-gradient(160deg,#0c0a07,#1b1508 55%,#0c0a07);
+  padding-top:max(20px,env(safe-area-inset-top));padding-bottom:max(20px,env(safe-area-inset-bottom))}
+.lk[hidden]{display:none}
+.lkc{width:100%;max-width:340px;margin:auto;text-align:center}
+.lkl{width:64px;height:64px;margin:0 auto 18px;border-radius:20px;background:linear-gradient(135deg,#f3d98b,#b0801f);color:#2a2110;display:grid;place-items:center;font-size:30px;box-shadow:0 10px 30px rgba(224,180,79,.25),inset 0 1px 0 rgba(255,255,255,.45)}
+.lkt{font:700 26px/1.2 Fraunces,Georgia,serif;color:#f6e3a8}
+.lks{margin:6px 0 26px;color:#b9ad8d;font-size:14px}
+.lkd{display:flex;justify-content:center;align-items:center;gap:14px;height:18px;margin-bottom:10px}
+.lkd i{width:13px;height:13px;border-radius:50%;border:1.5px solid rgba(243,217,139,.45);transition:background .15s,transform .15s,box-shadow .15s,border-color .15s}
+.lkd i.on{background:#e0b44f;border-color:#e0b44f;transform:scale(1.1);box-shadow:0 0 12px rgba(224,180,79,.55)}
+.lkd.sk{animation:lksk .45s}
+@keyframes lksk{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.lkm{min-height:40px;margin:0 0 12px;font-size:13px;line-height:1.45;color:#ff9a8f}
+.lkm.ok{color:#b9ad8d}
+.lkp{display:grid;grid-template-columns:repeat(3,72px);gap:14px;justify-content:center;transition:opacity .2s}
+.lkp button{width:72px;height:72px;padding:0;border-radius:50%;background:rgba(243,217,139,.06);border:1px solid rgba(243,217,139,.2);color:#f6e3a8;font:600 25px/1 Fraunces,Georgia,serif;display:flex;align-items:center;justify-content:center;transition:background .12s,transform .12s,border-color .12s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.lkp button:hover{background:rgba(243,217,139,.13);border-color:rgba(243,217,139,.5)}
+.lkp button:active{transform:scale(.93);background:rgba(243,217,139,.22)}
+.lkp button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lkp .lkg{background:#e0b44f;border-color:#e0b44f;color:#1b1710}
+.lkp .lkg:hover{background:#f0cf80;border-color:#f0cf80}
+.lkp .lkg:disabled{background:rgba(243,217,139,.06);border-color:rgba(243,217,139,.2);color:rgba(243,217,139,.35);cursor:not-allowed}
+.lkp .lkx{border-color:transparent;background:transparent}
+.lk.dis .lkp{opacity:.4;pointer-events:none}
+.lk.nopin .lkp,.lk.nopin .lkd,.lk.nopin .lkr{display:none}
+.lkr{display:inline-flex;align-items:center;gap:8px;margin-top:24px;color:#b9ad8d;font-size:13px;cursor:pointer;user-select:none}
+.lkr input{width:16px;height:16px;margin:0;accent-color:#e0b44f}
+.lkb{display:none;margin:4px auto 0;background:#e0b44f;border-color:#e0b44f;color:#1b1710;padding:10px 22px}
+.lk.nopin .lkb{display:inline-flex}
+.lkf{margin-top:22px;font-size:11.5px;color:rgba(185,173,141,.6)}
+@media(max-height:640px){.lkl{width:50px;height:50px;font-size:24px;margin-bottom:12px}.lks{margin-bottom:14px}.lkp{gap:10px;grid-template-columns:repeat(3,62px)}.lkp button{width:62px;height:62px;font-size:22px}.lkr{margin-top:14px}.lkm{min-height:34px}}
+@media(prefers-reduced-motion:reduce){.lkd.sk{animation:none}}
+.hb .lko svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:400px){.hb{gap:6px}header .wrap{gap:8px}h1{white-space:nowrap;font-size:18px}.hb button{min-width:38px!important;padding:0 10px!important}.brand{gap:10px;min-width:0}.logo{width:30px;height:30px;font-size:16px;border-radius:10px;flex:none}}
 </style>
 </head>
 <body>
 <header><div class="wrap">
   <div class="brand"><div class="logo">◆</div><div><h1>Aset Perhiasan</h1><p>Pantau koleksi emas, nilai terkini, dan selisihnya dari harga beli</p></div></div>
-  <div class="hb"><button id="lnk" style="display:none" onclick="window.open(P.sheetUrl,'_blank')" title="Buka Google Sheet" aria-label="Buka Google Sheet">↗<span class="lbl"> Buka Sheet</span></button><button onclick="load()" title="Muat ulang" aria-label="Muat ulang">↻</button><button class="pri" onclick="openForm()" aria-label="Tambah perhiasan">+ <span class="lbl">Tambah perhiasan</span></button></div>
+  <div class="hb"><button id="lnk" style="display:none" onclick="window.open(P.sheetUrl,'_blank')" title="Buka Google Sheet" aria-label="Buka Google Sheet">↗<span class="lbl"> Buka Sheet</span></button><button onclick="load()" title="Muat ulang" aria-label="Muat ulang">↻</button><button class="pri" onclick="openForm()" aria-label="Tambah perhiasan">+ <span class="lbl">Tambah perhiasan</span></button><button class="lko" onclick="logout()" title="Kunci aplikasi" aria-label="Kunci aplikasi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button></div>
 </div></header>
 
 <main class="wrap">
@@ -327,6 +364,19 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
   </div>
 </main>
 <div style="height:40px"></div>
+
+<div class="lk" id="lock" role="dialog" aria-modal="true" aria-labelledby="lkT" tabindex="-1" hidden>
+  <div class="lkc">
+    <div class="lkl">◆</div>
+    <div class="lkt" id="lkT">Aset Perhiasan</div>
+    <p class="lks" id="lkS">Masukkan PIN untuk melanjutkan</p>
+    <div class="lkd" id="lkD" aria-hidden="true"></div>
+    <div class="lkm" id="lkM" role="status" aria-live="polite"></div>
+    <div class="lkp" id="lkP"></div>
+    <button type="button" class="lkb" onclick="lkStatus(false)">Coba lagi</button>
+    <label class="lkr"><input type="checkbox" id="lkR" checked> Tetap masuk di perangkat ini</label>
+  </div>
+</div>
 
 <div class="ov" id="ov">
   <form class="md" onsubmit="submitForm(event)">
@@ -396,20 +446,101 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbw_Ioly4k-9QGrOH9FPA33p_QfTrgabTTebU81Z3Fke_S8vPNQA2_GZFAct6vJ3UB9E/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbxKOtCz9hGj6NE99h9YvZPBYbfN8z24Na3nmUjXRkN5Lsr0wqQDvqIA_uJUu8n7E4Re/exec';
 // =======================================================
+/* ===== Sesi & login PIN ===== */
+const $=id=>document.getElementById(id);
+const TK='ap_tok';
+function tokGet(){try{return sessionStorage.getItem(TK)||localStorage.getItem(TK)||''}catch(e){return ''}}
+let TOKEN=tokGet(),lockOn=false,pinV='',pinBusy=false,lkTm=null,lkSt='';
+function tokSet(t,keep){TOKEN=t;try{sessionStorage.removeItem(TK);localStorage.removeItem(TK);(keep?localStorage:sessionStorage).setItem(TK,t)}catch(e){}}
+function tokClear(){TOKEN='';try{sessionStorage.removeItem(TK);localStorage.removeItem(TK)}catch(e){}}
 function api(fn,args,ok,ko){
-  if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...args);return}
+  const bad=er=>{if(/SESI_HABIS/.test((er&&er.message)||'')){showLock('Sesi berakhir. Masukkan PIN kembali.');er=new Error('Sesi berakhir. Masukkan PIN kembali.')}ko(er)};
+  if(typeof google!=='undefined'&&google.script&&google.script.run){google.script.run.withSuccessHandler(ok).withFailureHandler(bad).rpc(fn,args,TOKEN);return}
   if(!API_URL){ko(new Error('Isi API_URL di index.html dengan URL Web App (berakhiran /exec).'));return}
-  fetch(API_URL,{method:'POST',body:JSON.stringify({fn:fn,args:args})})
-   .then(r=>r.json()).then(j=>{if(j.ok)ok(j.data);else ko(new Error(j.error))},
+  fetch(API_URL,{method:'POST',body:JSON.stringify({fn:fn,args:args,token:TOKEN})})
+   .then(r=>r.json()).then(j=>{if(j.ok)ok(j.data);else bad(new Error(j.error))},
    e=>ko(new Error('Tidak bisa terhubung ke Web App ('+e.message+'). Pastikan Deploy memakai akses "Anyone", URL /exec benar, dan sudah New version.')));
 }
+const pj=d=>typeof d==='string'?JSON.parse(d):d;
+function lkMsg(t,cls){const m=$('lkM');m.textContent=t||'';m.className='lkm'+(cls==='ok'?' ok':'')}
+function lkDraw(){
+  const n=Math.max(4,pinV.length);let h='';for(let i=0;i<n;i++)h+='<i'+(i<pinV.length?' class="on"':'')+'></i>';
+  $('lkD').innerHTML=h;const g=document.querySelector('#lkP .lkg');if(g)g.disabled=pinV.length<4||pinBusy;
+}
+function lkMode(m){const l=$('lock');l.classList.toggle('dis',m==='dis');l.classList.toggle('nopin',m==='nopin')}
+function lkCount(sec){
+  clearInterval(lkTm);lkMode('dis');pinV='';lkDraw();
+  const t0=Date.now()+sec*1000,tick=()=>{
+    const r=Math.max(0,Math.ceil((t0-Date.now())/1000));
+    if(r<=0){clearInterval(lkTm);lkMode('');lkMsg('Silakan coba lagi.','ok');return}
+    lkMsg('Terlalu banyak percobaan salah. Coba lagi dalam '+Math.floor(r/60)+':'+String(r%60).padStart(2,'0')+'.');
+  };tick();lkTm=setInterval(tick,1000);
+}
+function lkNoPin(){
+  clearInterval(lkTm);lkMode('nopin');$('lkS').textContent='Aplikasi terkunci';
+  lkMsg('PIN belum dibuat. Buka Google Spreadsheet, lalu pilih menu “Keamanan PIN” → “Atur / ganti PIN…”. Setelah itu tekan Coba lagi.','ok');
+}
+function lkStatus(keep){
+  lkMode('');$('lkS').textContent='Masukkan PIN untuk melanjutkan';
+  api('authStatus',[],d=>{try{const r=pj(d);if(!r.pinSet)lkNoPin();else if(r.kunci>0)lkCount(r.kunci)}catch(e){}},
+    er=>{if(!keep)lkMsg('Tidak bisa terhubung: '+er.message)})
+}
+function showLock(msg,cls){
+  lockOn=true;D=[];tokClear();pinV='';pinBusy=false;clearInterval(lkTm);
+  $('app').style.display='none';$('load').style.display='none';
+  ['ov','ovs','ovd'].forEach(i=>$(i).classList.remove('on'));
+  $('lock').hidden=false;document.body.style.overflow='hidden';
+  lkMode('');$('lkS').textContent='Masukkan PIN untuk melanjutkan';lkDraw();lkMsg(msg||'',cls);
+  try{$('lock').focus({preventScroll:true})}catch(e){}
+  lkStatus(!!msg);
+}
+function hideLock(){lockOn=false;clearInterval(lkTm);$('lock').hidden=true;document.body.style.overflow='';pinV='';lkMsg('')}
+function lkFail(r){
+  pinV='';lkDraw();const d=$('lkD');d.classList.remove('sk');void d.offsetWidth;d.classList.add('sk');
+  if(r.belum)lkNoPin();
+  else if(r.kunci)lkCount(r.kunci);
+  else lkMsg('PIN salah.'+(r.sisa!=null?' Sisa percobaan: '+r.sisa+'.':''));
+}
+function lkSubmit(){
+  if(pinBusy||pinV.length<4)return;
+  pinBusy=true;lkDraw();lkMsg('Memeriksa…','ok');$('lock').classList.add('dis');
+  api('masukPin',[pinV],d=>{
+    pinBusy=false;$('lock').classList.remove('dis');
+    try{const r=pj(d);
+      if(r.ok){tokSet(r.token,$('lkR').checked);hideLock();load()}
+      else lkFail(r)}
+    catch(e){pinV='';lkDraw();lkMsg('Respons server tidak valid. Pastikan Code.gs terbaru sudah di-deploy sebagai versi baru.')}
+  },er=>{pinBusy=false;$('lock').classList.remove('dis');pinV='';lkDraw();lkMsg('Gagal: '+er.message)});
+}
+function lkKey(k){
+  if(pinBusy||$('lock').classList.contains('dis')||$('lock').classList.contains('nopin'))return;
+  if(/^\d$/.test(k)){if(pinV.length<12)pinV+=k}
+  else if(k==='del')pinV=pinV.slice(0,-1);
+  else if(k==='go'){lkSubmit();return}
+  lkMsg('');lkDraw();
+}
+(function(){
+  const k=$('lkP');let h='';
+  for(let n=1;n<=9;n++)h+='<button type="button" data-k="'+n+'" aria-label="'+n+'">'+n+'</button>';
+  h+='<button type="button" class="lkx" data-k="del" aria-label="Hapus angka terakhir"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1z"/><path d="M17 9.5l-5 5M12 9.5l5 5"/></svg></button>'
+   +'<button type="button" data-k="0" aria-label="0">0</button>'
+   +'<button type="button" class="lkg" data-k="go" aria-label="Masuk" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>';
+  k.innerHTML=h;lkDraw();
+  k.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&!b.disabled)lkKey(b.dataset.k)});
+  document.addEventListener('keydown',e=>{
+    if(!lockOn||e.ctrlKey||e.metaKey||e.altKey)return;
+    if(/^\d$/.test(e.key)){e.preventDefault();lkKey(e.key)}
+    else if(e.key==='Backspace'){e.preventDefault();lkKey('del')}
+    else if(e.key==='Enter'){e.preventDefault();lkKey('go')}
+  });
+})();
+function logout(){api('keluarPin',[],()=>{},()=>{});showLock('Anda sudah keluar.','ok')}
 const DEF_KADAR=10;
 let hv='auto';try{hv=localStorage.getItem('hv')==='manual'?'manual':'auto'}catch(e){}
 function setHv(v){hv=v==='manual'?'manual':'auto';try{localStorage.setItem('hv',hv)}catch(e){}render()}
 let D=[],P={base:0,manual:0,mode:'manual',h24:0,adj:0,ref:0,sumber:'',diperbarui:'',riwayat:[]},sortK='pemilik',sortD=1,delId=null,smode='manual',sH24=0,page=1,ps=10;
-const $=id=>document.getElementById(id);
 const rp=n=>isFinite(n)&&n!==null&&n!==''?'Rp\u00A0'+(Math.round(n)||0).toLocaleString('id-ID'):'Rp\u00A00';
 const pct=(x,d)=>(x>=0?'+':'−')+Math.abs(x).toFixed(d==null?1:d).replace('.',',')+'%';
 const fd=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?m[3]+'/'+m[2]+'/'+m[1]:'—'};
@@ -441,7 +572,7 @@ function fixRumus(){
   api('perbaikiRumus',[],d=>{try{const o=setAll(d);render();toast(o.pesan||'Selesai')}catch(e){toast(e.message)}},er=>{b.disabled=false;b.textContent='Perbaiki rumus Sheet';toast(er.message)});
 }
 function setVM(m){if(P.sumberNilai===undefined||P.sumberNilai===m)return;P.sumberNilai=m;applyVM();render();api('simpanSumberNilai',[m],()=>{},er=>toast('Gagal menyimpan pilihan: '+er.message))}
-function fail(m){$('app').style.display='none';$('load').style.display='block';$('load').innerHTML='<b>Gagal memuat data.</b><br>'+esc(m)}
+function fail(m){if(lockOn)return;$('app').style.display='none';$('load').style.display='block';$('load').innerHTML='<b>Gagal memuat data.</b><br>'+esc(m)}
 function load(){
   $('load').style.display='block';$('load').textContent='Memuat data dari Google Sheets…';
   const t=setTimeout(()=>fail('Server tidak merespons lebih dari 30 detik. Di editor Apps Script jalankan setupData, setujui izin, lalu Deploy > New version.'),30000);
@@ -873,7 +1004,7 @@ ovClose($('ov'),closeForm);ovClose($('ovs'),closeS);ovClose(ovd,()=>ovd.classLis
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeForm();closeS();ovd.classList.remove('on')}});
 let rzW=window.innerWidth,rzT=null;
 window.addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(window.innerWidth!==rzW&&D.length&&$('app').style.display!=='none'){rzW=window.innerWidth;hist();pf()}},150)});
-load();
+if(TOKEN)load();else showLock();
 </script>
 </body>
 </html>
