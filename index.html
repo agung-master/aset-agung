@@ -446,13 +446,13 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
 // ==================== TEMPEL URL WEB APP DI SINI (satu-satunya yang perlu diisi) ====================
 // URL WEB APP dari Apps Script (Deploy > Manage deployments, berakhiran /exec).
 // WAJIB diisi jika file index.html ini dibuka dari hosting / komputer sendiri.
-const API_URL='https://script.google.com/macros/s/AKfycbxKOtCz9hGj6NE99h9YvZPBYbfN8z24Na3nmUjXRkN5Lsr0wqQDvqIA_uJUu8n7E4Re/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbxi2B-7OX42PReUIQ5qrbjX1uatldlRNhXEMH3410d1f9j_naLQArJtN7gkAI_D5ojH/exec';
 // =======================================================
 /* ===== Sesi & login PIN ===== */
 const $=id=>document.getElementById(id);
 const TK='ap_tok';
 function tokGet(){try{return sessionStorage.getItem(TK)||localStorage.getItem(TK)||''}catch(e){return ''}}
-let TOKEN=tokGet(),lockOn=false,pinV='',pinBusy=false,lkTm=null,lkSt='';
+let TOKEN=tokGet(),pinLen=0,lockOn=false,pinV='',pinBusy=false,lkTm=null,lkSt='';
 function tokSet(t,keep){TOKEN=t;try{sessionStorage.removeItem(TK);localStorage.removeItem(TK);(keep?localStorage:sessionStorage).setItem(TK,t)}catch(e){}}
 function tokClear(){TOKEN='';try{sessionStorage.removeItem(TK);localStorage.removeItem(TK)}catch(e){}}
 function api(fn,args,ok,ko){
@@ -466,7 +466,7 @@ function api(fn,args,ok,ko){
 const pj=d=>typeof d==='string'?JSON.parse(d):d;
 function lkMsg(t,cls){const m=$('lkM');m.textContent=t||'';m.className='lkm'+(cls==='ok'?' ok':'')}
 function lkDraw(){
-  const n=Math.max(4,pinV.length);let h='';for(let i=0;i<n;i++)h+='<i'+(i<pinV.length?' class="on"':'')+'></i>';
+  const n=Math.max(pinLen||4,pinV.length);let h='';for(let i=0;i<n;i++)h+='<i'+(i<pinV.length?' class="on"':'')+'></i>';
   $('lkD').innerHTML=h;const g=document.querySelector('#lkP .lkg');if(g)g.disabled=pinV.length<4||pinBusy;
 }
 function lkMode(m){const l=$('lock');l.classList.toggle('dis',m==='dis');l.classList.toggle('nopin',m==='nopin')}
@@ -484,7 +484,7 @@ function lkNoPin(){
 }
 function lkStatus(keep){
   lkMode('');$('lkS').textContent='Masukkan PIN untuk melanjutkan';
-  api('authStatus',[],d=>{try{const r=pj(d);if(!r.pinSet)lkNoPin();else if(r.kunci>0)lkCount(r.kunci)}catch(e){}},
+  api('authStatus',[],d=>{try{const r=pj(d);pinLen=r.len||0;lkDraw();if(!r.pinSet)lkNoPin();else if(r.kunci>0)lkCount(r.kunci)}catch(e){}},
     er=>{if(!keep)lkMsg('Tidak bisa terhubung: '+er.message)})
 }
 function showLock(msg,cls){
@@ -501,7 +501,7 @@ function lkFail(r){
   pinV='';lkDraw();const d=$('lkD');d.classList.remove('sk');void d.offsetWidth;d.classList.add('sk');
   if(r.belum)lkNoPin();
   else if(r.kunci)lkCount(r.kunci);
-  else lkMsg('PIN salah.'+(r.sisa!=null?' Sisa percobaan: '+r.sisa+'.':''));
+  else{lkMsg('PIN salah.'+(r.sisa!=null?' Sisa percobaan: '+r.sisa+'.':''));api('authStatus',[],d=>{try{pinLen=pj(d).len||0;lkDraw()}catch(e){}},()=>{})}
 }
 function lkSubmit(){
   if(pinBusy||pinV.length<4)return;
@@ -516,7 +516,7 @@ function lkSubmit(){
 }
 function lkKey(k){
   if(pinBusy||$('lock').classList.contains('dis')||$('lock').classList.contains('nopin'))return;
-  if(/^\d$/.test(k)){if(pinV.length<12)pinV+=k}
+  if(/^\d$/.test(k)){if(pinV.length<(pinLen||12))pinV+=k;if(pinLen&&pinV.length===pinLen){lkMsg('');lkDraw();lkSubmit();return}}
   else if(k==='del')pinV=pinV.slice(0,-1);
   else if(k==='go'){lkSubmit();return}
   lkMsg('');lkDraw();
