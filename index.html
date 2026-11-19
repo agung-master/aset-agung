@@ -3,7 +3,12 @@
 <head>
 <base target="_top">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0a07">
+<script>
+// Cegah kilatan layar terang saat pertama dibuka: bila belum ada sesi, langsung pakai latar gelap halaman PIN.
+try{if(!(sessionStorage.getItem('ap_tok')||localStorage.getItem('ap_tok')))document.documentElement.className='locked'}catch(e){document.documentElement.className='locked'}
+</script>
 <title>Aset Perhiasan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -356,6 +361,90 @@ button{display:inline-flex;align-items:center;justify-content:center;text-align:
 .emp button{margin-top:12px}
 .mob .emp{grid-column:1/-1;background:var(--card);border:1px dashed var(--line);border-radius:var(--r)}
 footer.ftr{color:var(--mut);font-size:12px;text-align:center;padding:22px 16px 34px}
+
+/* ===== Perbaikan tampilan v8 ===== */
+/* Garis putih di tepi layar PIN: itu cincin fokus bawaan browser pada elemen dialog (tabindex=-1) yang difokuskan lewat skrip. */
+.lk,.lk:focus,.lk:focus-visible,.lkc:focus{outline:none!important;border:0}
+.lk{color-scheme:dark;overscroll-behavior:contain;box-shadow:none}
+html{background:var(--bg);min-height:100%;-webkit-text-size-adjust:100%;scrollbar-color:var(--line) transparent}
+html.locked{background:#0c0a07;color-scheme:dark}
+html.locked header,html.locked main,html.locked footer,html.locked #toast{display:none!important}
+html.locked .lk[hidden]{display:flex}
+body{min-height:100vh;min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;border:2px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:var(--mut);background-clip:content-box;border:2px solid transparent}
+.lk::-webkit-scrollbar{display:none}.lk{scrollbar-width:none}
+
+/* Header menempel di atas, mengikuti area aman (notch) di HP */
+header{position:sticky;top:0;z-index:15;padding:max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 14px max(16px,env(safe-area-inset-left));box-shadow:0 4px 18px rgba(0,0,0,.25)}
+.wrap{max-width:1280px}
+main.wrap{padding-bottom:8px}
+button{transition:background .15s,border-color .15s,transform .1s,box-shadow .15s}
+button:active:not(:disabled){transform:scale(.97)}
+
+/* Kartu & panel */
+.hero{padding:22px 26px;background:radial-gradient(600px 220px at 85% 0,rgba(224,180,79,.18),transparent 70%),linear-gradient(135deg,#14110b,#2c2312)}
+.st,.pn,.item{transition:transform .18s,box-shadow .18s,border-color .18s}
+@media(hover:hover){.st:hover,.item:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(40,30,10,.12);border-color:rgba(176,128,31,.45)}}
+.st .num{letter-spacing:-.01em}
+.pn h2{letter-spacing:-.005em}
+.tools{position:relative;margin:4px 0 12px}
+.tools input[type=search]{padding-left:12px}
+
+/* Tabel (laptop) */
+.tbl{border-radius:var(--r)}
+th{text-transform:uppercase;letter-spacing:.04em;font-size:11.5px;padding-top:12px;padding-bottom:12px}
+th:hover{color:var(--ink)}
+tbody tr{transition:background .12s}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--gold-l) 28%,transparent)}
+tbody tr:hover{background:var(--gold-l)}
+td{padding-top:12px;padding-bottom:12px}
+tfoot td{font-size:13.5px}
+.ib{transition:background .15s,border-color .15s,color .15s}
+.ib:hover{background:var(--gold-l)}
+.ib.dng:hover{background:rgba(179,55,44,.1)}
+
+/* Jendela isian */
+.ov{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.md{box-shadow:0 24px 70px rgba(0,0,0,.45);border:1px solid var(--line)}
+.md h2{font-size:21px}
+.ft{position:sticky;bottom:-22px;background:linear-gradient(to top,var(--card) 70%,transparent);padding:14px 0 2px;margin-top:12px}
+#toast{bottom:max(22px,calc(env(safe-area-inset-bottom) + 12px))}
+
+/* Layar PIN: nyaman di laptop & HP */
+.lkc{padding:8px 0}
+.lkl{box-shadow:0 12px 36px rgba(224,180,79,.3),inset 0 1px 0 rgba(255,255,255,.45)}
+.lkp button:focus-visible{outline:2px solid #f0cf80;outline-offset:3px}
+.lkb:focus-visible,.lkr:focus-within{outline:2px solid #f0cf80;outline-offset:3px;border-radius:8px}
+@media(min-width:900px) and (min-height:760px){.lkc{max-width:380px}.lkt{font-size:30px}.lkp{grid-template-columns:repeat(3,80px);gap:16px}.lkp button{width:80px;height:80px;font-size:28px}.lkl{width:72px;height:72px;font-size:34px}}
+
+/* Tablet */
+@media(max-width:1180px){.mob{gap:12px}}
+
+/* HP */
+@media(max-width:600px){
+  .wrap{padding:0 14px}
+  header{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+  .hero{margin:14px 0 10px}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .st .eyebrow{font-size:10.5px;letter-spacing:.06em}
+  .st small{font-size:11.5px}
+  .st:nth-child(odd):last-child{grid-column:1/-1}
+  .pn{padding:14px}
+  .bd{gap:14px}
+  /* Jendela menjadi panel dari bawah layar */
+  .ov{align-items:flex-end;padding:0}
+  .md,#ovd .md{max-width:none!important;border-radius:22px 22px 0 0;border-bottom:0;max-height:92vh;max-height:92dvh;padding:18px 16px max(16px,env(safe-area-inset-bottom))}
+  .md::before{content:'';display:block;width:42px;height:4px;border-radius:99px;background:var(--line);margin:-6px auto 14px}
+  .ft{bottom:calc(-1 * max(16px,env(safe-area-inset-bottom)))}
+  #toast{width:calc(100% - 28px);max-width:none;border-radius:12px}
+  .item{padding:14px}
+  .item .act button{min-height:42px}
+  .tools select,.tools input{min-height:42px}
+  .pg{gap:10px}
+}
+@media(prefers-reduced-motion:reduce){.st,.pn,.item,button{transition:none}.md{animation:none}}
 </style>
 </head>
 <body>
@@ -520,12 +609,12 @@ function showLock(msg,cls){
   lockOn=true;D=[];tokClear();pinV='';pinBusy=false;clearInterval(lkTm);
   $('app').style.display='none';$('load').style.display='none';
   ['ov','ovs','ovd'].forEach(i=>$(i).classList.remove('on'));cbClose();
-  $('lock').hidden=false;bgLock();
+  document.documentElement.classList.add('locked');$('lock').hidden=false;bgLock();
   lkMode('');$('lkS').textContent='Masukkan PIN untuk melanjutkan';lkDraw();lkMsg(msg||'',cls);
   try{$('lock').focus({preventScroll:true})}catch(e){}
   lkStatus(!!msg);
 }
-function hideLock(){lockOn=false;clearInterval(lkTm);$('lock').hidden=true;pinV='';lkMsg('');bgLock()}
+function hideLock(){lockOn=false;clearInterval(lkTm);document.documentElement.classList.remove('locked');$('lock').hidden=true;pinV='';lkMsg('');bgLock()}
 function bgLock(){
   const any=lockOn||['ov','ovs','ovd'].some(i=>$(i).classList.contains('on'));
   document.body.style.overflow=any?'hidden':'';
